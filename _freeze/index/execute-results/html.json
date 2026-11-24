@@ -1,0 +1,17 @@
+{
+  "hash": "e31de992234e4fdee032777e8d4c79aa",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\npagetitle: \"IP-PAD UK Data\"\nlisting:\n  id: latest-insights\n  contents: \"insights/uk/**/index.qmd\"\n  sort: \"date desc\"\n  type: grid\n  max-items: 3\n  grid-columns: 3\n  image-height: 150px\n  fields: [image, title, description]\n---\n\n\n\n::: {.hero}\n::: {.kicker}\nInterdisciplinary Perspectives on the Politics of Adolescence and Democracy\n:::\n\n# How young people in the UK think about politics\n\n::: {.lead}\nBetween 2024 and 2026, we surveyed young people across the United Kingdom about politics, from 12-year-olds who took part with a parent's consent to young adults in their mid twenties. On this site, we describe who took part and what they were asked, and you can look at their answers yourself.\n:::\n:::\n\n::: {.key-numbers}\n::: {}\n::: {.value}\n4\n:::\n::: {.label}\nsurveys, two run by Gallup International and two by Survation\n:::\n:::\n\n::: {}\n::: {.value}\n4,968\n:::\n::: {.label}\ninterviews with 4,841 young people\n:::\n:::\n\n::: {}\n::: {.value}\n12 to 26\n:::\n::: {.label}\nyears of age, with those under 18 recruited through their parents\n:::\n:::\n\n::: {}\n::: {.value}\n127\n:::\n::: {.label}\nyoung people took part in both waves of a survey\n:::\n:::\n:::\n\n## Four surveys, 2024 to 2026\n\nTwo fieldwork providers carried out the surveys for us. Gallup International interviewed 16 to 26 year olds who are members of its online panels, while Survation reached 12 to 18 year olds through their parents, who first gave consent and then handed over to their child. Each provider ran two waves about a year apart. For the second wave, they first invited the respondents of the first wave to take part again and then completed the sample with new respondents, which is why some young people answered our questions twice.\n\n\n::: {.cell layout-align=\"left\"}\n::: {.cell-output-display}\n![](index_files/figure-html/plot-timeline-1.png){fig-align='left' fig-alt='Timeline of the four surveys from May 2024 to November 2026. Gallup W1 ran in May and June 2024, Survation W1 from July to September 2025, Gallup W2 mostly in November and December 2025, and Survation W2 from August to November 2026. Each dot shows the number of interviews in a month.' width=768}\n:::\n:::\n\n\n::: {.section-links}\n::: {}\n[[The data]{.link-title} [How the four surveys were designed, who answered them, and what to keep in mind when comparing them.]{.link-text}](data.qmd)\n:::\n\n::: {}\n[[Explore]{.link-title} [Pick a question and see how the answers differ between age groups, genders and surveys.]{.link-text}](explore.qmd)\n:::\n\n::: {}\n[[Insights]{.link-title} [Short articles in which we look at selected questions in more detail.]{.link-text}](insights/index.qmd)\n:::\n:::\n\n## Latest insights\n\n::: {#latest-insights}\n:::\n",
+    "supporting": [
+      "index_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

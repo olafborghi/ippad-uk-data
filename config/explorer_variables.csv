@@ -1,0 +1,102 @@
+name,short_label,topic,in_explorer,site_note
+polint,Interest in politics,Interest and participation,TRUE,
+vote_intent,Would vote in a general election,Interest and participation,TRUE,
+polpart1,Willing to work in a party or action group,Interest and participation,TRUE,
+polpart2,Willing to wear a campaign badge,Interest and participation,TRUE,
+polpart3,Willing to sign a petition,Interest and participation,TRUE,
+polpart4,Willing to join a lawful demonstration,Interest and participation,TRUE,
+polpart5,Willing to post about politics online,Interest and participation,TRUE,
+poldisc1_UK,Parents discuss politics at home,Interest and participation,TRUE,
+poldisc2_UK,Discuss politics with partner or best friend,Interest and participation,TRUE,
+poldisc3_UK,Politics is discussed at school,Interest and participation,TRUE,
+poldisc4_UK,Usually have something to say about politics,Interest and participation,TRUE,
+lr,Left-right self-placement,Ideology,TRUE,
+pc,Progressive-conservative self-placement,Ideology,TRUE,
+cer_UK,Certainty about own political beliefs,Ideology,TRUE,
+polself1_UK,Politics reflects who I am,Ideology,TRUE,
+polself2_UK,Politics is part of my self-image,Ideology,TRUE,
+ftp1_UK,Feeling about the Conservative Party,Party feelings,TRUE,
+ftp2_UK,Feeling about the Labour Party,Party feelings,TRUE,
+ftp3_UK,Feeling about the Liberal Democrats,Party feelings,TRUE,
+ftp4_UK,Feeling about the Green Party,Party feelings,TRUE,
+ftp5_UK,Feeling about Reform UK,Party feelings,TRUE,
+swdkep1,Satisfied with how democracy works,Democracy and populism,TRUE,
+swdkep2,Not capable of an active role in politics,Democracy and populism,TRUE,
+swdkep3,Know a lot about current affairs,Democracy and populism,TRUE,
+swdkep4,The system gives people like me no influence,Democracy and populism,TRUE,
+swdkep5,"Big decisions by the people, not politicians",Democracy and populism,TRUE,
+swdkep6,Rather ordinary people than professional politicians,Democracy and populism,TRUE,
+swdkep7,Ordinary people share the same values,Democracy and populism,TRUE,
+swdkep8,Would support a group that breaks the law,Democracy and populism,TRUE,
+aut1_UK,Strong leader without interference,Democracy and populism,TRUE,
+aut2_UK,Strong government using tough means,Democracy and populism,TRUE,
+aut3_UK,Less control over the government,Democracy and populism,TRUE,
+dem1_UK,Elections where every vote is equal,Democracy and populism,TRUE,
+dem2_UK,Fundamental rights for everyone,Democracy and populism,TRUE,
+dem3_UK,Several political groups can govern,Democracy and populism,TRUE,
+trust1,Trust in the courts,Trust in institutions,TRUE,
+trust2,Trust in the police,Trust in institutions,TRUE,
+trust3,Trust in the UK government,Trust in institutions,TRUE,
+trust4,Trust in political parties,Trust in institutions,TRUE,
+trust5,Trust in the media,Trust in institutions,TRUE,
+opideo01_UK,Government should reduce income differences,Issue attitudes,TRUE,"Respondents could also answer that they did not know. These answers are shown as a separate category, and you can leave them out."
+opideo02_UK,Government responsible for health care,Issue attitudes,TRUE,"Respondents could also answer that they did not know. These answers are shown as a separate category, and you can leave them out."
+opideo03_UK,Large income differences are acceptable,Issue attitudes,TRUE,"Respondents could also answer that they did not know. These answers are shown as a separate category, and you can leave them out."
+opideo04_UK,Welfare benefits make people lazy,Issue attitudes,TRUE,"Respondents could also answer that they did not know. These answers are shown as a separate category, and you can leave them out."
+opideo05_UK,One parent can raise a child as well as two,Issue attitudes,TRUE,"Respondents could also answer that they did not know. These answers are shown as a separate category, and you can leave them out."
+opideo06_UK,Transgender people free to live as they wish,Issue attitudes,TRUE,"Respondents could also answer that they did not know. These answers are shown as a separate category, and you can leave them out."
+opideo07_UK,Right to assisted dying,Issue attitudes,TRUE,"Respondents could also answer that they did not know. These answers are shown as a separate category, and you can leave them out."
+opideo08_UK,Discrimination against women is no longer a problem,Issue attitudes,TRUE,"Respondents could also answer that they did not know. These answers are shown as a separate category, and you can leave them out."
+opideo09_UK,Act on climate even if growth slows,Issue attitudes,TRUE,"Respondents could also answer that they did not know. These answers are shown as a separate category, and you can leave them out."
+opideo10_UK,Personal responsibility to reduce climate change,Issue attitudes,TRUE,"Respondents could also answer that they did not know. These answers are shown as a separate category, and you can leave them out."
+opideo11_UK,Impact of climate change is exaggerated,Issue attitudes,TRUE,"Respondents could also answer that they did not know. These answers are shown as a separate category, and you can leave them out."
+opideo12_UK,Immigration is bad for the economy,Issue attitudes,TRUE,"Respondents could also answer that they did not know. These answers are shown as a separate category, and you can leave them out."
+opideo13_UK,Immigration enriches cultural life,Issue attitudes,TRUE,"Respondents could also answer that they did not know. These answers are shown as a separate category, and you can leave them out."
+opideo14_UK,Immigration makes the UK a worse place,Issue attitudes,TRUE,"Respondents could also answer that they did not know. These answers are shown as a separate category, and you can leave them out."
+symideo01_UK,Describes self as feminist,Ideological labels,TRUE,Respondents saw a list of labels and could tick as many as they felt described them. The chart shows the share who ticked this label.
+symideo02_UK,Describes self as conservative,Ideological labels,TRUE,Respondents saw a list of labels and could tick as many as they felt described them. The chart shows the share who ticked this label.
+symideo03_UK,Describes self as environmentalist,Ideological labels,TRUE,Respondents saw a list of labels and could tick as many as they felt described them. The chart shows the share who ticked this label.
+symideo04_UK,Describes self as liberal,Ideological labels,TRUE,Respondents saw a list of labels and could tick as many as they felt described them. The chart shows the share who ticked this label.
+symideo05_UK,Describes self as socialist,Ideological labels,TRUE,Respondents saw a list of labels and could tick as many as they felt described them. The chart shows the share who ticked this label.
+symideo06_UK,Describes self as monarchist,Ideological labels,TRUE,Respondents saw a list of labels and could tick as many as they felt described them. The chart shows the share who ticked this label.
+symideo07_UK,Describes self as anarchist,Ideological labels,TRUE,Respondents saw a list of labels and could tick as many as they felt described them. The chart shows the share who ticked this label.
+symideo08_UK,Describes self as communist,Ideological labels,TRUE,Respondents saw a list of labels and could tick as many as they felt described them. The chart shows the share who ticked this label.
+symideo09_UK,Describes self as democrat,Ideological labels,TRUE,Respondents saw a list of labels and could tick as many as they felt described them. The chart shows the share who ticked this label.
+symideo10_UK,Describes self as moderate,Ideological labels,TRUE,Respondents saw a list of labels and could tick as many as they felt described them. The chart shows the share who ticked this label.
+symideo11_UK,Describes self as nationalist,Ideological labels,TRUE,Respondents saw a list of labels and could tick as many as they felt described them. The chart shows the share who ticked this label.
+livecomf,Getting by on household income,Living and belonging,TRUE,
+attach1,Close to friends,Living and belonging,TRUE,
+attach2,Close to family,Living and belonging,TRUE,
+attach3,Close to peers,Living and belonging,TRUE,
+df1_UK,Fear current problems will last,Outlook and personality,TRUE,
+df2_UK,Terrified of future crises,Outlook and personality,TRUE,
+df3_UK,Fear life will change for the worse,Outlook and personality,TRUE,
+df4_UK,Fear economy and politics threaten my future,Outlook and personality,TRUE,
+df5_UK,Worry I will not reach my goals,Outlook and personality,TRUE,
+dog1_UK,Stay loyal to beliefs despite evidence,Outlook and personality,TRUE,
+dog2_UK,Feeling true matters more than evidence,Outlook and personality,TRUE,
+dog3_UK,Conflicting evidence does not make me wrong,Outlook and personality,TRUE,
+dog4_UK,Evidence need not change my beliefs,Outlook and personality,TRUE,
+dog5_UK,Fine to keep beliefs despite clear evidence,Outlook and personality,TRUE,
+dog6_UK,What I believe matters more than evidence,Outlook and personality,TRUE,
+bscs1_UK,Good at resisting temptation,Outlook and personality,TRUE,
+bscs2_UK,Do things that are bad for me if they are fun,Outlook and personality,TRUE,
+bscs3_UK,Iron self-discipline,Outlook and personality,TRUE,
+bscs4_UK,Fun keeps me from getting work done,Outlook and personality,TRUE,
+bscs5_UK,Work effectively towards long-term goals,Outlook and personality,TRUE,
+bscs6_UK,Cannot stop myself doing something wrong,Outlook and personality,TRUE,
+bscs7_UK,Act without thinking through alternatives,Outlook and personality,TRUE,
+erq01_UK,Think about something else to feel happier,Outlook and personality,TRUE,
+erq02_UK,Keep my feelings to myself,Outlook and personality,TRUE,
+erq03_UK,Think about something else to feel less bad,Outlook and personality,TRUE,
+erq04_UK,Careful not to show happiness,Outlook and personality,TRUE,
+erq05_UK,Rethink worries to feel better,Outlook and personality,TRUE,
+erq06_UK,Control feelings by not showing them,Outlook and personality,TRUE,
+erq07_UK,Rethink things to feel happier,Outlook and personality,TRUE,
+erq08_UK,Control feelings by changing how I think,Outlook and personality,TRUE,
+erq09_UK,Careful not to show feeling bad,Outlook and personality,TRUE,
+erq10_UK,Rethink things to feel less bad,Outlook and personality,TRUE,
+aa1_UK,Dislike uncertain situations,Outlook and personality,TRUE,
+aa2_UK,Uncomfortable not knowing why things happen,Outlook and personality,TRUE,
+aa3_UK,Upset when confused about an important issue,Outlook and personality,TRUE,
+aa4_UK,Uncomfortable when meaning is unclear,Outlook and personality,TRUE,

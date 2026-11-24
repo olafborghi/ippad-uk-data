@@ -1,0 +1,341 @@
+---
+title: "Views on the economy, morality, climate and immigration"
+description: "How young people in the UK answer fourteen statements on four political issues, and how their answers differ by gender and age."
+date: 2026-11-24
+categories: [Issues, Age, Gender]
+image: thumbnail.png
+---
+
+```{r}
+#| label: setup
+#| include: false
+source(here::here("R", "site.R"))
+
+pct <- \(x) percent(x, accuracy = 1)
+num2 <- \(x) number(x, accuracy = 0.01, style_negative = "minus")
+
+# the 14 statements, grouped by issue, with their short labels
+issue_items <- tibble(
+  item = sprintf("opideo%02d_UK", 1:14),
+  issue = rep(c("Economy", "Morality", "Climate", "Immigration"), times = c(4, 4, 3, 3))
+) |>
+  left_join(select(variables, item = name, label = short_label), by = "item") |>
+  mutate(issue = fct_inorder(issue))
+
+item_label <- deframe(select(issue_items, item, label))
+
+# one row per answer, with agreement in three groups plus "I don't know"
+answers <- respondents |>
+  mutate(row = row_number()) |>
+  select(row, dataset, age, age_group, gender, all_of(issue_items$item)) |>
+  pivot_longer(all_of(issue_items$item), names_to = "item", values_to = "answer") |>
+  mutate(
+    code = as.integer(answer),
+    response = case_when(
+      answer == "I don't know" ~ "Don't know",
+      code <= 3 ~ "Disagree",
+      code == 4 ~ "Neither",
+      code <= 7 ~ "Agree"
+    ),
+    agree = response == "Agree"
+  ) |>
+  left_join(issue_items, by = "item")
+
+# shares of the four answers per statement, all surveys pooled
+pooled <- answers |>
+  count(issue, item, label, response) |>
+  mutate(share = n / sum(n), .by = item)
+
+pooled_share <- \(it, resp) pct(pooled$share[pooled$item == it & pooled$response == resp])
+
+# agreement per survey
+agree_dataset <- answers |>
+  summarise(agree = mean(agree), .by = c(item, dataset))
+
+agree_s <- \(it, ds) pct(agree_dataset$agree[agree_dataset$item == it & agree_dataset$dataset == ds])
+
+# how much the pooled agreement changes without Gallup W1
+without_gw1 <- answers |>
+  filter(dataset != "Gallup W1") |>
+  summarise(agree_without = mean(agree), .by = item) |>
+  left_join(summarise(answers, agree_all = mean(agree), .by = item), by = "item")
+max_shift_gw1 <- number(100 * max(abs(without_gw1$agree_without - without_gw1$agree_all)), accuracy = 1)
+
+# response quality: the two opposite immigration statements
+immigration_r <- respondents |>
+  mutate(across(c(opideo13_UK, opideo14_UK), \(x) if_else(x == "I don't know", NA, as.integer(x)))) |>
+  summarise(r = cor(opideo13_UK, opideo14_UK, use = "complete.obs"), .by = dataset) |>
+  deframe()
+r_others <- immigration_r[names(immigration_r) != "Gallup W1"]
+
+# gender gaps in agreement (women minus men), in percentage points
+gender_gap <- answers |>
+  filter(gender %in% c("Female", "Male")) |>
+  summarise(agree = mean(agree), .by = c(item, dataset, gender)) |>
+  pivot_wider(names_from = gender, values_from = agree) |>
+  mutate(gap = 100 * (Female - Male))
+
+gap_range <- \(it) {
+  x <- abs(gender_gap$gap[gender_gap$item == it])
+  str_c(number(min(x), accuracy = 1), " and ", number(max(x), accuracy = 1))
+}
+
+# agreement by age group in Gallup W2
+age_gw2 <- answers |>
+  filter(dataset == "Gallup W2") |>
+  summarise(agree = mean(agree), n = n(), .by = c(item, age_group))
+age_agree <- \(it, ag) pct(age_gw2$agree[age_gw2$item == it & age_gw2$age_group == ag])
+n_gw2_16_17 <- sum(respondents$dataset == "Gallup W2" & respondents$age_group == "16-17")
+
+# "I don't know"
+dk_all <- pct(mean(answers$response == "Don't know"))
+dk_survation <- answers |>
+  filter(dataset %in% c("Survation W1", "Survation W2"), age <= 17) |>
+  mutate(younger = age <= 14) |>
+  summarise(dk = mean(response == "Don't know"), .by = younger) |>
+  deframe()
+
+# the text names assisted dying as the statement the youngest most often
+# answer with "I don't know", and Gallup W2 as the survey with the fewest
+dk_young_top <- answers |>
+  filter(dataset %in% c("Survation W1", "Survation W2"), age <= 14) |>
+  summarise(dk = mean(response == "Don't know"), .by = item) |>
+  slice_max(dk, n = 1)
+dk_dataset <- answers |>
+  summarise(dk = mean(response == "Don't know"), .by = dataset)
+stopifnot(
+  dk_young_top$item == "opideo07_UK",
+  slice_min(dk_dataset, dk)$dataset == "Gallup W2"
+)
+```
+
+```{r}
+#| label: thumbnail
+#| include: false
+# Card image for the listings: the diverging bars of the main figure, without text
+thumb_data <- pooled |>
+  filter(response != "Don't know") |>
+  mutate(share = share / sum(share), .by = item) |>
+  pivot_wider(id_cols = item, names_from = response, values_from = share) |>
+  mutate(y = 15 - row_number())
+
+thumbnail <- ggplot(thumb_data, aes(y = y)) +
+  geom_rect(aes(xmin = -Neither / 2 - Disagree, xmax = -Neither / 2, ymin = y - 0.36, ymax = y + 0.36), fill = brand[["coral"]]) +
+  geom_rect(aes(xmin = -Neither / 2, xmax = Neither / 2, ymin = y - 0.36, ymax = y + 0.36), fill = brand[["rule"]]) +
+  geom_rect(aes(xmin = Neither / 2, xmax = Neither / 2 + Agree, ymin = y - 0.36, ymax = y + 0.36), fill = brand[["blue"]]) +
+  theme_void() +
+  theme(
+    plot.background = element_rect(fill = brand[["tint"]], colour = NA),
+    plot.margin = margin(18, 30, 18, 30)
+  )
+
+ggsave("thumbnail.png", thumbnail, width = 6, height = 3.9, dpi = 150)
+```
+
+Left and right are broad labels, and young people who share one can still disagree on concrete questions. All four surveys therefore asked how far respondents agree with fourteen statements on the economy, moral questions, climate change and immigration, with the option to say that they did not know. Some statements are worded so that agreeing expresses a left-leaning or progressive view, and others so that it expresses a right-leaning or conservative one. This mix helps to tell genuine views apart from a general tendency to agree.
+
+## Broad agreement, with more division on welfare and immigration
+
+::: {.how-to-read}
+Each bar shows the answers to one statement, with disagreement to the left and agreement to the right of the centre line. Neutral answers are split evenly across it, and the narrow column gives the share who did not know. All four surveys are pooled.
+:::
+
+```{r}
+#| label: plot-overview
+#| fig-width: 9.5
+#| fig-height: 8.8
+#| fig-alt: "Diverging bar chart of agreement with 14 statements, grouped into economy, morality, climate and immigration, with all four surveys pooled. About two thirds agree that the government should reduce income differences, ensure health care, that one parent can raise a child as well as two, and that terminally ill people should have a right to assisted dying. Agreement and disagreement are closer for welfare benefits making people lazy and for the three immigration statements on the economy and the UK as a place to live. Between 2 and 5 percent answer that they do not know."
+response_colours <- c(
+  "Disagree" = brand[["coral"]],
+  "Neither" = col_mix(brand[["rule"]], brand[["muted"]], 0.25),
+  "Agree" = brand[["blue"]],
+  "Don't know" = brand[["muted"]]
+)
+
+overview <- pooled |>
+  pivot_wider(id_cols = c(issue, item, label), names_from = response, values_from = share) |>
+  mutate(label = fct_rev(fct_inorder(str_wrap(label, 36))))
+
+bars <- bind_rows(
+  transmute(overview, issue, label, response = "Disagree", xmin = -Neither / 2 - Disagree, xmax = -Neither / 2),
+  transmute(overview, issue, label, response = "Neither", xmin = -Neither / 2, xmax = Neither / 2),
+  transmute(overview, issue, label, response = "Agree", xmin = Neither / 2, xmax = Neither / 2 + Agree),
+  transmute(overview, issue, label, response = "Don't know", xmin = 0, xmax = `Don't know`)
+) |>
+  mutate(
+    part = if_else(response == "Don't know", "Don't know", "Disagree or agree"),
+    part = factor(part, levels = c("Disagree or agree", "Don't know")),
+    response = factor(response, levels = names(response_colours))
+  )
+
+bar_labels <- bars |>
+  filter(response != "Neither") |>
+  mutate(
+    value = xmax - xmin,
+    x = if_else(response == "Disagree", xmin, xmax),
+    hjust = if_else(response == "Disagree", 1.15, -0.15)
+  )
+
+ggplot(bars) +
+  geom_rect(
+    aes(xmin = xmin, xmax = xmax, ymin = as.numeric(label) - 0.36, ymax = as.numeric(label) + 0.36, fill = response),
+    colour = brand[["paper"]],
+    linewidth = 0.3
+  ) +
+  geom_text(
+    data = bar_labels,
+    aes(x = x, y = as.numeric(label), label = pct(value), hjust = hjust),
+    family = "Public Sans Regular",
+    size = 3.1,
+    colour = brand[["ink"]]
+  ) +
+  # keeps the don't know column narrow, on the same scale as the main bars
+  geom_blank(data = tibble(part = factor("Don't know", levels = levels(bars$part)), x = c(0, 0.2)), aes(x = x)) +
+  geom_blank(data = tibble(part = factor("Disagree or agree", levels = levels(bars$part)), x = c(-0.72, 0.92)), aes(x = x)) +
+  facet_grid(issue ~ part, scales = "free", space = "free") +
+  scale_y_continuous(
+    breaks = seq_along(levels(overview$label)),
+    labels = levels(overview$label),
+    expand = expansion(add = 0.5)
+  ) +
+  scale_x_continuous(labels = \(x) percent(abs(x)), breaks = c(-0.5, 0, 0.5), expand = expansion(0)) +
+  scale_fill_manual(values = response_colours, name = NULL) +
+  labs(
+    title = "Clear majorities on most statements, but welfare and immigration divide",
+    x = "Share of answers",
+    y = NULL,
+    caption = site_caption
+  ) +
+  theme(
+    legend.position = "top",
+    legend.justification = "left",
+    strip.text.x = element_blank(),
+    strip.background = element_blank(),
+    strip.text.y = element_text(angle = 0, hjust = 0),
+    axis.text.y = element_text(lineheight = 0.85),
+    panel.spacing.x = unit(1.2, "lines")
+  )
+```
+
+On moral questions and climate change, clear majorities take the progressive side. About two thirds agree that one parent can raise a child as well as two (`r pooled_share("opideo05_UK", "Agree")`) and that terminally ill people should have a right to assisted dying (`r pooled_share("opideo07_UK", "Agree")`), while the opposite statements on discrimination against women and on climate change find more disagreement than agreement. On the economy, however, the answers fit less neatly into one position. Most agree that the government should reduce income differences (`r pooled_share("opideo01_UK", "Agree")`), yet `r pooled_share("opideo03_UK", "Agree")` also accept large income differences as a reward for talent and effort, and slightly more agree than disagree that welfare benefits make people lazy. These patterns hold within each survey.
+
+Immigration divides young people most, and it is also the issue on which the surveys differ most. In Survation W2, `r agree_s("opideo14_UK", "Survation W2")` agree that immigration makes the UK a worse place to live, compared with `r agree_s("opideo14_UK", "Survation W1")` in Survation W1 about a year earlier, although both surveys cover the same ages. This could reflect a change over time, but it could equally reflect differences in who took part or in question order, as Survation W2 asked these statements after an experiment on ideology.
+
+## Gender gaps are largest on questions about gender and family
+
+::: {.how-to-read}
+Each row compares the share of young women and young men who agree with a statement in one survey. A longer line means a larger gap.
+:::
+
+```{r}
+#| label: plot-gender
+#| fig-width: 8.5
+#| fig-height: 5.6
+#| fig-alt: "Dumbbell chart of the share agreeing with four statements, for young women and young men in each of the four surveys. Young women agree more often that one parent can raise a child as well as two and that transgender people should be free to live as they wish, and less often that discrimination against women is no longer a problem. The gaps are larger in the two Gallup surveys. On whether the impact of climate change is exaggerated, young men agree more in Gallup but there is no consistent gap in Survation."
+gender_items <- c("opideo05_UK", "opideo06_UK", "opideo08_UK", "opideo11_UK")
+
+gender_agree <- answers |>
+  filter(gender %in% c("Female", "Male"), item %in% gender_items) |>
+  summarise(agree = mean(agree), .by = c(item, label, dataset, gender)) |>
+  mutate(
+    label = factor(label, levels = item_label[gender_items]),
+    dataset = fct_rev(dataset)
+  )
+
+ggplot(gender_agree, aes(x = agree, y = dataset)) +
+  geom_line(aes(group = dataset), colour = brand[["rule"]], linewidth = 2) +
+  geom_point(aes(colour = gender), size = 3.2) +
+  facet_wrap(~label, ncol = 2, labeller = label_wrap_gen(32)) +
+  scale_colour_manual(values = gender_colours, breaks = c("Female", "Male"), name = NULL) +
+  scale_x_continuous(labels = label_percent(accuracy = 1), limits = c(0.1, 0.9)) +
+  labs(
+    title = "Young women and men differ most on gender and family",
+    x = "Share who agree",
+    y = NULL,
+    caption = site_caption
+  ) +
+  theme(legend.position = "top", legend.justification = "left", panel.spacing.x = unit(1.5, "lines"))
+```
+
+Young women and young men differ most on statements about gender and the family. Young women more often agree that one parent can raise a child as well as two, with gaps of between `r gap_range("opideo05_UK")` percentage points, and less often that discrimination against women is no longer a problem. These gaps are larger among the Gallup respondents than among the 12 to 17 year olds in Survation, whose gender was reported by a parent. On climate change, a gap appears in Gallup only, where young men more often see its impact as exaggerated.
+
+## Older respondents agree more, on both sides
+
+::: {.how-to-read}
+Each panel shows one statement in Gallup W2, with the share who agree in each age group and a line for the 95% confidence interval. The lower row holds the counterparts of the statements in the upper row.
+:::
+
+```{r}
+#| label: plot-age
+#| fig-width: 8.5
+#| fig-height: 5.6
+#| fig-alt: "Six small panels showing the share of Gallup W2 respondents who agree with a statement, by age group 16 to 17, 18 to 21 and 22 to 26. Agreement rises with age both for reducing income differences and for accepting large income differences, both for feeling personally responsible to act on climate change and for seeing its impact as exaggerated. For immigration, agreement that it enriches cultural life stays flat while agreement that it makes the UK worse rises with age."
+age_items <- c("opideo01_UK", "opideo10_UK", "opideo13_UK", "opideo03_UK", "opideo11_UK", "opideo14_UK")
+
+age_plot <- age_gw2 |>
+  filter(item %in% age_items) |>
+  mutate(
+    se = sqrt(agree * (1 - agree) / n),
+    label = factor(item_label[item], levels = item_label[age_items])
+  )
+
+ggplot(age_plot, aes(x = age_group, y = agree, group = item)) +
+  geom_line(colour = dataset_colours[["Gallup W2"]], linewidth = 0.7) +
+  geom_pointrange(
+    aes(ymin = agree - 1.96 * se, ymax = agree + 1.96 * se),
+    colour = dataset_colours[["Gallup W2"]],
+    size = 0.35,
+    linewidth = 0.5
+  ) +
+  facet_wrap(~label, ncol = 3, labeller = label_wrap_gen(24)) +
+  scale_y_continuous(labels = label_percent(accuracy = 1), limits = c(0.1, 0.85)) +
+  labs(
+    title = "In Gallup W2, older respondents agree more with statements on both sides",
+    x = "Age group",
+    y = "Share who agree",
+    caption = site_caption
+  ) +
+  theme(panel.spacing.x = unit(1.5, "lines"))
+```
+
+Since each survey covers different ages, we look at age within Gallup W2, the only survey that spans ages 16 to 26. Interestingly, older respondents there agree more often with statements on both sides of the same issue. Agreement that the government should reduce income differences rises from `r age_agree("opideo01_UK", "16-17")` among 16 and 17 year olds to `r age_agree("opideo01_UK", "22-26")` among 22 to 26 year olds, but agreement that large income differences are acceptable rises as well, from `r age_agree("opideo03_UK", "16-17")` to `r age_agree("opideo03_UK", "22-26")`. This suggests that older respondents are, if anything, more willing to agree in general rather than more left or more right. Differences in who took part at each age could also play a role, and only `r n_gw2_16_17` respondents are aged 16 or 17.
+
+## Few answer "I don't know"
+
+::: {.how-to-read}
+Each dot is the share of "I don't know" answers across all fourteen statements, at one year of age in one survey. Ages with fewer than 20 respondents are left out.
+:::
+
+```{r}
+#| label: plot-dont-know
+#| fig-width: 8
+#| fig-height: 4.4
+#| fig-alt: "Share of I don't know answers by year of age, from 12 to 26, for each survey. The share stays below 6 percent at every age. In both Survation surveys it is about 5 percent at ages 12 to 14 and about 3 percent from age 15. In Gallup W2 it is about 2 percent at almost every age."
+dont_know_age <- answers |>
+  summarise(
+    dont_know = mean(response == "Don't know"),
+    n = n_distinct(row),
+    .by = c(dataset, age)
+  ) |>
+  filter(n >= 20)
+
+ggplot(dont_know_age, aes(x = age, y = dont_know, colour = dataset)) +
+  geom_line(linewidth = 0.7) +
+  geom_point(size = 2.4) +
+  scale_colour_manual(values = dataset_colours, name = NULL) +
+  scale_x_continuous(breaks = 12:26) +
+  scale_y_continuous(labels = label_percent(accuracy = 1), limits = c(0, 0.07)) +
+  labs(
+    title = "\"I don't know\" is rare at every age, and rarest in Gallup W2",
+    x = "Age",
+    y = "Share of answers",
+    caption = site_caption
+  ) +
+  theme(legend.position = "top", legend.justification = "left")
+```
+
+Only `r dk_all` of all answers are "I don't know". In the two Survation surveys, 12 to 14 year olds choose it somewhat more often (`r pct(dk_survation[["TRUE"]])` of their answers) than 15 to 17 year olds (`r pct(dk_survation[["FALSE"]])`), most of all for the statement on assisted dying. Gallup W2 has the fewest such answers at every age, so the differences between surveys are as large as those between ages.
+
+## About these data
+
+The overview pools all interviews, so Gallup W2, which is twice as large as the other surveys, counts twice as much. The surveys are unweighted and differ in age range, recruitment and timing (see [The data](/data.qmd)), which is why we compare age and gender within surveys. Gallup W1 also shows signs of weaker response quality. The statements that immigration enriches cultural life and that it makes the UK a worse place should go together negatively, as they do in the other surveys with correlations between `r num2(min(r_others))` and `r num2(max(r_others))`. In Gallup W1, however, the correlation is only `r num2(immigration_r[["Gallup W1"]])`. Leaving Gallup W1 out changes no pooled share of agreement by more than `r max_shift_gw1` percentage points.

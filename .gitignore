@@ -1,0 +1,21 @@
+# Quarto build output and cache. The site is published with
+# `quarto publish gh-pages`, which renders into _site itself and pushes it to
+# the gh-pages branch. _freeze/ is committed, so publishing needs no R.
+/_site/
+/.quarto/
+**/*.quarto_ipynb
+
+# Rendered report of the data build script (rebuilt locally when needed)
+/scripts/*.html
+/scripts/*_files/
+
+# Notes for the coding assistant, kept local
+CLAUDE.md
+.claude/
+
+# R and system leftovers
+.Rhistory
+.RData
+.Rproj.user/
+Rplots*.pdf
+.DS_Store

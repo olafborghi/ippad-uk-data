@@ -1,0 +1,70 @@
+---
+# Copy this file to insights/uk/<short-name>/index.qmd and fill it in.
+# The page appears on the Insights page and on the home page by itself.
+title: "A short title that says what the reader learns"
+description: "One sentence for the listing card."
+date: 2026-11-24
+categories: [Topic, Comparison]
+# card image for the listings, made by the thumbnail chunk below
+image: thumbnail.png
+---
+
+```{r}
+#| label: setup
+#| include: false
+# brand colours, site data (respondents, panel, variables) and figure theme
+source(here::here("R", "site.R"))
+```
+
+```{r}
+#| label: thumbnail
+#| include: false
+# Card image for the listings: a simple version of the main figure, without
+# any text, on the tint background. Saved next to this page.
+thumbnail <- respondents |>
+  summarise(mean = mean(lr), .by = dataset) |>
+  ggplot(aes(x = mean, y = dataset, colour = dataset)) +
+  geom_point(size = 6) +
+  scale_colour_manual(values = dataset_colours, guide = "none") +
+  theme_void() +
+  theme(
+    plot.background = element_rect(fill = brand[["tint"]], colour = NA),
+    plot.margin = margin(18, 18, 18, 18)
+  )
+
+ggsave("thumbnail.png", thumbnail, width = 6, height = 3.9, dpi = 150)
+```
+
+<!-- Chunk labels must not start with "fig-": that makes Quarto number the
+figures ("Figure 1") without a caption. Use "plot-" instead. -->
+
+
+One or two paragraphs that say what this page looks at and why it matters.
+
+::: {.how-to-read}
+How to read the figure below, in one or two sentences.
+:::
+
+```{r}
+#| label: plot-first
+#| fig-width: 8
+#| fig-height: 4.5
+#| fig-alt: "Describe what the figure shows, including the main pattern."
+respondents |>
+  summarise(mean = mean(lr), .by = dataset) |>
+  ggplot(aes(x = mean, y = dataset, colour = dataset)) +
+  geom_point(size = 3) +
+  scale_colour_manual(values = dataset_colours, guide = "none") +
+  labs(
+    title = "A one-line takeaway",
+    x = "Mean on the scale",
+    y = NULL,
+    caption = site_caption
+  )
+```
+
+What the figure shows, with numbers as inline R.
+
+## About these data
+
+The surveys are unweighted and differ in design (see [The data](/data.qmd)). Say which caveats matter for this page.

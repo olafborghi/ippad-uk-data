@@ -1,0 +1,262 @@
+---
+title: "IP-PAD UK Website: Site Data"
+
+format:
+  html:
+    theme: simplex
+    embed-resources: true
+    toc: true
+    toc-title: "Contents"
+    toc-location: right
+    code-fold: true
+    code-tools: true
+    df-print: paged
+
+execute:
+  warning: false
+  message: false
+---
+
+This script builds the data files of the website from the combined IP-PAD UK data in `../ippad_combined`. Run it whenever the combined data or the variable registry change, then render the site.
+
+- `data/respondents.csv` has one row per interview, with the variables the site shows.
+- `data/panel.csv` has one row per person interviewed in both waves of a provider, with their answers in each wave.
+- `data/variables.csv` describes every variable of `respondents.csv`: label, question, type, anchors and note.
+- `data/levels.csv` gives the order of the categories of every factor.
+- `data/compare_by.csv` lists the variables the explorer can compare by.
+
+The site files leave out open answers, identifiers and exact dates, which the charts do not need. All files have a `country` column, so that data from other countries can be added later.
+
+```{r}
+#| label: setup
+#| include: false
+options(
+  digits = 4,
+  width = 90,
+  scipen = 999,
+  dplyr.summarise.inform = FALSE
+)
+
+Sys.setenv(LANG = "en")
+```
+
+```{r}
+#| label: packages
+#| include: false
+if (!require("groundhog", quietly = TRUE)) {
+  install.packages("groundhog")
+}
+library("groundhog")
+
+# use groundhog to install and load packages
+pkgs <- c(
+  "here", # System path management
+  "tidyverse", # ggplot, dplyr, and friends
+  "tinytable" # Minimalist tables
+)
+
+groundhog.library(pkgs, "2026-07-01")
+```
+
+## Load Data
+
+The combined data sit in the folder next to the website.
+
+```{r}
+#| label: folders
+combined_dir <- here("..", "ippad_combined", "data", "combined")
+config_dir <- here("config")
+site_data_dir <- here("data")
+```
+
+```{r}
+#| label: load-data
+load(here(combined_dir, "IP-PAD_UK_combined_data.RData"))
+
+dictionary <- read_csv(
+  here(combined_dir, "IP-PAD_UK_combined_dictionary.csv"),
+  show_col_types = FALSE
+)
+
+level_sets <- read_csv(
+  here(combined_dir, "IP-PAD_UK_combined_levels.csv"),
+  show_col_types = FALSE
+)
+
+dim(ippad_uk)
+```
+
+The registry lists the variables the explorer offers, with a short label and a topic. It is edited by hand. Its optional column `site_note` replaces the note of the combined data where that note is written for data users rather than for visitors of the site. The comparison list gives the variables the explorer can compare by.
+
+```{r}
+#| label: load-config
+registry <- read_csv(here(config_dir, "explorer_variables.csv"), show_col_types = FALSE)
+compare_by <- read_csv(here(config_dir, "compare_by.csv"), show_col_types = FALSE)
+
+# every variable exists in the combined data, and none is listed twice
+stopifnot(
+  all(registry$name %in% names(ippad_uk)),
+  all(compare_by$name %in% names(ippad_uk)),
+  !anyDuplicated(registry$name),
+  !anyDuplicated(compare_by$name)
+)
+
+registry |>
+  count(topic, in_explorer) |>
+  tt()
+```
+
+## Respondents
+
+One row per interview. The sample variables come first, then the comparison variables, then the registry variables. The interview date is kept as month only.
+
+```{r}
+#| label: respondents
+sample_vars <- c("dataset", "provider", "wave", "sample_type", "panel", "person_first")
+
+respondents <- ippad_uk |>
+  mutate(
+    country = "UK",
+    interview_month = format(interview_start, "%Y-%m")
+  ) |>
+  select(
+    country,
+    all_of(sample_vars),
+    interview_month,
+    all_of(setdiff(compare_by$name, sample_vars)),
+    all_of(setdiff(registry$name, compare_by$name))
+  )
+
+# no open text and no identifiers
+stopifnot(
+  !any(map_lgl(respondents, is.character) & !names(respondents) %in% c("country", "interview_month")),
+  !any(c("id", "person_id", "respid", "respid_w1") %in% names(respondents))
+)
+
+dim(respondents)
+```
+
+The same numbers as in the combined data. Rows per survey, and the mean left-right self-placement per survey, as reported in the data documentation.
+
+```{r}
+#| label: check-respondents
+respondent_check <- respondents |>
+  summarise(rows = n(), mean_lr = round(mean(lr), 2), .by = dataset)
+
+stopifnot(
+  identical(respondent_check$rows, c(988L, 993L, 1985L, 1002L)),
+  identical(respondent_check$mean_lr, c(4.43, 6.11, 4.98, 5.02)),
+  sum(respondents$panel) == 254
+)
+
+respondent_check |>
+  tt()
+```
+
+## Panel
+
+One row per person interviewed in both waves of a provider, with the answers in each wave as `<variable>_w1` and `<variable>_w2`. A running number replaces the person identifier. The link variables of the Wave 2 row say how plausible the link is.
+
+```{r}
+#| label: panel
+panel_vars <- c(
+  "age", "gender", "lr", "pc", "polint",
+  str_c("ftp", 1:5, "_UK"),
+  str_c("swdkep", 1:4),
+  str_c("trust", 1:5),
+  "cer_UK", "polself1_UK", "polself2_UK",
+  str_c("aut", 1:3, "_UK"), str_c("dem", 1:3, "_UK")
+)
+
+panel <- ippad_uk |>
+  filter(panel) |>
+  mutate(
+    # link variables are given on the Wave 2 row only
+    across(c(link_age_diff, link_same_gender, link_consistent), \(x) first(na.omit(x))),
+    .by = person_id
+  ) |>
+  select(
+    person_id, provider, wave,
+    link_age_diff, link_same_gender, link_consistent,
+    all_of(panel_vars)
+  ) |>
+  pivot_wider(
+    names_from = wave,
+    values_from = all_of(panel_vars),
+    names_glue = "{.value}_w{wave}"
+  ) |>
+  arrange(provider, person_id) |>
+  mutate(pair = sprintf("P%03d", row_number()), country = "UK", .before = 1) |>
+  select(-person_id)
+
+stopifnot(
+  nrow(panel) == 127,
+  identical(count(panel, provider)$n, c(55L, 72L)),
+  !anyNA(panel$link_consistent)
+)
+
+panel |>
+  count(provider, link_consistent) |>
+  tt()
+```
+
+## Variables and Levels
+
+The variable file joins the registry with the dictionary of the combined data. It describes every variable of `respondents.csv`, so the explorer and the insight pages can show the label, question, anchors and note.
+
+```{r}
+#| label: variables
+variables <- dictionary |>
+  filter(name %in% names(respondents)) |>
+  select(name, block, type, levels, min, max, anchors, label, question, note, starts_with("n_")) |>
+  left_join(registry, by = "name") |>
+  left_join(rename(compare_by, compare_label = label), by = "name") |>
+  mutate(
+    note = coalesce(site_note, note),
+    in_explorer = coalesce(in_explorer, FALSE),
+    short_label = coalesce(short_label, compare_label, label),
+    is_compare_by = name %in% compare_by$name
+  ) |>
+  select(-compare_label, -site_note) |>
+  arrange(match(name, names(respondents)))
+
+stopifnot(
+  # interview_month is the only variable not in the combined data
+  setequal(variables$name, setdiff(names(respondents), "interview_month")),
+  !anyNA(variables$short_label)
+)
+```
+
+The level file gives the categories of every factor in `respondents.csv`, in order, with the code used in the combined data.
+
+```{r}
+#| label: levels
+site_levels <- variables |>
+  filter(type %in% c("factor", "ordered")) |>
+  select(variable = name, level_set = levels, ordered = type) |>
+  mutate(ordered = ordered == "ordered") |>
+  inner_join(level_sets, by = "level_set", relationship = "many-to-many") |>
+  select(variable, order, code, level, ordered) |>
+  arrange(match(variable, names(respondents)), order)
+
+# every factor value in the data has a level
+stopifnot(all(map_lgl(
+  unique(site_levels$variable),
+  \(v) all(na.omit(as.character(respondents[[v]])) %in% site_levels$level[site_levels$variable == v])
+)))
+```
+
+## Save
+
+```{r}
+#| label: save
+write_csv(respondents, here(site_data_dir, "respondents.csv"), na = "")
+write_csv(panel, here(site_data_dir, "panel.csv"), na = "")
+write_csv(variables, here(site_data_dir, "variables.csv"), na = "")
+write_csv(site_levels, here(site_data_dir, "levels.csv"), na = "")
+write_csv(compare_by, here(site_data_dir, "compare_by.csv"), na = "")
+
+tibble(file = list.files(site_data_dir)) |>
+  mutate(size_kb = round(file.size(here(site_data_dir, file)) / 1024)) |>
+  tt()
+```

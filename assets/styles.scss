@@ -1,0 +1,230 @@
+/*-- scss:defaults --*/
+
+// Colours and fonts come from _brand.yml. These defaults only set layout.
+$font-size-base: 1.0625rem;
+$border-radius: 0;
+$border-radius-sm: 0;
+$border-radius-lg: 0;
+$headings-margin-bottom: 0.6rem;
+// Bootstrap colour variables are not defined yet at this point, so the
+// navbar uses the brand values (paper and ink) directly
+$navbar-bg: #FFFFFF;
+$navbar-fg: #23262B;
+$navbar-hl: #23262B;
+
+/*-- scss:rules --*/
+
+:root {
+  --ip-ink: #23262B;
+  --ip-muted: #5F6670;
+  --ip-rule: #E3E5E8;
+  --ip-tint: #F4F5F7;
+  --ip-coral: #FF7676;
+  --ip-yellow: #F9D662;
+  --ip-green: #7CAB7D;
+  --ip-blue: #75B7D1;
+}
+
+body {
+  font-variant-numeric: tabular-nums;
+}
+
+// Navbar: white, finished with the four colours of the palette as a thin
+// band along its lower edge. This band is the theme of the site.
+.navbar {
+  border-bottom: 0;
+  box-shadow: none;
+  background-image: linear-gradient(
+    to right,
+    var(--ip-coral) 0 25%,
+    var(--ip-yellow) 25% 50%,
+    var(--ip-green) 50% 75%,
+    var(--ip-blue) 75% 100%
+  );
+  background-size: 100% 4px;
+  background-position: bottom;
+  background-repeat: no-repeat;
+}
+
+.navbar-brand img {
+  max-height: 34px;
+  margin-right: 0.4rem;
+}
+
+.navbar .nav-link {
+  font-weight: 600;
+}
+
+// Site name in the same weight as the links next to it
+.navbar-title {
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+// Funding logos in the footer
+.funder-logos {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  margin-bottom: 0.4rem;
+
+  img {
+    height: 38px;
+    width: auto;
+  }
+}
+
+// The four colours of the palette as a thin band, used under page titles
+// and on the home page. It is the one decorative element of the site.
+.colour-band {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  height: 6px;
+  margin: 1rem 0 2rem 0;
+
+  span:nth-child(1) { background: var(--ip-coral); }
+  span:nth-child(2) { background: var(--ip-yellow); }
+  span:nth-child(3) { background: var(--ip-green); }
+  span:nth-child(4) { background: var(--ip-blue); }
+}
+
+// Small upper-case label above titles and numbers
+.kicker {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ip-muted);
+  margin-bottom: 0.3rem;
+}
+
+h1.title,
+.hero h1 {
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+
+.lead {
+  font-size: 1.2rem;
+  color: var(--ip-muted);
+  max-width: 42rem;
+}
+
+// Home page
+.hero {
+  margin-top: 1.5rem;
+
+  h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    line-height: 1.1;
+    margin-bottom: 0.8rem;
+  }
+}
+
+.key-numbers {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  gap: 1.5rem;
+  border-top: 1px solid var(--ip-rule);
+  padding-top: 1.2rem;
+  margin: 2rem 0 2.5rem 0;
+
+  .value {
+    font-size: 2.3rem;
+    font-weight: 700;
+    line-height: 1.1;
+  }
+
+  .label {
+    color: var(--ip-muted);
+    font-size: 0.92rem;
+  }
+}
+
+.section-links {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 1.5rem;
+  margin: 1.5rem 0 2.5rem 0;
+
+  > div {
+    padding-top: 0.8rem;
+    border-top: 4px solid var(--ip-rule);
+  }
+
+  > div:nth-child(1) { border-top-color: var(--ip-blue); }
+  > div:nth-child(2) { border-top-color: var(--ip-coral); }
+  > div:nth-child(3) { border-top-color: var(--ip-yellow); }
+
+  p {
+    margin: 0;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  a:hover .link-title { text-decoration: underline; }
+
+  .link-title,
+  .link-text {
+    display: block;
+  }
+
+  .link-title {
+    font-weight: 600;
+    font-size: 1.15rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .link-text {
+    color: var(--ip-muted);
+    font-size: 0.95rem;
+  }
+}
+
+// Figures: captions small and muted, aligned left
+.figure-caption,
+figcaption {
+  color: var(--ip-muted);
+  font-size: 0.85rem;
+  text-align: left;
+}
+
+// Short "how to read this" note above figures
+.how-to-read {
+  border-left: 3px solid var(--ip-yellow);
+  padding: 0.2rem 0 0.2rem 0.9rem;
+  color: var(--ip-muted);
+  font-size: 0.95rem;
+  margin: 1rem 0 1.5rem 0;
+}
+
+// Listings: flat cards with a rule, no shadow
+.quarto-grid-item.card {
+  border: 0;
+  border-top: 1px solid var(--ip-rule);
+  box-shadow: none;
+  background: transparent;
+}
+
+.quarto-grid-item .card-title {
+  font-weight: 600;
+}
+
+// Tables
+table {
+  font-variant-numeric: tabular-nums;
+}
+
+.table > :not(caption) > * > * {
+  background-color: transparent;
+}
+
+// Footer
+.nav-footer {
+  border-top: 1px solid var(--ip-rule);
+  font-size: 0.82rem;
+  color: var(--ip-muted);
+}

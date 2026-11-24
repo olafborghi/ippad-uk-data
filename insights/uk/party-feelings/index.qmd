@@ -1,0 +1,307 @@
+---
+title: "Feelings towards the parties"
+description: "How young people in the UK rate the Conservatives, Labour, the Liberal Democrats, the Greens and Reform UK, and how this differs by age, gender and survey."
+date: 2026-11-24
+categories: [Parties, Age, Gender]
+image: thumbnail.png
+---
+
+```{r}
+#| label: setup
+#| include: false
+source(here::here("R", "site.R"))
+
+share <- \(x) percent(mean(x), accuracy = 1)
+
+party_names <- c(
+  ftp1_UK = "Conservatives",
+  ftp2_UK = "Labour",
+  ftp3_UK = "Liberal Democrats",
+  ftp4_UK = "Greens",
+  ftp5_UK = "Reform UK"
+)
+
+# one row per respondent and party
+ratings <- respondents |>
+  select(dataset, age, age_group, gender, starts_with("ftp")) |>
+  pivot_longer(starts_with("ftp"), names_to = "party", values_to = "rating") |>
+  mutate(party = factor(party_names[party], levels = party_names))
+
+# shares that like (7 to 10) or dislike (0 to 3) a party, by survey
+like_dislike <- ratings |>
+  summarise(
+    like = mean(rating >= 7),
+    dislike = mean(rating <= 3),
+    zero = mean(rating == 0),
+    mean = mean(rating),
+    .by = c(dataset, party)
+  )
+
+stat <- \(data, ds, p, column, f = percent) {
+  f(data[[column]][data$dataset == ds & data$party == p], accuracy = 1)
+}
+
+# average of all five ratings, in Survation W1 and the range of the others
+overall_mean <- ratings |>
+  summarise(mean = mean(rating), .by = dataset)
+mean_sw1 <- number(overall_mean$mean[overall_mean$dataset == "Survation W1"], accuracy = 0.1)
+mean_others <- number(range(overall_mean$mean[overall_mean$dataset != "Survation W1"]), accuracy = 0.1)
+
+# Gallup W2 by age group
+gallup_w2_age <- ratings |>
+  filter(dataset == "Gallup W2") |>
+  summarise(mean = mean(rating), like = mean(rating >= 7), .by = c(age_group, party))
+
+w2_age <- \(ag, p, column, f = number, accuracy = 0.1) {
+  f(gallup_w2_age[[column]][gallup_w2_age$age_group == ag & gallup_w2_age$party == p], accuracy = accuracy)
+}
+
+# gender differences (men minus women) in the average rating
+gender_gap <- ratings |>
+  filter(gender %in% c("Female", "Male")) |>
+  summarise(mean = mean(rating), .by = c(dataset, party, gender)) |>
+  pivot_wider(names_from = gender, values_from = mean) |>
+  mutate(gap = Male - Female)
+
+gap_range <- \(p) {
+  gender_gap |>
+    filter(party == p) |>
+    pull(gap) |>
+    range() |>
+    number(accuracy = 0.1)
+}
+green_gap <- gender_gap |>
+  filter(party == "Greens") |>
+  select(dataset, gap) |>
+  deframe() |>
+  abs() |>
+  number(accuracy = 0.1)
+
+# Gallup respondents aged 18 to 21 in both waves
+gallup_1821 <- ratings |>
+  filter(dataset %in% c("Gallup W1", "Gallup W2"), age %in% 18:21) |>
+  summarise(
+    like = mean(rating >= 7),
+    dislike = mean(rating <= 3),
+    zero = mean(rating == 0),
+    .by = c(dataset, party)
+  )
+n_1821 <- respondents |>
+  filter(dataset %in% c("Gallup W1", "Gallup W2"), age %in% 18:21) |>
+  count(dataset) |>
+  deframe() |>
+  comma()
+```
+
+```{r}
+#| label: thumbnail
+#| include: false
+# Card image for the listings: the like and dislike bars of the first figure,
+# pooled over the surveys, without text
+thumbnail <- ratings |>
+  summarise(like = mean(rating >= 7), dislike = -mean(rating <= 3), .by = party) |>
+  pivot_longer(c(like, dislike)) |>
+  ggplot(aes(x = value, y = fct_rev(party), fill = name)) +
+  geom_col(width = 0.7) +
+  geom_vline(xintercept = 0, colour = brand[["ink"]], linewidth = 0.6) +
+  scale_fill_manual(values = c(like = brand[["blue-dark"]], dislike = brand[["coral-dark"]]), guide = "none") +
+  theme_void() +
+  theme(
+    plot.background = element_rect(fill = brand[["tint"]], colour = NA),
+    plot.margin = margin(24, 40, 24, 40)
+  )
+
+ggsave("thumbnail.png", thumbnail, width = 6, height = 3.9, dpi = 150)
+```
+
+Most of the young people in these surveys are too young to vote, so their feelings towards the parties are one of the few ways to see how they relate to party politics. In all four surveys, we asked them to rate five parties on a scale from 0 (strongly dislike) to 10 (strongly like). The surveys took place at different points in the political cycle. Gallup W1 was fielded in May and June 2024, during the general election campaign and under a Conservative government, while all later surveys took place after Labour had come to power (see [Who took part](/insights/uk/who-took-part/index.qmd)).
+
+## Which parties young people like
+
+::: {.how-to-read}
+Each panel shows one survey. Bars to the right give the share of respondents who rate a party 7 or higher, bars to the left the share who rate it 3 or lower. Ratings of 4 to 6 are not shown.
+:::
+
+```{r}
+#| label: plot-like
+#| fig-width: 8
+#| fig-height: 5.6
+#| fig-alt: "Diverging bar charts of the share of respondents who like (7 to 10) and dislike (0 to 3) each of five parties, one panel per survey. Labour is liked by the largest share in Gallup W1 and both Survation surveys, the Greens in Gallup W2. The Conservatives and Reform UK are disliked by the largest shares in Gallup W1, Gallup W2 and Survation W2. In Survation W1 all parties are liked by more and disliked by fewer respondents than in the other surveys."
+like_long <- like_dislike |>
+  select(dataset, party, like, dislike) |>
+  pivot_longer(c(like, dislike), names_to = "side", values_to = "share") |>
+  mutate(
+    value = if_else(side == "dislike", -share, share),
+    side = factor(side, levels = c("dislike", "like"), labels = c("Dislike (0 to 3)", "Like (7 to 10)"))
+  )
+
+ggplot(like_long, aes(x = value, y = fct_rev(party), fill = side)) +
+  geom_col(width = 0.7) +
+  geom_vline(xintercept = 0, colour = brand[["ink"]], linewidth = 0.4) +
+  geom_text(
+    aes(
+      label = percent(share, accuracy = 1),
+      hjust = if_else(value < 0, 1.15, -0.15)
+    ),
+    size = 3.3,
+    colour = brand[["ink"]]
+  ) +
+  facet_wrap(~dataset, ncol = 2) +
+  scale_fill_manual(values = c(brand[["coral-dark"]], brand[["blue-dark"]]), name = NULL) +
+  scale_x_continuous(
+    limits = c(-0.72, 0.72),
+    breaks = c(-0.5, 0, 0.5),
+    labels = \(x) percent(abs(x))
+  ) +
+  labs(
+    title = "Labour is the party liked most often in three of the four surveys",
+    x = "Share of respondents",
+    y = NULL,
+    caption = site_caption
+  ) +
+  theme(
+    legend.position = "top",
+    legend.justification = "left",
+    legend.location = "plot",
+    strip.background = element_blank(),
+    strip.text = element_text(hjust = 0, face = "bold"),
+    panel.grid.major.y = element_blank(),
+    panel.spacing.x = unit(1, "cm")
+  )
+```
+
+Labour is the party that the largest share of respondents like in Gallup W1 (`r stat(like_dislike, "Gallup W1", "Labour", "like")`) and in both Survation surveys. Gallup W2 is the exception, as `r stat(like_dislike, "Gallup W2", "Greens", "like")` of its respondents like the Greens and `r stat(like_dislike, "Gallup W2", "Labour", "like")` like Labour. At the other end, the Conservatives and Reform UK are disliked most often. In Gallup W1, `r stat(like_dislike, "Gallup W1", "Conservatives", "dislike")` rate the Conservatives 3 or lower. In both second waves, Reform UK receives the lowest possible rating of 0 more often than any other party (`r stat(like_dislike, "Gallup W2", "Reform UK", "zero")` in Gallup W2, `r stat(like_dislike, "Survation W2", "Reform UK", "zero")` in Survation W2). At the same time, `r stat(like_dislike, "Survation W2", "Reform UK", "like")` of Survation W2 respondents like Reform UK, about as many as like the Greens. This suggests that Reform UK divides young people more sharply than the other parties do.
+
+Survation W1 looks different from the other surveys. Its respondents like every party more often and dislike every party less often, and their average rating across all five parties is `r mean_sw1`, against `r mean_others[1]` to `r mean_others[2]` in the other surveys. This fits the general tendency of Survation W1 respondents to give higher answers on 0 to 10 scales, so it is safer to compare the order of the parties within that survey than their levels across surveys.
+
+## Age
+
+::: {.how-to-read}
+Each panel shows one party. The dots give the average rating in each age group of a survey. Groups with fewer than 50 respondents are left out.
+:::
+
+```{r}
+#| label: plot-age
+#| fig-width: 8
+#| fig-height: 5.4
+#| fig-alt: "Average party ratings by age group and survey, one panel per party. Within Gallup W2, respondents aged 22 to 26 rate the Conservatives, Labour and Reform UK about one point higher than those aged 18 to 21, while ratings of the Greens differ little by age. Within the Survation surveys, 16 and 17 year olds rate all parties slightly lower than 12 to 15 year olds."
+age_means <- ratings |>
+  summarise(mean = mean(rating), n = n(), .by = c(dataset, age_group, party)) |>
+  filter(n >= 50)
+
+ggplot(age_means, aes(x = age_group, y = mean, colour = dataset, group = dataset)) +
+  geom_hline(yintercept = 5, colour = brand[["rule"]], linewidth = 0.8) +
+  geom_line(linewidth = 0.7) +
+  geom_point(size = 2.4) +
+  facet_wrap(~party, ncol = 3) +
+  scale_colour_manual(values = dataset_colours, name = NULL) +
+  scale_y_continuous(limits = c(2.5, 6.5), breaks = 3:6) +
+  labs(
+    title = "In Gallup W2, 22 to 26 year olds rate most parties higher",
+    x = "Age group",
+    y = "Average rating (0 to 10)",
+    caption = site_caption
+  ) +
+  theme(
+    legend.position = "inside",
+    legend.position.inside = c(0.84, 0.22),
+    strip.background = element_blank(),
+    strip.text = element_text(hjust = 0, face = "bold"),
+    axis.text.x = element_text(size = 10)
+  )
+```
+
+Because each survey covers a different age range, age differences are best read within a survey. In Gallup W2, 22 to 26 year olds rate the Conservatives at `r w2_age("22-26", "Conservatives", "mean")` on average, compared with `r w2_age("18-21", "Conservatives", "mean")` among 18 to 21 year olds, and Reform UK at `r w2_age("22-26", "Reform UK", "mean")` compared with `r w2_age("18-21", "Reform UK", "mean")`. Labour, too, is rated higher by the older group, while ratings of the Greens hardly differ by age. Since the older group rates almost every party more warmly, this could partly reflect a general tendency to give higher ratings rather than a preference for particular parties. Within the Survation surveys, the age pattern runs the other way, as 16 and 17 year olds rate all five parties slightly lower than 12 to 15 year olds.
+
+## Gender
+
+::: {.how-to-read}
+Each row compares the average rating of a party among young women and young men in one survey. A longer line means a larger gap.
+:::
+
+```{r}
+#| label: plot-gender
+#| fig-width: 8
+#| fig-height: 5.4
+#| fig-alt: "Dumbbell charts of the average party ratings of young women and young men, one panel per survey. In all four surveys young men rate the Conservatives and Reform UK higher than young women. In both Gallup surveys young women rate the Greens higher than young men. Gaps for Labour and the Liberal Democrats are smaller and less consistent."
+gender_means <- ratings |>
+  filter(gender %in% c("Female", "Male")) |>
+  summarise(mean = mean(rating), .by = c(dataset, party, gender))
+
+ggplot(gender_means, aes(x = mean, y = fct_rev(party))) +
+  geom_line(aes(group = party), colour = brand[["rule"]], linewidth = 2) +
+  geom_point(aes(colour = gender), size = 3) +
+  facet_wrap(~dataset, ncol = 2) +
+  scale_colour_manual(values = gender_colours, breaks = c("Female", "Male"), name = NULL) +
+  scale_x_continuous(limits = c(2.5, 6.5), breaks = 3:6) +
+  labs(
+    title = "Young men rate the Conservatives and Reform UK higher than young women",
+    x = "Average rating (0 to 10)",
+    y = NULL,
+    caption = site_caption
+  ) +
+  theme(
+    legend.position = "top",
+    legend.justification = "left",
+    legend.location = "plot",
+    strip.background = element_blank(),
+    strip.text = element_text(hjust = 0, face = "bold"),
+    panel.grid.major.y = element_blank(),
+    panel.spacing.x = unit(1, "cm")
+  )
+```
+
+The gender differences concern specific parties. In all four surveys, young men rate the Conservatives higher than young women, by `r gap_range("Conservatives")[1]` to `r gap_range("Conservatives")[2]` points, and Reform UK by `r gap_range("Reform UK")[1]` to `r gap_range("Reform UK")[2]` points. In turn, young women in the two Gallup surveys rate the Greens higher than young men, by `r green_gap[["Gallup W1"]]` points in W1 and `r green_gap[["Gallup W2"]]` points in W2. For Labour and the Liberal Democrats, the gaps are smaller and less consistent. In Survation W1, young men rate every party somewhat higher than young women.
+
+## The same ages in two waves
+
+::: {.how-to-read}
+Both panels compare Gallup respondents aged 18 to 21 in W1 (spring 2024, light blue) and W2 (mostly late 2025, dark blue). A longer line means a larger difference between the two surveys.
+:::
+
+```{r}
+#| label: plot-waves
+#| fig-width: 8
+#| fig-height: 3.8
+#| fig-alt: "Dot charts comparing Gallup respondents aged 18 to 21 in W1 and W2. The share who like Labour is lower in W2 and the share who like the Greens is higher. The share who dislike Labour and Reform UK is higher in W2. The other shares change little."
+waves <- gallup_1821 |>
+  select(dataset, party, like, dislike) |>
+  pivot_longer(c(like, dislike), names_to = "side", values_to = "share") |>
+  mutate(side = factor(side, levels = c("like", "dislike"), labels = c("Like (7 to 10)", "Dislike (0 to 3)")))
+
+waves_wide <- waves |>
+  pivot_wider(names_from = dataset, values_from = share)
+
+ggplot(waves, aes(x = share, y = fct_rev(party))) +
+  geom_segment(
+    data = waves_wide,
+    aes(x = `Gallup W1`, xend = `Gallup W2`, yend = fct_rev(party)),
+    colour = brand[["rule"]],
+    linewidth = 2
+  ) +
+  geom_point(aes(colour = dataset), size = 3) +
+  facet_wrap(~side, ncol = 2) +
+  scale_colour_manual(values = dataset_colours, name = NULL) +
+  scale_x_continuous(labels = label_percent(), limits = c(0, 0.6)) +
+  labs(
+    title = "Fewer 18 to 21 year olds liked Labour in W2, and more liked the Greens",
+    x = "Share of respondents aged 18 to 21",
+    y = NULL,
+    caption = site_caption
+  ) +
+  theme(
+    legend.position = "top",
+    legend.justification = "left",
+    legend.location = "plot",
+    strip.background = element_blank(),
+    strip.text = element_text(hjust = 0, face = "bold"),
+    panel.grid.major.y = element_blank(),
+    panel.spacing.x = unit(1, "cm")
+  )
+```
+
+The two Gallup surveys allow a fairer comparison over time, because both include over 800 respondents aged 18 to 21 (`r n_1821[["Gallup W1"]]` and `r n_1821[["Gallup W2"]]`) recruited in the same way. In this age group, the share who like Labour is `r stat(gallup_1821, "Gallup W1", "Labour", "like")` in W1 and `r stat(gallup_1821, "Gallup W2", "Labour", "like")` in W2, while the share who like the Greens rises from `r stat(gallup_1821, "Gallup W1", "Greens", "like")` to `r stat(gallup_1821, "Gallup W2", "Greens", "like")`. Interestingly, the share who like Reform UK hardly changes, but the share who give it a rating of 0 rises from `r stat(gallup_1821, "Gallup W1", "Reform UK", "zero")` to `r stat(gallup_1821, "Gallup W2", "Reform UK", "zero")`. The two surveys lie on either side of the change from a Conservative to a Labour government. However, the two samples consist of different young people, and the data cannot tell whether the differences reflect the political events of that period or who happened to take part.
+
+## About these data
+
+The four surveys differ in age range, recruitment and timing, and the data are not weighted. Gallup W1 introduced the parties as those "in the Parliament of the United Kingdom" and the other surveys as those "in the House of Commons". [The data](/data.qmd) page explains the design.

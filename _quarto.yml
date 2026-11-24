@@ -1,0 +1,70 @@
+project:
+  type: website
+  output-dir: _site
+  # site data read by the explorer and the data page in the browser
+  resources:
+    - "data/*.csv"
+  # the data build script and the insight template are not site pages
+  render:
+    - "*.qmd"
+    - "!scripts/"
+    - "!insights/_template.qmd"
+    - "!CLAUDE.md"
+    - "!README.md"
+    - "!LICENSE.md"
+
+lang: en-GB
+
+execute:
+  # pages only re-run when their source changes, so publishing needs no R
+  freeze: auto
+  echo: false
+  warning: false
+  message: false
+
+website:
+  title: "IP-PAD UK Data"
+  site-url: "https://olafborghi.com/ippad-uk-data"
+  repo-url: "https://github.com/olafborghi/ippad-uk-data"
+  description: "Findings and data from four surveys of young people aged 12 to 26 in the United Kingdom, carried out between 2024 and 2026 as part of the IP-PAD Doctoral Network."
+  favicon: assets/logo.png
+  page-navigation: false
+  navbar:
+    logo: assets/logo.png
+    logo-alt: "IP-PAD logo"
+    title: "IP-PAD UK Data"
+    left:
+      - text: "Data"
+        href: data.qmd
+      - text: "Explore"
+        href: explore.qmd
+      - text: "Insights"
+        href: insights/index.qmd
+      - text: "About"
+        href: about.qmd
+  page-footer:
+    left: |
+      [![European Commission](/assets/ec-logo-horiz_en.png){height=38px} ![UK Research and Innovation](/assets/UKRI_Logo.jpg){height=38px}]{.funder-logos}
+
+      IP-PAD is funded by the European Union under the Horizon Europe MSCA Doctoral Networks
+      programme (Grant Agreement No. 101072992), with participation from the UKRI Horizon Europe
+      guarantee scheme (EPSRC EP/X026825/1). [Funding details](/about.qmd#funding)
+    right: |
+      Data and text under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)
+
+      This website was built with the help of [Claude Code](https://claude.com/claude-code).
+
+format:
+  html:
+    theme: [brand, assets/styles.scss]
+    toc: false
+    smooth-scroll: true
+    link-external-newwindow: true
+    fig-align: left
+    fig-responsive: true
+
+knitr:
+  opts_chunk:
+    dev: "ragg_png"
+    fig.retina: 2
+    fig.align: "left"

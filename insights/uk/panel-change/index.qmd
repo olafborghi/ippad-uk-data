@@ -1,0 +1,324 @@
+---
+title: "The same young people a year later"
+description: "How the views of young people interviewed twice changed between the two waves, and how stable their answers were."
+date: 2026-11-24
+categories: [Panel, Change]
+image: thumbnail.png
+---
+
+```{r}
+#| label: setup
+#| include: false
+source(here::here("R", "site.R"))
+
+pct <- \(x) percent(x, accuracy = 1)
+num <- \(x, acc = 0.1) number(x, accuracy = acc, style_negative = "minus")
+
+provider_colours <- c(
+  "Gallup" = dataset_colours[["Gallup W2"]],
+  "Survation" = dataset_colours[["Survation W2"]]
+)
+
+# the measures, their original range and a readable label
+measures <- tribble(
+  ~var, ~label, ~min, ~max,
+  "lr", "Left-right", 0, 10,
+  "pc", "Progressive-conservative", 0, 10,
+  "polint", "Interest in politics", 1, 4,
+  "ftp1_UK", "Feeling about Conservatives", 0, 10,
+  "ftp2_UK", "Feeling about Labour", 0, 10,
+  "ftp3_UK", "Feeling about Liberal Democrats", 0, 10,
+  "ftp4_UK", "Feeling about Greens", 0, 10,
+  "ftp5_UK", "Feeling about Reform UK", 0, 10,
+  "swdkep1", "Satisfied with democracy", 1, 7,
+  "trust", "Trust in institutions", 0, 10,
+  "cer_UK", "Certainty about own beliefs", 0, 100
+) |>
+  mutate(label = fct_inorder(label))
+
+# interest in politics as a number from 1 to 4, trust as the mean of five items
+panel_num <- panel |>
+  mutate(
+    across(starts_with("polint"), \(x) as.integer(factor(x, levels = levels(respondents$polint)))),
+    trust_w1 = rowMeans(pick(all_of(str_c("trust", 1:5, "_w1")))),
+    trust_w2 = rowMeans(pick(all_of(str_c("trust", 1:5, "_w2")))),
+    provider = if_else(provider == "Gallup International", "Gallup", "Survation"),
+    strict = link_age_diff %in% 1:2 & link_same_gender
+  )
+
+# one row per person and measure, only where both waves were asked
+panel_long <- panel_num |>
+  select(pair, provider, strict, all_of(c(str_c(measures$var, "_w1"), str_c(measures$var, "_w2")))) |>
+  pivot_longer(
+    -c(pair, provider, strict),
+    names_to = c("var", ".value"),
+    names_pattern = "(.*)_(w[12])"
+  ) |>
+  filter(!is.na(w1), !is.na(w2)) |>
+  left_join(measures, by = "var") |>
+  mutate(
+    change = w2 - w1,
+    # change in points of a 0 to 10 scale, so that all measures compare
+    change_10 = change * 10 / (max - min)
+  )
+
+# mean change with a 95% confidence interval for paired differences,
+# for all links and for the strict links only
+change_summary <- bind_rows(
+  mutate(panel_long, links = "All links"),
+  mutate(filter(panel_long, strict), links = "Strict links only")
+) |>
+  summarise(
+    n = n(),
+    mean = mean(change),
+    mean_10 = mean(change_10),
+    half = qt(0.975, n - 1) * sd(change) / sqrt(n),
+    half_10 = qt(0.975, n - 1) * sd(change_10) / sqrt(n),
+    r = cor(w1, w2),
+    .by = c(provider, links, var, label)
+  ) |>
+  mutate(
+    lo = mean - half,
+    hi = mean + half,
+    excludes_zero = lo > 0 | hi < 0
+  )
+
+# the size of a change, with the confidence interval of the signed change
+change_text <- \(v, prov, lk = "All links", acc = 0.1) {
+  x <- filter(change_summary, var == v, provider == prov, links == lk)
+  str_c(num(abs(x$mean), acc), " points (95% interval of the change ", num(x$lo, acc), " to ", num(x$hi, acc), ")")
+}
+
+# the text describes these changes as clear (or not) with strict links only
+is_clear <- \(v, prov, lk) change_summary$excludes_zero[change_summary$var == v & change_summary$provider == prov & change_summary$links == lk]
+stopifnot(
+  is_clear("ftp2_UK", "Gallup", "All links"),
+  is_clear("ftp2_UK", "Gallup", "Strict links only"),
+  is_clear("ftp2_UK", "Survation", "All links"),
+  !is_clear("ftp2_UK", "Survation", "Strict links only"),
+  is_clear("cer_UK", "Survation", "All links"),
+  !is_clear("cer_UK", "Survation", "Strict links only")
+)
+
+# link quality
+links <- panel_num |>
+  summarise(
+    n = n(),
+    consistent = sum(link_consistent),
+    strict = sum(strict),
+    same_age = sum(link_age_diff == 0),
+    younger = sum(link_age_diff < 0),
+    other_gender = sum(!link_same_gender),
+    .by = provider
+  )
+link_n <- \(stat, prov) links[[stat]][links$provider == prov]
+
+# measures not asked in both waves
+not_both <- panel_num |>
+  summarise(pc = all(is.na(pc_w2)), trust = all(is.na(trust_w2)), .by = provider)
+stopifnot(not_both$pc == c(FALSE, TRUE), not_both$trust == c(FALSE, TRUE))
+
+# months of the interviews
+panel_months <- respondents |>
+  filter(panel) |>
+  count(dataset, interview_month) |>
+  slice_max(n, n = 1, by = dataset) |>
+  mutate(month = format(as.Date(str_c(interview_month, "-01")), "%B %Y")) |>
+  select(dataset, month) |>
+  deframe()
+
+# left-right in detail
+lr_change <- panel_long |>
+  filter(var == "lr") |>
+  summarise(
+    same = mean(change == 0),
+    within_1 = mean(abs(change) <= 1),
+    three_plus = mean(abs(change) >= 3),
+    .by = provider
+  )
+lr_stat <- \(stat, prov) lr_change[[stat]][lr_change$provider == prov]
+
+lr_extremes <- panel_long |>
+  filter(var == "lr", provider == "Survation") |>
+  mutate(start = case_when(w1 <= 3 ~ "left", w1 >= 7 ~ "right")) |>
+  filter(!is.na(start)) |>
+  summarise(n = n(), change = mean(change), .by = start)
+lr_ext <- \(stat, side) lr_extremes[[stat]][lr_extremes$start == side]
+
+r_lr <- \(prov, lk = "All links") {
+  change_summary$r[change_summary$var == "lr" & change_summary$provider == prov & change_summary$links == lk]
+}
+r_all <- filter(change_summary, links == "All links")
+
+# left-right is the most stable measure in Gallup and the least stable in Survation
+stopifnot(
+  slice_max(filter(r_all, provider == "Gallup"), r)$var == "lr",
+  slice_min(filter(r_all, provider == "Survation"), r)$var == "lr"
+)
+
+# Survation W1: panel members against everyone else
+survation_w1_lr <- respondents |>
+  filter(dataset == "Survation W1") |>
+  summarise(lr = mean(lr), .by = panel) |>
+  deframe()
+other_lr <- respondents |>
+  filter(dataset != "Survation W1") |>
+  summarise(lr = mean(lr), .by = dataset) |>
+  pull(lr)
+```
+
+```{r}
+#| label: thumbnail
+#| include: false
+# Card image for the listings: individual left-right answers in both waves,
+# as faint connected dots, without text
+set.seed(1)
+thumb_data <- panel_num |>
+  select(pair, provider, lr_w1, lr_w2) |>
+  pivot_longer(c(lr_w1, lr_w2), names_to = "wave", values_to = "lr") |>
+  mutate(
+    x = if_else(wave == "lr_w1", 1, 2) + if_else(provider == "Gallup", 0, 1.6),
+    y = lr + runif(n(), -0.25, 0.25)
+  )
+
+thumbnail <- ggplot(thumb_data, aes(x = x, y = y, group = pair, colour = provider)) +
+  geom_line(alpha = 0.35, linewidth = 0.5) +
+  geom_point(size = 1.6, alpha = 0.8) +
+  scale_colour_manual(values = provider_colours, guide = "none") +
+  theme_void() +
+  theme(
+    plot.background = element_rect(fill = brand[["tint"]], colour = NA),
+    plot.margin = margin(18, 40, 18, 40)
+  )
+
+ggsave("thumbnail.png", thumbnail, width = 6, height = 3.9, dpi = 150)
+```
+
+Comparing young people of different ages says little about how the views of any one person develop. Both providers therefore re-interviewed some of their respondents. Gallup interviewed `r link_n("n", "Gallup")` young people in both waves, first in `r panel_months[["Gallup W1"]]` and again in 2025, and Survation interviewed `r link_n("n", "Survation")` young people in `r panel_months[["Survation W1"]]` and again in `r panel_months[["Survation W2"]]`. This page asks how much their answers changed on average, and how stable they were from one person to the next.
+
+## How certain the links are
+
+Because the interviews were more than a year apart, a correctly linked respondent should be one or two years older in the second wave and report the same gender. The rule that Survation documented, which also accepts an unchanged age, is met by `r link_n("consistent", "Gallup")` of `r link_n("n", "Gallup")` Gallup links and `r link_n("consistent", "Survation")` of `r link_n("n", "Survation")` Survation links. A stricter rule, which requires an age one or two years higher, is met by only `r link_n("strict", "Gallup")` and `r link_n("strict", "Survation")` links. Since Survation reached children through a parent's panel account, some second interviews may have been answered by a sibling. We therefore show each result for all links and, as a check, for the strict links only.
+
+## Average change is small
+
+::: {.how-to-read}
+Each dot is the average change from the first to the second wave, with a line for its 95% confidence interval, and open circles repeat it for the strict links only. To compare measures, all are expressed in points of a scale from 0 to 10. Survation did not ask about trust or the progressive-conservative scale in its second wave.
+:::
+
+```{r}
+#| label: plot-change
+#| fig-width: 8.5
+#| fig-height: 5.6
+#| fig-alt: "Average change between waves on eleven measures, for the Gallup and the Survation panel, with 95% confidence intervals. Most intervals include zero. In Gallup, the feeling about the Labour Party fell by about one point on the 0 to 10 scale, also with strict links only. In Survation, the feeling about Labour rose slightly and certainty about own beliefs fell, but neither change is clear with strict links only. The feeling about Reform UK fell slightly in both panels."
+change_plot <- change_summary |>
+  mutate(label = fct_rev(label))
+
+ggplot(change_plot, aes(x = mean_10, y = label, colour = provider, shape = links)) +
+  geom_vline(xintercept = 0, colour = brand[["rule"]], linewidth = 0.8) +
+  geom_pointrange(
+    aes(xmin = mean_10 - half_10, xmax = mean_10 + half_10),
+    position = position_dodge(width = 0.6, reverse = TRUE),
+    size = 0.35,
+    linewidth = 0.5,
+    fill = brand[["paper"]]
+  ) +
+  facet_wrap(~provider) +
+  scale_colour_manual(values = provider_colours, guide = "none") +
+  scale_shape_manual(values = c("All links" = 16, "Strict links only" = 21), name = NULL) +
+  scale_x_continuous(breaks = -2:2, labels = label_number(style_negative = "minus", style_positive = "plus")) +
+  labs(
+    title = "Most average changes are small and uncertain",
+    x = "Change from wave 1 to wave 2 (points on a 0 to 10 scale)",
+    y = NULL,
+    caption = site_caption
+  ) +
+  theme(legend.position = "top", legend.justification = "left", panel.spacing.x = unit(1.5, "lines"))
+```
+
+On most measures, the average answers barely moved. The clearest change is that the Gallup panel felt less warmly about the Labour Party, by `r change_text("ftp2_UK", "Gallup")` on the scale from 0 to 10, and this holds for the strict links. As the general election of July 2024 fell between the two Gallup waves, this could reflect Labour's move from opposition into government rather than anything specific to young people. In the Survation panel, feelings about Labour rose by `r change_text("ftp2_UK", "Survation", acc = 0.01)`, and certainty about one's own beliefs fell by `r change_text("cer_UK", "Survation")` on a scale from 0 to 100. However, neither Survation change is clear when only the strict links are kept.
+
+## Individual answers move more than the averages
+
+::: {.how-to-read}
+The bars show how many young people moved by a given number of points on the left-right scale. The shaded band marks a change of at most one point.
+:::
+
+```{r}
+#| label: plot-lr-change
+#| fig-width: 8
+#| fig-height: 4
+#| fig-alt: "Bar charts of the change in left-right self-placement between the waves, for the Gallup and the Survation panel. In both, about half give the same answer and about three quarters move by at most one point. In Survation, a few respondents move by five or more points, up to ten."
+lr_counts <- panel_long |>
+  filter(var == "lr") |>
+  count(provider, change)
+
+lr_labels <- lr_change |>
+  mutate(text = str_c(pct(within_1), " within\none point"))
+
+ggplot(lr_counts, aes(x = change, y = n, fill = provider)) +
+  annotate("rect", xmin = -1.5, xmax = 1.5, ymin = -Inf, ymax = Inf, fill = brand[["tint"]]) +
+  geom_col(width = 0.8) +
+  geom_text(
+    data = lr_labels,
+    aes(x = 3.5, y = 33, label = text),
+    hjust = 0,
+    lineheight = 0.95,
+    family = "Public Sans Regular",
+    size = 3.6,
+    colour = brand[["ink"]],
+    inherit.aes = FALSE
+  ) +
+  facet_wrap(~provider) +
+  scale_fill_manual(values = provider_colours, guide = "none") +
+  scale_x_continuous(breaks = seq(-10, 10, 2), labels = label_number(style_negative = "minus", style_positive = "plus")) +
+  labs(
+    title = "About half give the same left-right answer a year later",
+    x = "Change in left-right position (points)",
+    y = "Number of young people",
+    caption = site_caption
+  ) +
+  theme(panel.spacing.x = unit(1.5, "lines"))
+```
+
+Behind these small averages, individuals move in both directions. On the left-right scale, `r pct(lr_stat("same", "Gallup"))` of the Gallup panel and `r pct(lr_stat("same", "Survation"))` of the Survation panel chose the same point twice, but `r pct(lr_stat("three_plus", "Survation"))` of the Survation panel moved by three points or more. Those who started near the ends of the scale tended to move towards the centre. The `r lr_ext("n", "left")` Survation respondents who first placed themselves at 3 or below moved right by `r num(lr_ext("change", "left"))` points on average, and the `r lr_ext("n", "right")` who started at 7 or above moved left by `r num(abs(lr_ext("change", "right")))`. Measurement error alone would produce this pattern, since an answer that is extreme partly by chance tends to be less extreme the next time, so it does not necessarily mean that these young people became more moderate.
+
+## How stable answers are
+
+::: {.how-to-read}
+Each dot is the correlation between the answers in the two waves. A value of 1 means that everyone kept their position relative to the others, and 0 that the first answer says nothing about the second. Open circles show the strict links only.
+:::
+
+```{r}
+#| label: plot-stability
+#| fig-width: 8.5
+#| fig-height: 5.4
+#| fig-alt: "Correlation between first and second wave answers on eleven measures, for the Gallup and the Survation panel. Most correlations lie between about 0.4 and 0.8. Left-right self-placement is the most stable measure in Gallup, at about 0.8, but one of the least stable in Survation, at about 0.4. Feelings about the Conservative Party are among the most stable in both panels."
+stability <- change_summary |>
+  mutate(label = fct_rev(label))
+
+ggplot(stability, aes(x = r, y = label, colour = provider, shape = links)) +
+  geom_point(
+    position = position_dodge(width = 0.6, reverse = TRUE),
+    size = 2.6,
+    fill = brand[["paper"]],
+    stroke = 0.9
+  ) +
+  facet_wrap(~provider) +
+  scale_colour_manual(values = provider_colours, guide = "none") +
+  scale_shape_manual(values = c("All links" = 16, "Strict links only" = 21), name = NULL) +
+  scale_x_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.25)) +
+  labs(
+    title = "Answers are moderately stable from one wave to the next",
+    x = "Correlation between wave 1 and wave 2",
+    y = NULL,
+    caption = site_caption
+  ) +
+  theme(legend.position = "top", legend.justification = "left", panel.spacing.x = unit(1.5, "lines"))
+```
+
+Most correlations between the waves lie between `r num(quantile(r_all$r, 0.1))` and `r num(quantile(r_all$r, 0.9))`, so young people largely keep their position relative to each other, even though single answers vary. Left-right self-placement is the most stable measure in Gallup, with a correlation of `r num(r_lr("Gallup"), 0.01)`, but the least stable in Survation, with `r num(r_lr("Survation"), 0.01)`, or `r num(r_lr("Survation", "Strict links only"), 0.01)` with the strict links only. One possible reason is that many of the 12 to 17 year olds in Survation may not yet have a settled sense of what left and right mean.
+
+## About these data
+
+The two panels are small and include only those who agreed to take part again, who may differ from those who did not return. One difference is already visible. Survation W1 as a whole gives higher answers on the scales from 0 to 10 than the other surveys, with an average left-right position of `r num(mean(respondents$lr[respondents$dataset == "Survation W1"]))`, but its later panel members placed themselves at `r num(survation_w1_lr[["TRUE"]])` in the first wave, close to the other surveys (`r num(min(other_lr))` to `r num(max(other_lr))`). The higher scores of Survation W1 thus come from those who did not return. In addition, the changes shown here combine real change with measurement error and possibly some wrongly linked respondents, and they cannot tell us why views changed. With 50 to 70 people per panel, only large changes can be detected with confidence. [The data](/data.qmd) page explains the design of the surveys.

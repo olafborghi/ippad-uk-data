@@ -1,0 +1,350 @@
+---
+title: "Interest, democracy and trust"
+description: "How interested young people in the UK are in politics, how satisfied they are with democracy, and how much they trust its institutions."
+date: 2026-11-24
+categories: [Democracy, Trust, Age, Gender]
+image: thumbnail.png
+---
+
+```{r}
+#| label: setup
+#| include: false
+source(here::here("R", "site.R"))
+
+share <- \(x) percent(mean(x, na.rm = TRUE), accuracy = 1)
+
+# interest: fairly or very interested
+respondents <- respondents |>
+  mutate(interested = as.integer(polint) >= 3)
+
+interest <- respondents |>
+  summarise(share = share(interested), .by = dataset) |>
+  deframe()
+
+interest_gw2 <- respondents |>
+  filter(dataset == "Gallup W2") |>
+  summarise(share = share(interested), .by = age) |>
+  deframe()
+interest_gw2_group <- respondents |>
+  filter(dataset == "Gallup W2") |>
+  summarise(share = share(interested), .by = age_group) |>
+  deframe()
+
+# Survation W1 respondents who took part again, and the others
+interest_sw1_panel <- respondents |>
+  filter(dataset == "Survation W1") |>
+  summarise(share = share(interested), .by = panel) |>
+  mutate(panel = if_else(panel, "panel", "others")) |>
+  deframe()
+n_sw1_panel <- sum(respondents$dataset == "Survation W1" & respondents$panel)
+
+interest_gender <- respondents |>
+  filter(gender %in% c("Female", "Male")) |>
+  summarise(share = mean(interested), .by = c(dataset, gender)) |>
+  pivot_wider(names_from = gender, values_from = share) |>
+  mutate(gap = Male - Female)
+interest_gap <- number(range(interest_gender$gap) * 100, accuracy = 1)
+
+# satisfaction with democracy
+swd <- respondents |>
+  summarise(
+    satisfied = share(swdkep1 >= 5),
+    dissatisfied = share(swdkep1 <= 3),
+    neutral = share(swdkep1 == 4),
+    .by = dataset
+  )
+swd_stat <- \(ds, column) swd[[column]][swd$dataset == ds]
+
+swd_gender <- respondents |>
+  filter(gender %in% c("Female", "Male")) |>
+  summarise(satisfied = share(swdkep1 >= 5), .by = c(dataset, gender))
+swd_g <- \(ds, g) swd_gender$satisfied[swd_gender$dataset == ds & swd_gender$gender == g]
+
+swd_gw2_age <- respondents |>
+  filter(dataset == "Gallup W2") |>
+  summarise(satisfied = share(swdkep1 >= 5), .by = age_group) |>
+  deframe()
+
+swd_by_interest <- respondents |>
+  filter(polint %in% c("Not at all interested", "Very interested")) |>
+  summarise(satisfied = share(swdkep1 >= 5), .by = polint) |>
+  deframe()
+
+# trust
+institutions <- c(
+  trust1 = "Courts",
+  trust2 = "Police",
+  trust3 = "UK government",
+  trust4 = "Political parties",
+  trust5 = "Media"
+)
+
+trust <- respondents |>
+  filter(dataset != "Survation W2") |>
+  select(dataset, age, age_group, gender, starts_with("trust")) |>
+  pivot_longer(starts_with("trust"), names_to = "institution", values_to = "trust") |>
+  filter(!is.na(trust)) |>
+  mutate(institution = institutions[institution])
+
+trust_means <- trust |>
+  summarise(mean = mean(trust), .by = c(dataset, institution))
+tm <- \(ds, inst) number(trust_means$mean[trust_means$dataset == ds & trust_means$institution == inst], accuracy = 0.1)
+
+trust_gallup_age <- trust |>
+  filter(dataset %in% c("Gallup W1", "Gallup W2"), age_group %in% c("18-21", "22-26")) |>
+  filter(institution == "UK government") |>
+  summarise(mean = number(mean(trust), accuracy = 0.1), .by = c(dataset, age_group)) |>
+  mutate(group = str_c(dataset, " ", age_group)) |>
+  select(group, mean) |>
+  deframe()
+
+trust_gender_gov <- trust |>
+  filter(gender %in% c("Female", "Male"), institution == "UK government") |>
+  summarise(mean = number(mean(trust), accuracy = 0.1), .by = c(dataset, gender)) |>
+  mutate(group = str_c(dataset, " ", gender)) |>
+  select(group, mean) |>
+  deframe()
+
+# ways of governing: rated fairly or very good (5 to 7)
+good <- respondents |>
+  summarise(
+    both = share(aut1_UK >= 5 & dem1_UK >= 5),
+    across(c(aut1_UK, dem1_UK), \(x) share(x >= 5)),
+    .by = dataset
+  )
+gd <- \(ds, column) good[[column]][good$dataset == ds]
+```
+
+```{r}
+#| label: thumbnail
+#| include: false
+# Card image for the listings: the interest lines of the first figure,
+# without text
+thumbnail <- respondents |>
+  summarise(share = mean(interested), n = n(), .by = c(dataset, age)) |>
+  filter(n >= 20) |>
+  ggplot(aes(x = age, y = share, colour = dataset)) +
+  geom_line(linewidth = 1.6) +
+  geom_point(size = 3) +
+  scale_colour_manual(values = dataset_colours, guide = "none") +
+  theme_void() +
+  theme(
+    plot.background = element_rect(fill = brand[["tint"]], colour = NA),
+    plot.margin = margin(24, 30, 24, 30)
+  )
+
+ggsave("thumbnail.png", thumbnail, width = 6, height = 3.9, dpi = 150)
+```
+
+How young people relate to democracy matters for research on political development, because attitudes formed in these years can last. All four surveys asked about political interest and satisfaction with democracy, and three of them asked about trust in five institutions. Because the surveys cover different ages, we compare age groups mostly within a survey.
+
+## Interest in politics
+
+::: {.how-to-read}
+Each line shows one survey. The dots give the share of respondents at each year of age who are fairly or very interested in politics. Ages with fewer than 20 respondents in a survey are left out.
+:::
+
+```{r}
+#| label: plot-interest
+#| fig-width: 8
+#| fig-height: 4.6
+#| fig-alt: "Share of respondents who are fairly or very interested in politics by year of age, from 12 to 26, for each survey. Within Gallup W2, the share rises from under 40% at age 16 to about 75% at age 26, and Gallup W1 shows a similar rise from 16 to 21. Within the two Survation surveys the share changes less with age. Survation W1 lies above Survation W2 at every age."
+interest_age <- respondents |>
+  summarise(share = mean(interested), n = n(), .by = c(dataset, age)) |>
+  filter(n >= 20)
+
+# label positions chosen by hand, so that no label crosses a line
+interest_labels <- tribble(
+  ~dataset, ~age, ~share,
+  "Survation W1", 12, 0.665,
+  "Survation W2", 12, 0.30,
+  "Gallup W1", 21.3, 0.52,
+  "Gallup W2", 26.3, 0.75
+) |>
+  mutate(dataset = factor(dataset, levels = names(dataset_colours)))
+
+ggplot(interest_age, aes(x = age, y = share, colour = dataset)) +
+  geom_line(linewidth = 0.8) +
+  geom_point(size = 2.2) +
+  geom_text(
+    data = interest_labels,
+    aes(label = dataset),
+    hjust = 0, size = 3.6, show.legend = FALSE
+  ) +
+  scale_colour_manual(values = dataset_colours, guide = "none") +
+  scale_x_continuous(breaks = 12:26, limits = c(12, 28.5)) +
+  scale_y_continuous(labels = label_percent(), limits = c(0, 1), breaks = seq(0, 1, 0.25)) +
+  labs(
+    title = "Among Gallup respondents, interest in politics rises with age",
+    x = "Age",
+    y = "Fairly or very interested",
+    caption = site_caption
+  )
+```
+
+In Gallup W2, the only survey that covers ages 16 to 26, the share who are fairly or very interested in politics rises from `r interest_gw2[["16"]]` at age 16 to `r interest_gw2[["26"]]` at age 26. Gallup W1 shows a similar rise between 16 and 21. Within the Survation surveys, by contrast, interest differs less between 12 and 17 year olds. The two Survation surveys also differ from each other, as `r interest[["Survation W1"]]` of respondents in W1 but only `r interest[["Survation W2"]]` in W2 are fairly or very interested. Interestingly, the `r n_sw1_panel` Survation W1 respondents who took part again a year later were less interested in W1 (`r interest_sw1_panel[["panel"]]`) than the other W1 respondents (`r interest_sw1_panel[["others"]]`). As with the higher answers of Survation W1 on 0 to 10 scales, this suggests that the difference between the waves partly reflects who took part. Taking all ages of a survey together, young men say slightly more often than young women that they are interested in politics, by `r interest_gap[1]` to `r interest_gap[2]` percentage points.
+
+## Satisfaction with democracy
+
+::: {.how-to-read}
+Each bar shows the answers of young women or young men in one survey to the statement "I am satisfied with the way that democracy works in the United Kingdom", on a scale from 1 (fully disagree) to 7 (fully agree).
+:::
+
+```{r}
+#| label: plot-democracy
+#| fig-width: 8
+#| fig-height: 4.6
+#| fig-alt: "Stacked bars of the share of young women and young men who are dissatisfied (1 to 3), neutral (4) or satisfied (5 to 7) with the way democracy works in the UK, for each survey. In both Gallup surveys, more respondents are dissatisfied than satisfied, and young women are dissatisfied more often than young men. In Survation W1 more are satisfied than dissatisfied. In Survation W2 the three groups are of similar size."
+swd_bars <- respondents |>
+  filter(gender %in% c("Female", "Male")) |>
+  mutate(
+    answer = case_when(
+      swdkep1 <= 3 ~ "Dissatisfied (1 to 3)",
+      swdkep1 == 4 ~ "Neutral (4)",
+      .default = "Satisfied (5 to 7)"
+    ),
+    answer = factor(answer, levels = c("Satisfied (5 to 7)", "Neutral (4)", "Dissatisfied (1 to 3)")),
+    gender = fct_recode(gender, "Young women" = "Female", "Young men" = "Male")
+  ) |>
+  count(dataset, gender, answer) |>
+  mutate(share = n / sum(n), .by = c(dataset, gender)) |>
+  mutate(group = fct_rev(fct_inorder(str_c(dataset, ", ", str_to_lower(gender))))) |>
+  arrange(dataset, gender)
+
+ggplot(swd_bars, aes(x = share, y = group, fill = answer)) +
+  geom_col(width = 0.75) +
+  geom_text(
+    aes(label = percent(share, accuracy = 1), colour = answer),
+    position = position_stack(vjust = 0.5),
+    size = 3.4,
+    show.legend = FALSE
+  ) +
+  scale_fill_manual(
+    values = c(
+      "Dissatisfied (1 to 3)" = brand[["coral-dark"]],
+      "Neutral (4)" = brand[["rule"]],
+      "Satisfied (5 to 7)" = brand[["blue-dark"]]
+    ),
+    breaks = c("Dissatisfied (1 to 3)", "Neutral (4)", "Satisfied (5 to 7)"),
+    name = NULL
+  ) +
+  scale_colour_manual(
+    values = c(
+      "Dissatisfied (1 to 3)" = brand[["paper"]],
+      "Neutral (4)" = brand[["ink"]],
+      "Satisfied (5 to 7)" = brand[["paper"]]
+    )
+  ) +
+  scale_x_continuous(labels = label_percent(), expand = expansion(0)) +
+  coord_cartesian(clip = "off") +
+  labs(
+    title = "Young women are less often satisfied with democracy than young men",
+    x = "Share of respondents",
+    y = NULL,
+    caption = site_caption
+  ) +
+  theme(
+    legend.position = "top",
+    legend.justification = "left",
+    legend.location = "plot",
+    panel.grid.major.y = element_blank(),
+    plot.margin = margin(5.5, 18, 5.5, 5.5)
+  )
+```
+
+In both Gallup surveys, more young people are dissatisfied with the way democracy works in the UK than satisfied (`r swd_stat("Gallup W1", "dissatisfied")` against `r swd_stat("Gallup W1", "satisfied")` in W1, and `r swd_stat("Gallup W2", "dissatisfied")` against `r swd_stat("Gallup W2", "satisfied")` in W2). Among the adolescents in Survation, satisfaction is more common. In Survation W1, more respondents are satisfied than dissatisfied, while in Survation W2 the two groups are of similar size and `r swd_stat("Survation W2", "neutral")` choose the middle of the scale. In every survey, young women are satisfied less often than young men, for instance `r swd_g("Gallup W2", "Female")` against `r swd_g("Gallup W2", "Male")` in Gallup W2. Within Gallup W2, satisfaction is also more common among 22 to 26 year olds (`r swd_gw2_age[["22-26"]]`) than among 18 to 21 year olds (`r swd_gw2_age[["18-21"]]`). Satisfaction also goes together with interest. Across the surveys, `r swd_by_interest[["Very interested"]]` of those who are very interested in politics are satisfied with democracy, compared with `r swd_by_interest[["Not at all interested"]]` of those who are not at all interested.
+
+## Trust in institutions
+
+::: {.how-to-read}
+Each row is one institution, and the dots give its average trust rating in each survey on a scale from 0 (no trust at all) to 10 (complete trust). Survation W2 did not ask these questions.
+:::
+
+```{r}
+#| label: plot-trust
+#| fig-width: 8
+#| fig-height: 4
+#| fig-alt: "Average trust in courts, police, the UK government, political parties and the media in Gallup W1, Survation W1 and Gallup W2. In every survey, the courts and the police receive the highest trust and political parties and the media the lowest. Survation W1 shows higher trust than the two Gallup surveys for every institution, and Gallup W2 slightly higher trust than Gallup W1."
+trust_plot <- trust_means |>
+  mutate(institution = fct_reorder(institution, mean))
+
+ggplot(trust_plot, aes(x = mean, y = institution)) +
+  geom_vline(xintercept = 5, colour = brand[["rule"]], linewidth = 0.8) +
+  geom_line(aes(group = institution), colour = brand[["rule"]], linewidth = 2) +
+  geom_point(aes(fill = dataset), shape = 21, size = 3.4, colour = brand[["ink"]], stroke = 0.3) +
+  scale_fill_manual(values = dataset_colours, breaks = c("Gallup W1", "Survation W1", "Gallup W2"), name = NULL) +
+  scale_x_continuous(limits = c(3, 7), breaks = 3:7) +
+  labs(
+    title = "Courts and police are trusted more than parties and the media",
+    x = "Average trust (0 none, 10 complete)",
+    y = NULL,
+    caption = site_caption
+  ) +
+  theme(
+    legend.position = "top",
+    legend.justification = "left",
+    legend.location = "plot",
+    panel.grid.major.y = element_blank()
+  )
+```
+
+In all three surveys that asked about trust, the courts and the police are trusted most, while political parties and the media are trusted least. In Gallup W1, for example, trust averages `r tm("Gallup W1", "Police")` for the police but `r tm("Gallup W1", "Political parties")` for political parties. Survation W1 shows higher trust in every institution, which again fits its higher answers on all 0 to 10 scales. The two Gallup surveys invite a comparison over time, since Gallup W1 was fielded under a Conservative government and Gallup W2 under a Labour government. However, among 18 to 21 year olds, the one age group that both surveys cover well, trust in the UK government is almost the same (`r trust_gallup_age[["Gallup W1 18-21"]]` and `r trust_gallup_age[["Gallup W2 18-21"]]`). The higher average of Gallup W2 thus comes mainly from its 22 to 26 year olds, who trust the government more (`r trust_gallup_age[["Gallup W2 22-26"]]`). In both Gallup surveys, young men also trust the government somewhat more than young women, with averages of `r trust_gender_gov[["Gallup W2 Male"]]` and `r trust_gender_gov[["Gallup W2 Female"]]` in Gallup W2.
+
+## Ways of governing
+
+::: {.how-to-read}
+Each row is one way of governing a country. The dots give the share of respondents in each survey who find it fairly or very good (5 to 7 on a scale from 1, very bad, to 7, very good).
+:::
+
+```{r}
+#| label: plot-governing
+#| fig-width: 8
+#| fig-height: 4.4
+#| fig-alt: "Share of respondents who rate six ways of governing as good, by survey. Elections where every vote is equal receive the most support, from about 70% to 90%. The three authoritarian ways, such as a strong leader who does not accept interference, are rated good by about a third to three fifths of respondents. Survation respondents rate a strong leader as good more often than Gallup respondents."
+governing_items <- c(
+  dem1_UK = "Elections where every vote is equal",
+  dem2_UK = "Fundamental rights for everyone",
+  dem3_UK = "Several groups can be elected",
+  aut1_UK = "Strong leader without interference",
+  aut2_UK = "Strong government using tough means",
+  aut3_UK = "Less control over the government"
+)
+
+governing <- respondents |>
+  select(dataset, all_of(names(governing_items))) |>
+  pivot_longer(-dataset, names_to = "item", values_to = "rating") |>
+  summarise(good = mean(rating >= 5), .by = c(dataset, item)) |>
+  mutate(
+    type = if_else(str_starts(item, "dem"), "Democratic", "Authoritarian"),
+    type = factor(type, levels = c("Democratic", "Authoritarian")),
+    item = factor(governing_items[item], levels = rev(governing_items))
+  )
+
+ggplot(governing, aes(x = good, y = item)) +
+  geom_line(aes(group = item), colour = brand[["rule"]], linewidth = 2) +
+  geom_point(aes(fill = dataset), shape = 21, size = 3.4, colour = brand[["ink"]], stroke = 0.3) +
+  facet_grid(type ~ ., scales = "free_y", space = "free_y", switch = "y") +
+  scale_fill_manual(values = dataset_colours, name = NULL) +
+  scale_x_continuous(labels = label_percent(), limits = c(0.2, 1), breaks = seq(0.2, 1, 0.2)) +
+  labs(
+    title = "Most value equal votes, but many also find a strong leader appealing",
+    x = "Rated fairly or very good",
+    y = NULL,
+    caption = site_caption
+  ) +
+  theme(
+    legend.position = "top",
+    legend.justification = "left",
+    legend.location = "plot",
+    strip.placement = "outside",
+    strip.background = element_blank(),
+    strip.text.y.left = element_text(angle = 90, face = "bold"),
+    panel.grid.major.y = element_blank()
+  )
+```
+
+Large majorities in all surveys find democratic ways of governing good, and elections where every vote counts equally receive the most support, from `r gd("Gallup W1", "dem1_UK")` in Gallup W1 to `r gd("Survation W1", "dem1_UK")` in Survation W1. At the same time, a strong leader who does not accept interference from anyone is rated good by `r gd("Gallup W1", "aut1_UK")` in Gallup W1, `r gd("Gallup W2", "aut1_UK")` in Gallup W2 and close to three fifths in both Survation surveys. These views are not mutually exclusive. In Survation W2, for example, `r gd("Survation W2", "both")` of respondents rate both equal elections and a strong leader as good. This could mean that some young people read "strong leader" as effective leadership rather than as a rejection of democratic checks, a possibility that these data cannot settle.
+
+## About these data
+
+The four surveys differ in age range, recruitment and timing, and the data are not weighted. Survation W1 respondents give higher answers on 0 to 10 scales, which affects the trust items, and Survation W2 did not ask about trust. [The data](/data.qmd) page explains the design.

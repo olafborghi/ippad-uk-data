@@ -1,0 +1,296 @@
+---
+title: "Who took part"
+description: "Who answered the four IP-PAD UK surveys, how they were reached, and how the samples differ in age, background and timing."
+date: 2026-11-24
+categories: [Sample, Age]
+image: thumbnail.png
+---
+
+```{r}
+#| label: setup
+#| include: false
+source(here::here("R", "site.R"))
+
+share <- \(x) percent(mean(x), accuracy = 1)
+
+n_interviews <- comma(nrow(respondents))
+n_dataset <- respondents |>
+  count(dataset) |>
+  deframe() |>
+  comma()
+
+median_age <- respondents |>
+  summarise(median = median(age), .by = dataset) |>
+  deframe()
+
+age_range <- respondents |>
+  summarise(range = str_c(min(age), " to ", max(age)), .by = dataset) |>
+  deframe()
+
+# Gallup respondents aged 16 or 17, and Survation respondents aged 18
+gallup_16_17 <- respondents |>
+  filter(provider == "Gallup International", age <= 17) |>
+  count(dataset) |>
+  deframe()
+survation_18 <- sum(respondents$dataset == "Survation W2" & respondents$age == 18)
+
+# the largest age group in Gallup W2
+gallup_w2_ages <- respondents |>
+  filter(dataset == "Gallup W2") |>
+  count(age)
+gallup_w2_25 <- gallup_w2_ages$n[gallup_w2_ages$age == 25]
+gallup_w2_next <- max(gallup_w2_ages$n[gallup_w2_ages$age != 25])
+
+# fieldwork
+gallup_w2_novdec <- share(
+  respondents$interview_month[respondents$dataset == "Gallup W2"] %in% c("2025-11", "2025-12")
+)
+
+# composition
+other_gender <- sum(respondents$gender == "Other")
+female_range <- respondents |>
+  summarise(female = mean(gender == "Female"), .by = dataset) |>
+  pull(female) |>
+  range() |>
+  percent(accuracy = 1)
+
+city <- respondents |>
+  summarise(city = share(rururb == "Large town or city"), .by = dataset) |>
+  deframe()
+
+london <- respondents |>
+  summarise(london = mean(region == "London"), .by = dataset) |>
+  pull(london) |>
+  range() |>
+  percent(accuracy = 1)
+
+isced_low_survation <- share(respondents$edu_group[respondents$provider == "Survation"] %in% "ISCED 0-2")
+isced_high_2226 <- share(respondents$edu_group[respondents$age_group == "22-26"] %in% "ISCED 5-8")
+isced_high_1821 <- share(
+  respondents$edu_group[respondents$provider == "Gallup International" & respondents$age_group == "18-21"] %in% "ISCED 5-8"
+)
+
+comfortable <- respondents |>
+  summarise(comf = share(livecomf == "Living comfortably on present income"), .by = dataset) |>
+  deframe()
+
+# recontacted respondents
+recontacts <- respondents |>
+  filter(sample_type == "Recontact") |>
+  count(dataset) |>
+  deframe()
+recontact_share <- c(
+  "Gallup" = percent(recontacts[["Gallup W2"]] / sum(respondents$dataset == "Gallup W1"), accuracy = 0.1),
+  "Survation" = percent(recontacts[["Survation W2"]] / sum(respondents$dataset == "Survation W1"), accuracy = 0.1)
+)
+n_persons <- comma(sum(respondents$person_first))
+```
+
+```{r}
+#| label: thumbnail
+#| include: false
+# Card image for the listings: the four age distributions on one age axis
+thumbnail <- respondents |>
+  count(dataset, age) |>
+  ggplot(aes(x = age, y = n, fill = dataset)) +
+  geom_col(width = 0.8) +
+  facet_wrap(~dataset, ncol = 1, scales = "free_y") +
+  scale_fill_manual(values = dataset_colours, guide = "none") +
+  scale_x_continuous(limits = c(11.5, 26.5)) +
+  theme_void() +
+  theme(
+    plot.background = element_rect(fill = brand[["tint"]], colour = NA),
+    strip.text = element_blank(),
+    panel.spacing = unit(0.25, "cm"),
+    plot.margin = margin(18, 24, 18, 24)
+  )
+
+ggsave("thumbnail.png", thumbnail, width = 6, height = 3.9, dpi = 150)
+```
+
+The IP-PAD UK data bring together four online surveys with `r n_interviews` interviews in total. Two were carried out by Gallup International and two by Survation, and each provider ran two waves about a year apart. Because the surveys reached different age groups in different ways, it helps to know who took part before reading any comparison between them, and this page serves as the background for the other insights.
+
+## Two ways of reaching young people
+
+Gallup International interviewed members of its online access panels aged 16 and over, who answered every question themselves. Survation, in turn, reached children through parents on its online panels. A parent gave consent and reported the child's age, gender, region and type of place, and then handed the device to the child, who answered all remaining questions. In the Survation surveys, the background information thus comes from parents, while the questions on politics and on household income were answered by the young people themselves.
+
+## Age
+
+::: {.how-to-read}
+Each panel shows one survey. The bars give the number of respondents at each year of age, on a shared age axis from 12 to 26.
+:::
+
+```{r}
+#| label: plot-age
+#| fig-width: 8
+#| fig-height: 5.2
+#| fig-alt: "Bar charts of the number of respondents at each age, one panel per survey. Survation W1 covers ages 12 to 17 and Survation W2 ages 12 to 18, with few 18 year olds. Gallup W1 covers ages 16 to 21 and Gallup W2 ages 16 to 26, with the largest group at age 25. The two providers overlap only at ages 16 to 18, and Gallup has few respondents aged 16 or 17."
+ggplot(count(respondents, dataset, age), aes(x = age, y = n, fill = dataset)) +
+  geom_col(width = 0.8, colour = brand[["ink"]], linewidth = 0.15) +
+  facet_wrap(~dataset, ncol = 1) +
+  scale_fill_manual(values = dataset_colours, guide = "none") +
+  scale_x_continuous(breaks = 12:26, limits = c(11.5, 26.5)) +
+  scale_y_continuous(breaks = c(0, 150, 300), expand = expansion(mult = c(0, 0.08))) +
+  labs(
+    title = "Survation reached 12 to 18 year olds, Gallup 16 to 26 year olds",
+    x = "Age",
+    y = "Respondents",
+    caption = site_caption
+  ) +
+  theme(
+    strip.background = element_blank(),
+    strip.text = element_text(hjust = 0, face = "bold"),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor = element_blank()
+  )
+```
+
+The two providers cover different stages of youth. Survation W1 includes ages `r age_range[["Survation W1"]]` and Survation W2 ages `r age_range[["Survation W2"]]`, with a median age of `r median_age[["Survation W1"]]` in both. Gallup W1 covers ages `r age_range[["Gallup W1"]]`, and Gallup W2 added a separate sample of young adults, so that it spans ages `r age_range[["Gallup W2"]]` with a median of `r median_age[["Gallup W2"]]`. The providers thus overlap only at ages 16 to 18, and even there the numbers are uneven. Gallup has `r gallup_16_17[["Gallup W1"]]` respondents aged 16 or 17 in W1 and `r gallup_16_17[["Gallup W2"]]` in W2, and Survation W2 has only `r survation_18` respondents aged 18. Interestingly, Gallup W2 has `r gallup_w2_25` respondents aged 25, compared with at most `r gallup_w2_next` at any other age, a peak that the fieldwork documents do not explain.
+
+## When the surveys took place
+
+::: {.how-to-read}
+Each row is one survey. The height of a bar shows the share of that survey's interviews carried out in a given month. The dashed line marks the general election of 4 July 2024.
+:::
+
+```{r}
+#| label: plot-timeline
+#| fig-width: 8
+#| fig-height: 3.6
+#| fig-alt: "Monthly share of interviews for each survey on a calendar axis from 2024 to 2026. Gallup W1 took place in May and June 2024, just before the general election of 4 July 2024. Survation W1 followed in July and August 2025. Gallup W2 had a few interviews from May 2025 but most in November and December 2025. Survation W2 ran from August to November 2026, mostly in October."
+months <- respondents |>
+  count(dataset, interview_month) |>
+  mutate(
+    share = n / sum(n),
+    start = ym(interview_month),
+    row = 5 - as.integer(dataset),
+    .by = dataset
+  )
+
+survey_labels <- months |>
+  summarise(start = min(start), row = first(row), .by = dataset)
+
+election <- as.Date("2024-07-04")
+
+ggplot(months) +
+  geom_hline(aes(yintercept = row), colour = brand[["rule"]], linewidth = 0.4) +
+  geom_rect(
+    aes(
+      xmin = start, xmax = start + days(27),
+      ymin = row, ymax = row + 0.8 * share,
+      fill = dataset
+    ),
+    colour = brand[["ink"]],
+    linewidth = 0.15
+  ) +
+  geom_vline(xintercept = election, linetype = "dashed", colour = brand[["muted"]], linewidth = 0.4) +
+  annotate(
+    "text",
+    x = election + days(20), y = 4.75,
+    label = "General election", hjust = 0, size = 3.6, colour = brand[["muted"]]
+  ) +
+  geom_text(
+    data = survey_labels,
+    aes(x = start - days(12), y = row + 0.22, label = dataset),
+    hjust = 1, size = 3.8, colour = brand[["ink"]]
+  ) +
+  scale_fill_manual(values = dataset_colours, guide = "none") +
+  scale_x_date(
+    limits = as.Date(c("2023-12-01", "2026-12-31")),
+    breaks = as.Date(c("2024-01-01", "2025-01-01", "2026-01-01")),
+    date_labels = "%Y",
+    minor_breaks = NULL
+  ) +
+  scale_y_continuous(limits = c(0.9, 4.9), breaks = NULL) +
+  labs(
+    title = "Most interviews of each survey took place within a few months",
+    x = NULL,
+    y = NULL,
+    caption = site_caption
+  ) +
+  theme(
+    panel.grid.major.y = element_blank(),
+    axis.line.y = element_blank()
+  )
+```
+
+The wave number does not order the surveys in time. Gallup W1 was fielded in May and June 2024, during the campaign for the general election of July 2024 and thus still under a Conservative government. Survation W1 followed a year later, in the summer of 2025. Gallup W2 started in May 2025, but `r gallup_w2_novdec` of its interviews took place in November and December 2025, after Survation W1. Survation W2 then ran in the autumn of 2026. All surveys but the first therefore took place under a Labour government, and any difference between them can reflect the time of fieldwork as well as the age of the respondents.
+
+## Gender, place, education and income
+
+::: {.how-to-read}
+Each row is one answer, grouped by question. The dots show the share of respondents in each survey who gave that answer.
+:::
+
+```{r}
+#| label: plot-background
+#| fig-width: 8
+#| fig-height: 6.6
+#| fig-alt: "Dot plot of the share of respondents in each answer category for gender, type of place, education group and household income, by survey. Gender is close to half female and half male in every survey. Most respondents live in a large town or city. Survation respondents are mostly in the lowest education group, while about half of Gallup W2 respondents are in the highest. In Survation W1, more respondents say their household lives comfortably than in the other surveys."
+background <- respondents |>
+  filter(gender != "Other") |>
+  select(dataset, gender, rururb, edu_group, livecomf) |>
+  mutate(across(-dataset, as.character)) |>
+  pivot_longer(-dataset, names_to = "question", values_to = "answer") |>
+  filter(!is.na(answer)) |>
+  count(dataset, question, answer) |>
+  mutate(share = n / sum(n), .by = c(dataset, question)) |>
+  mutate(
+    question = factor(
+      question,
+      levels = c("gender", "rururb", "edu_group", "livecomf"),
+      labels = c("Gender", "Place", "Education", "Household income")
+    ),
+    answer = fct_recode(
+      answer,
+      "Rural area or village" = "Rural area or village",
+      "Small or middle-sized town" = "Small or middle size town",
+      "Living comfortably" = "Living comfortably on present income",
+      "Coping" = "Coping on present income",
+      "Finding it difficult" = "Finding it difficult on present income",
+      "Finding it very difficult" = "Finding it very difficult on present income"
+    ),
+    answer = fct_relevel(
+      answer,
+      "Female", "Male",
+      "Large town or city", "Small or middle-sized town", "Rural area or village",
+      "ISCED 0-2", "ISCED 3-4", "ISCED 5-8", "Other",
+      "Living comfortably", "Coping", "Finding it difficult", "Finding it very difficult"
+    ),
+    answer = fct_rev(answer)
+  )
+
+ggplot(background, aes(x = share, y = answer)) +
+  geom_line(aes(group = answer), colour = brand[["rule"]], linewidth = 1.6) +
+  geom_point(aes(fill = dataset), shape = 21, size = 3.2, colour = brand[["ink"]], stroke = 0.3) +
+  facet_grid(question ~ ., scales = "free_y", space = "free_y", switch = "y") +
+  scale_fill_manual(values = dataset_colours, name = NULL) +
+  scale_x_continuous(labels = label_percent(), limits = c(0, 0.8), breaks = seq(0, 0.8, 0.2)) +
+  labs(
+    title = "The surveys differ more in education and income than in gender or place",
+    x = "Share of respondents",
+    y = NULL,
+    caption = str_c(site_caption, " Gender 'Other' (", other_gender, " respondents) not shown.")
+  ) +
+  theme(
+    legend.position = "top",
+    legend.justification = "left",
+    legend.location = "plot",
+    strip.placement = "outside",
+    strip.background = element_blank(),
+    strip.text.y.left = element_text(angle = 0, hjust = 0, vjust = 1, face = "bold"),
+    panel.grid.major.y = element_blank()
+  )
+```
+
+In terms of gender and place, the four samples look much alike. Between `r female_range[1]` and `r female_range[2]` of respondents in each survey are female, and `r other_gender` respondents in total describe their gender in another way. Most live in a large town or city, from `r city[["Survation W2"]]` in Survation W2 to `r city[["Survation W1"]]` in Survation W1, and every UK region is represented. Education, however, mostly follows age, as it combines the level that respondents are studying for with the highest level attained by those who have left education. In the Survation surveys, `r isced_low_survation` of respondents are in the lowest group (ISCED 0 to 2), which mainly reflects that most of them are still working towards their GCSEs. In Gallup, by contrast, `r isced_high_1821` of those aged 18 to 21 and `r isced_high_2226` of those aged 22 to 26 are studying for or hold a tertiary qualification (ISCED 5 to 8).
+
+The question on household income shows a less expected pattern. In both Gallup surveys, `r comfortable[["Gallup W1"]]` say that their household is living comfortably on its present income. In Survation W1 this share is `r comfortable[["Survation W1"]]`, but in Survation W2 it is only `r comfortable[["Survation W2"]]`, although both surveys used the same design. Young adolescents may find this question hard to judge, and the difference could also reflect who took part in each survey, so we would not read it as a change in household finances.
+
+## Fresh and recontacted respondents
+
+In both second waves, the providers first invited their earlier respondents again, but few took part, namely `r recontacts[["Gallup W2"]]` in Gallup W2 (`r recontact_share[["Gallup"]]` of Gallup W1) and `r recontacts[["Survation W2"]]` in Survation W2 (`r recontact_share[["Survation"]]` of Survation W1). The rest of each sample was new. The data therefore come from `r n_persons` different young people, and each survey is best treated as a separate snapshot rather than as a panel.
+
+## About these data
+
+The data are not weighted, so the shares on this page describe the respondents rather than all young people in the UK. Each provider also set its own quotas and its own rules for removing low quality interviews. [The data](/data.qmd) page describes the design in detail.

@@ -1,0 +1,944 @@
+---
+title: "Explore"
+subtitle: "How different groups of young people answered the questions of the four surveys."
+---
+
+```{=html}
+<style>
+/* Page-level styling of the explorer */
+.ex-layout {
+  display: grid;
+  grid-template-columns: minmax(14rem, 16.5rem) minmax(0, 1fr);
+  gap: 2.5rem;
+  align-items: start;
+  margin-top: 1.8rem;
+}
+.ex-controls {
+  position: sticky;
+  top: 5.5rem;
+  max-height: calc(100vh - 6.5rem);
+  overflow-y: auto;
+  background: var(--ip-tint);
+  border-top: 4px solid var(--ip-blue);
+  padding: 1rem 1.1rem 0.4rem 1.1rem;
+  font-size: 0.92rem;
+}
+.ex-controls .cell-output-display,
+.ex-main .cell-output-display,
+.ex-controls .cell,
+.ex-main .cell {
+  margin: 0;
+}
+.ex-field {
+  margin: 0 0 1rem 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+.ex-label {
+  display: block;
+  float: none;
+  width: auto;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ip-muted);
+  margin: 0 0 0.3rem 0;
+  padding: 0;
+}
+.ex-controls .form-select,
+.ex-controls .form-control {
+  font-size: 0.92rem;
+  border-color: #CDD0D4;
+  background-color: #FFFFFF;
+}
+.ex-controls .form-check {
+  padding-left: 1.7em;
+  margin-bottom: 0.2rem;
+}
+.ex-controls .form-check .form-check-input {
+  float: left;
+  border-color: #9AA0A8;
+  margin-left: -1.7em;
+}
+.ex-controls .form-switch {
+  padding-left: 2.6em;
+}
+.ex-controls .form-switch .form-check-input {
+  width: 2em;
+  margin-left: -2.6em;
+}
+.ex-controls .form-check-label {
+  line-height: 1.35;
+}
+.ex-age {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.ex-age input {
+  width: 4.6rem;
+}
+.ex-hint {
+  color: var(--ip-muted);
+  font-size: 0.82rem;
+  line-height: 1.4;
+  margin: 0.25rem 0 0 0;
+}
+.ex-swatch {
+  display: inline-block;
+  width: 0.8rem;
+  height: 0.8rem;
+  margin-right: 0.45rem;
+  vertical-align: -0.05rem;
+}
+.ex-header .kicker {
+  margin-bottom: 0.1rem;
+}
+.ex-title {
+  font-size: 1.45rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+  border: 0;
+  padding: 0;
+}
+.ex-question,
+.ex-item,
+.ex-anchors {
+  margin: 0 0 0.3rem 0;
+  max-width: 46rem;
+}
+.ex-item {
+  font-weight: 600;
+}
+.ex-anchors {
+  color: var(--ip-muted);
+  font-size: 0.95rem;
+}
+.ex-header .how-to-read {
+  margin: 0.9rem 0 1rem 0;
+  max-width: 46rem;
+}
+.ex-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem 1rem;
+  font-size: 0.85rem;
+  margin: 0 0 0.8rem 0;
+}
+.ex-legend > span {
+  white-space: nowrap;
+}
+.ex-panel-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  font-weight: 600;
+  border-top: 1px solid var(--ip-rule);
+  padding-top: 0.5rem;
+  margin-top: 0.6rem;
+}
+.ex-panel-n {
+  font-weight: 400;
+  color: var(--ip-muted);
+  font-size: 0.85rem;
+}
+.ex-panel {
+  display: flex;
+  align-items: flex-start;
+}
+.ex-chart svg {
+  overflow: visible;
+}
+.ex-message {
+  background: var(--ip-tint);
+  padding: 1rem 1.2rem;
+  margin: 0.5rem 0 1rem 0;
+}
+.ex-notes {
+  margin-top: 1rem;
+  font-size: 0.92rem;
+  color: var(--ip-muted);
+  max-width: 46rem;
+}
+.ex-notes p {
+  margin: 0 0 0.5rem 0;
+}
+.ex-notes details {
+  margin: 0.8rem 0 0.4rem 0;
+}
+.ex-notes summary {
+  color: var(--ip-ink);
+  font-weight: 600;
+  cursor: pointer;
+}
+.ex-table {
+  overflow-x: auto;
+  margin-top: 0.5rem;
+}
+.ex-table table {
+  font-size: 0.85rem;
+  color: var(--ip-ink);
+  white-space: nowrap;
+}
+.ex-table th {
+  font-weight: 600;
+}
+.ex-table .num {
+  text-align: right;
+}
+.ex-design-note {
+  font-size: 0.92rem;
+  color: var(--ip-muted);
+  border-top: 1px solid var(--ip-rule);
+  padding-top: 0.8rem;
+  margin-top: 1.2rem;
+  max-width: 46rem;
+}
+@media (max-width: 991.98px) {
+  .ex-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.5rem;
+  }
+  .ex-controls {
+    position: static;
+    max-height: none;
+    overflow: visible;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+    column-gap: 1.5rem;
+  }
+}
+</style>
+```
+
+```{r}
+#| label: setup
+#| include: false
+source(here::here("R", "site.R"))
+
+# the explorer reads all colours from _brand.yml, through R/site.R
+ojs_define(brand = as.list(brand))
+```
+
+This page shows how the young people in the four surveys answered most of our questions, and how their answers differ between groups. You can choose a question and a characteristic to compare by, such as age or gender, and limit the data to certain surveys or ages. All calculations run in your browser, on the same data that the [data page](data.qmd) describes.
+
+Because the surveys differ in age range, recruitment and timing, the explorer shows each survey in its own panel unless you choose to pool them. In pooled data, a difference between two groups may partly reflect who took part in each survey rather than a real difference between the groups. The address of the page changes with your choices, so you can share a link to the chart you are looking at.
+
+::: {.ex-layout .column-page}
+::: {.ex-controls}
+```{ojs}
+//| echo: false
+viewof varName = {
+  const select = htl.html`<select class="form-select" id="ex-var">${topics.map(([topic, vars]) => htl.html`<optgroup label=${topic}>${vars.map(d => htl.html`<option value=${d.name} selected=${d.name === init.var}>${d.short_label}</option>`)}</optgroup>`)}</select>`;
+  return field(htl.html`<label class="ex-label" for="ex-var">Question</label>`, select, () => select.value);
+}
+```
+
+```{ojs}
+//| echo: false
+viewof by = {
+  const select = htl.html`<select class="form-select" id="ex-by">${compareByRaw.map(d => htl.html`<option value=${d.name} selected=${d.name === init.by}>${d.label}</option>`)}</select>`;
+  return field(htl.html`<label class="ex-label" for="ex-by">Compare by</label>`, select, () => select.value);
+}
+```
+
+```{ojs}
+//| echo: false
+viewof split = {
+  const options = [["1", "Each survey separately"], ["0", "All surveys pooled"]];
+  const hint = htl.html`<p class="ex-hint" hidden>This comparison already separates the surveys, so they are shown together.</p>`;
+  const el = field(
+    htl.html`<legend class="ex-label">Surveys</legend>`,
+    [
+      ...options.map(([value, label]) => htl.html`<div class="form-check">
+        <input class="form-check-input" type="radio" name="ex-split" id=${"ex-split-" + value} value=${value} checked=${(value === "1") === init.split}>
+        <label class="form-check-label" for=${"ex-split-" + value}>${label}</label>
+      </div>`),
+      hint
+    ],
+    () => el.querySelector("input:checked").value === "1",
+    "fieldset"
+  );
+  el.hint = hint;
+  return el;
+}
+```
+
+```{ojs}
+//| echo: false
+viewof surveys = {
+  const el = field(
+    htl.html`<legend class="ex-label">Include</legend>`,
+    datasets.map((ds, i) => htl.html`<div class="form-check">
+      <input class="form-check-input" type="checkbox" id=${"ex-ds-" + i} value=${ds} checked=${init.surveys.includes(ds)}>
+      <label class="form-check-label" for=${"ex-ds-" + i}><span class="ex-swatch" style=${{background: datasetColour.get(ds)}}></span>${ds}</label>
+    </div>`),
+    () => [...el.querySelectorAll("input:checked")].map(d => d.value),
+    "fieldset"
+  );
+  return el;
+}
+```
+
+```{ojs}
+//| echo: false
+viewof ageRange = {
+  const [amin, amax] = ageExtent;
+  const lo = htl.html`<input type="number" class="form-control" min=${amin} max=${amax} step="1" value=${init.age[0]} aria-label="Youngest age">`;
+  const hi = htl.html`<input type="number" class="form-control" min=${amin} max=${amax} step="1" value=${init.age[1]} aria-label="Oldest age">`;
+  const read = (input, fallback) => {
+    const v = Math.round(+input.value);
+    return input.value === "" || !Number.isFinite(v) ? fallback : Math.min(amax, Math.max(amin, v));
+  };
+  return field(
+    htl.html`<legend class="ex-label">Age</legend>`,
+    htl.html`<div class="ex-age">${lo}<span>to</span>${hi}</div>`,
+    () => [read(lo, amin), read(hi, amax)].sort((a, b) => a - b),
+    "fieldset"
+  );
+}
+```
+
+```{ojs}
+//| echo: false
+viewof once = {
+  const input = htl.html`<input class="form-check-input" type="checkbox" role="switch" id="ex-once" checked=${init.once}>`;
+  return field(
+    htl.html`<legend class="ex-label">Repeated interviews</legend>`,
+    [
+      htl.html`<div class="form-check form-switch">${input}<label class="form-check-label" for="ex-once">Count each person once</label></div>`,
+      htl.html`<p class="ex-hint">${nTwice} young people took part in both waves of a survey. With this option, only their first interview is used.</p>`
+    ],
+    () => input.checked,
+    "fieldset"
+  );
+}
+```
+
+```{ojs}
+//| echo: false
+viewof showDk = {
+  const input = htl.html`<input class="form-check-input" type="checkbox" role="switch" id="ex-dk" checked=${init.dk}>`;
+  return field(
+    htl.html`<legend class="ex-label">Don't know</legend>`,
+    [
+      htl.html`<div class="form-check form-switch">${input}<label class="form-check-label" for="ex-dk">Show “I don't know” answers</label></div>`,
+      htl.html`<p class="ex-hint">If they are hidden, the shares refer only to respondents who gave an answer on the scale.</p>`
+    ],
+    () => input.checked,
+    "fieldset"
+  );
+}
+```
+:::
+
+::: {#ex-main .ex-main}
+```{ojs}
+//| echo: false
+header = htl.html`<div class="ex-header">
+  <div class="kicker">${current.topic}</div>
+  <h2 class="ex-title">${current.short_label}</h2>
+  <p class="ex-question">${current.question}</p>
+  ${current.label && current.label !== current.question ? htl.html`<p class="ex-item">“${current.label}”</p>` : null}
+  ${anchorSentence ? htl.html`<p class="ex-anchors">${anchorSentence}</p>` : null}
+  ${problem ? null : htl.html`<p class="how-to-read">${howToRead}</p>`}
+</div>`
+```
+
+```{ojs}
+//| echo: false
+chart = {
+  if (problem) return htl.html`<div class="ex-message">${problem}</div>`;
+  const wrap = htl.html`<div class="ex-chart" role="figure" aria-label=${`${current.short_label}, by ${byLabel.toLowerCase()}`}>`;
+  const legend = makeLegend();
+  if (legend) wrap.append(legend);
+  shownPanels.forEach((p, j) => {
+    if (splitActive) {
+      wrap.append(htl.html`<div class="ex-panel-head"><span><span class="ex-swatch" style=${{background: p.colour}}></span>${p.title}</span><span class="ex-panel-n">${fmtN(p.n)} answers</span></div>`);
+    }
+    wrap.append(drawPanel(p, j === shownPanels.length - 1));
+  });
+  return wrap;
+}
+```
+
+```{ojs}
+//| echo: false
+notes = {
+  if (problem) return htl.html`<div class="ex-notes"></div>`;
+  const ages = ageRange[0] === ageRange[1] ? `aged ${ageRange[0]}` : `aged ${ageRange[0]} to ${ageRange[1]}`;
+  const used = joinWords(splitActive ? shownPanels.map(p => p.key) : askedIn);
+  const small = allGroups.some(d => d.faded);
+  return htl.html`<div class="ex-notes">
+    <p>The chart is based on ${fmtN(answers.length)} answers from respondents ${ages} in ${used}${once ? ", counting each person once" : ""}.${layout.showN ? "" : " The table below the chart gives the number of answers in each group."}${nNoGroup ? ` A further ${nNoGroup === 1 ? "respondent is" : `${fmtN(nNoGroup)} respondents are`} left out because we do not know their ${byLabel.toLowerCase()}.` : ""}</p>
+    ${notAsked.length ? htl.html`<p>${joinWords(notAsked)} did not ask this question, so ${notAsked.length > 1 ? "these surveys are" : "this survey is"} not part of the chart.</p>` : null}
+    ${emptySurveys.length ? htl.html`<p>${joinWords(emptySurveys)} ${emptySurveys.length > 1 ? "have" : "has"} no respondents in the selected age range.</p>` : null}
+    ${small ? htl.html`<p>Groups with fewer than ${minN} answers are shown in a lighter shade, because their results are too uncertain to interpret.</p>` : null}
+    ${nDkLeftOut ? htl.html`<p>${nDkLeftOut === 1 ? "One respondent who" : `${fmtN(nDkLeftOut)} respondents who`} answered “${dkLevel}” ${nDkLeftOut === 1 ? "is" : "are"} left out, so the shares refer only to answers on the scale.</p>` : null}
+    ${current.note ? htl.html`<p><strong>About this question.</strong> ${current.note.replace(/\.?\s*$/, ".")}</p>` : null}
+    <details><summary>Numbers behind the chart</summary>${makeTable()}</details>
+  </div>`;
+}
+```
+
+::: {.ex-design-note}
+The samples are not weighted, so the results describe the young people who took part rather than all young people in the UK. The four surveys also differ in their design, and differences between them should therefore be read with care. The [data page](data.qmd) explains how each survey was carried out and what to keep in mind when comparing them.
+:::
+:::
+:::
+
+```{ojs}
+//| echo: false
+//| output: false
+
+// Data -------------------------------------------------------------------
+
+respondentsRaw = FileAttachment("data/respondents.csv").csv()
+variablesRaw = FileAttachment("data/variables.csv").csv()
+levelsRaw = FileAttachment("data/levels.csv").csv()
+compareByRaw = FileAttachment("data/compare_by.csv").csv()
+
+// categories of every factor, in their order
+levelsOf = d3.rollup(
+  levelsRaw.slice().sort((a, b) => +a.order - +b.order),
+  v => v.map(d => d.level),
+  d => d.variable
+)
+
+datasets = levelsOf.get("dataset")
+
+// "Gallup W1" becomes "gallup-w1", the name of its colour in _brand.yml
+datasetKey = ds => ds.toLowerCase().replace(/\s+/g, "-")
+
+datasetColour = new Map(datasets.map(ds => [ds, brand[datasetKey(ds)]]))
+
+variables = new Map(variablesRaw.map(d => [d.name, {
+  ...d,
+  min: d.min === "" ? null : +d.min,
+  max: d.max === "" ? null : +d.max,
+  in_explorer: d.in_explorer === "TRUE",
+  nBySurvey: new Map(datasets.map(ds => [ds, +d["n_" + datasetKey(ds).replace("-", "_")]]))
+}]))
+
+// one row per interview, with numbers, TRUE/FALSE and empty fields converted
+respondents = respondentsRaw.map(d => {
+  const row = {};
+  for (const key in d) {
+    const value = d[key];
+    const type = variables.get(key)?.type;
+    row[key] = value === "" ? null
+      : type === "number" ? +value
+      : type === "logical" ? value === "TRUE"
+      : value;
+  }
+  return row;
+})
+
+ageExtent = d3.extent(respondents, d => d.age)
+nTwice = respondents.filter(d => !d.person_first).length
+
+// explorer variables grouped by topic, topics in the order of the questionnaire
+topics = d3.groups(
+  variablesRaw.map((d, i) => ({...d, i})).filter(d => d.in_explorer === "TRUE"),
+  d => d.topic
+).sort((a, b) => d3.mean(a[1], d => d.i) - d3.mean(b[1], d => d.i))
+
+// Settings from the address of the page ---------------------------------
+
+init = {
+  const p = new URLSearchParams(window.location.search);
+  const v = p.get("var");
+  const by = p.get("by");
+  const keys = p.get("surveys")?.split(",") ?? [];
+  const chosen = datasets.filter(ds => keys.includes(datasetKey(ds)));
+  const age = (p.get("age") ?? "").split("-").map(Number);
+  const ageOk = age.length === 2 && age.every(a => Number.isInteger(a) && a >= ageExtent[0] && a <= ageExtent[1]);
+  return {
+    var: variables.get(v)?.in_explorer ? v : "lr",
+    by: compareByRaw.some(d => d.name === by) ? by : "age_group",
+    split: p.get("split") !== "0",
+    surveys: chosen.length ? chosen : datasets,
+    age: ageOk ? age.sort((a, b) => a - b) : ageExtent,
+    once: p.get("once") === "1",
+    dk: p.get("dk") !== "0"
+  };
+}
+
+// a labelled control whose value Observable reads on every input event
+field = (label, control, getValue, tag = "div") => {
+  const el = tag === "fieldset"
+    ? htl.html`<fieldset class="ex-field">${label}${control}</fieldset>`
+    : htl.html`<div class="ex-field">${label}${control}</div>`;
+  Object.defineProperty(el, "value", {get: getValue, set() {}});
+  return el;
+}
+
+// The settings in use ---------------------------------------------------
+
+current = variables.get(varName)
+varLevels = levelsOf.get(varName) ?? []
+dkLevel = varLevels.find(l => /don.t know/i.test(l))
+scaleLevels = varLevels.filter(l => l !== dkLevel)
+kind = current.type === "number" ? "number"
+  : current.type === "logical" ? "logical"
+  : current.type === "ordered" || dkLevel ? "diverging"
+  : "categorical"
+shownLevels = dkLevel && showDk ? varLevels : scaleLevels
+byLabel = compareByRaw.find(d => d.name === by).label
+
+surveyComparison = ["dataset", "provider", "wave"].includes(by)
+splitActive = split && !surveyComparison
+
+askedIn = surveys.filter(ds => current.nBySurvey.get(ds) > 0)
+notAsked = surveys.filter(ds => current.nBySurvey.get(ds) === 0)
+
+groupOf = by === "wave" ? (d => d.wave == null ? null : `Wave ${d.wave}`)
+  : by === "age" ? (d => d.age == null ? null : String(d.age))
+  : (d => d[by])
+groupDomain = by === "age" ? d3.range(ageRange[0], ageRange[1] + 1).map(String)
+  : by === "wave" ? ["Wave 1", "Wave 2"]
+  : levelsOf.get(by)
+
+selection = respondents.filter(d =>
+  askedIn.includes(d.dataset) &&
+  d.age >= ageRange[0] && d.age <= ageRange[1] &&
+  (!once || d.person_first)
+)
+answered = selection.filter(d => d[varName] != null)
+nNoGroup = answered.filter(d => groupOf(d) == null).length
+nDkLeftOut = dkLevel && !showDk ? answered.filter(d => d[varName] === dkLevel).length : 0
+answers = answered.filter(d =>
+  groupOf(d) != null && (!dkLevel || showDk || d[varName] !== dkLevel)
+)
+
+minN = 20
+
+// Summaries per group ---------------------------------------------------
+
+scale = {
+  if (kind !== "number") return null;
+  const min = current.min ?? d3.min(answers, d => d[varName]);
+  const max = current.max ?? d3.max(answers, d => d[varName]);
+  const binWidth = max - min > 20 ? 5 : 1;
+  const nBins = binWidth === 1 ? max - min + 1 : Math.ceil((max - min) / binWidth);
+  return {
+    min, max, binWidth, nBins,
+    bin: v => Math.min(Math.floor((v - min) / binWidth), nBins - 1),
+    centre: k => binWidth === 1 ? min + k : min + (k + 0.5) * binWidth
+  };
+}
+
+summarise = (rows, colour) => {
+  const n = rows.length;
+  const base = {n, colour, faded: n < minN};
+  if (kind === "number") {
+    const values = rows.map(d => d[varName]);
+    const mean = d3.mean(values);
+    const sd = d3.deviation(values);
+    const se = n > 1 ? sd / Math.sqrt(n) : NaN;
+    const counts = new Array(scale.nBins).fill(0);
+    for (const v of values) counts[scale.bin(v)] += 1;
+    return {...base, mean, sd, lo: mean - 1.96 * se, hi: mean + 1.96 * se,
+      dist: counts.map((c, k) => ({k, share: c / n}))};
+  }
+  if (kind === "logical") {
+    const yes = rows.filter(d => d[varName]).length;
+    const p = yes / n;
+    const se = Math.sqrt(p * (1 - p) / n);
+    return {...base, yes, p, lo: Math.max(0, p - 1.96 * se), hi: Math.min(1, p + 1.96 * se)};
+  }
+  const counts = d3.rollup(rows, v => v.length, d => d[varName]);
+  const shares = shownLevels.map(level => ({
+    level, count: counts.get(level) ?? 0, share: (counts.get(level) ?? 0) / n
+  }));
+  // position of the diverging bar: the lower half left of zero, the middle answer split across it
+  const k = scaleLevels.length;
+  const m = Math.floor(k / 2);
+  const s = scaleLevels.map(l => (counts.get(l) ?? 0) / n);
+  const left = d3.sum(s.slice(0, m));
+  const right = d3.sum(s.slice(k - m));
+  const start = -(left + (k % 2 ? s[m] / 2 : 0));
+  return {...base, shares, left, right, start, end: start + d3.sum(s)};
+}
+
+panels = {
+  const specs = splitActive
+    ? askedIn.map(ds => ({key: ds, title: ds, colour: datasetColour.get(ds), rows: answers.filter(d => d.dataset === ds)}))
+    : [{key: "all", title: null, colour: brand["blue-dark"], rows: answers}];
+  return specs.map(p => {
+    const byGroup = d3.group(p.rows, groupOf);
+    const groups = groupDomain
+      .filter(g => byGroup.has(g))
+      .map((g, i) => ({
+        group: g,
+        i,
+        survey: p.title,
+        ...summarise(byGroup.get(g), by === "dataset" ? datasetColour.get(g) : p.colour)
+      }));
+    return {...p, n: p.rows.length, groups};
+  });
+}
+
+shownPanels = panels.filter(p => p.groups.length > 0)
+emptySurveys = splitActive ? panels.filter(p => p.groups.length === 0).map(p => p.key) : []
+allGroups = shownPanels.flatMap(p => p.groups)
+
+// Formatting -------------------------------------------------------------
+
+fmtN = d3.format(",")
+fmtPct = v => `${Math.round(v * 100)}%`
+fmtMean = d3.format(".1f")
+joinWords = xs => xs.length <= 1 ? (xs[0] ?? "") : `${xs.slice(0, -1).join(", ")} and ${xs[xs.length - 1]}`
+
+anchors = (current.anchors || "")
+  .split(/,\s*(?=-?\d+\s*=)/)
+  .map(s => s.match(/^\s*(-?\d+)\s*=\s*(.+?)\s*$/))
+  .filter(Boolean)
+  .map(m => ({value: +m[1], text: m[2]}))
+
+anchorSentence = {
+  if (anchors.length < 2) return null;
+  const first = anchors[0];
+  const last = anchors[anchors.length - 1];
+  const middle = anchors.slice(1, -1).map(a => `${a.value} means “${a.text}”`);
+  return `The scale runs from ${first.value} (“${first.text}”) to ${last.value} (“${last.text}”)` +
+    (middle.length ? `, and ${joinWords(middle)}.` : ".");
+}
+
+// diverging colours: coral for the lower half, grey in the middle, blue for the upper half
+levelColour = {
+  const k = scaleLevels.length;
+  const m = Math.floor(k / 2);
+  const grey = d3.interpolateLab(brand.rule, brand.muted)(0.2);
+  const coralLight = d3.interpolateLab(brand.coral, brand.paper)(0.5);
+  const blueLight = d3.interpolateLab(brand.blue, brand.paper)(0.45);
+  const ramp = (dark, base, light) =>
+    m === 1 ? [base] : m === 2 ? [dark, base] : m === 3 ? [dark, base, light]
+    : d3.quantize(d3.interpolateLab(dark, light), m);
+  const left = ramp(brand["coral-dark"], brand.coral, coralLight);
+  const right = ramp(brand["blue-dark"], brand.blue, blueLight).reverse();
+  const colours = [...left, ...(k % 2 ? [grey] : []), ...right];
+  const map = new Map(scaleLevels.map((l, j) => [l, colours[j]]));
+  if (kind === "categorical") {
+    const cats = [brand["blue-dark"], brand.coral, brand.green, brand.yellow, brand.blue, brand["coral-dark"], brand.muted];
+    scaleLevels.forEach((l, j) => map.set(l, cats[j % cats.length]));
+  }
+  if (dkLevel) map.set(dkLevel, d3.interpolateLab(brand.muted, brand.paper)(0.3));
+  return map;
+}
+
+// Chart layout ------------------------------------------------------------
+
+chartWidth = Generators.observe(notify => {
+  const el = document.getElementById("ex-main");
+  const measure = () => notify(Math.max(280, Math.floor(el.getBoundingClientRect().width)));
+  const observer = new ResizeObserver(measure);
+  observer.observe(el);
+  measure();
+  return () => observer.disconnect();
+})
+
+layout = {
+  const longest = d3.max(allGroups, d => d.group.length) ?? 5;
+  const marginLeft = Math.round(Math.max(56, Math.min(longest * 7.2 + 18, chartWidth * (chartWidth < 480 ? 0.3 : 0.34))));
+  // on phones the number of answers moves from the chart to the table below it
+  const showN = chartWidth >= 480;
+  return {
+    marginLeft,
+    showN,
+    marginRight: showN ? 70 : 30,
+    lineWidth: (marginLeft - 14) / (chartWidth < 480 ? 14 : 12),
+    style: {fontFamily: "inherit", fontSize: "12px", color: brand.ink, fontVariantNumeric: "tabular-nums", overflow: "visible"}
+  };
+}
+
+// marks shared by all chart types: group labels on the left, n on the right
+rowLabels = (groups, withN = true, at = 0.5) => [
+  Plot.text(groups, {
+    frameAnchor: "left", y: d => d.i + at, text: "group", textAnchor: "end", dx: -10,
+    lineWidth: layout.lineWidth, fill: brand.ink, fillOpacity: d => d.faded ? 0.5 : 1, fontSize: 12.5
+  }),
+  withN && layout.showN ? Plot.text(groups, {
+    frameAnchor: "right", y: d => d.i + at, text: d => `n = ${fmtN(d.n)}`, textAnchor: "start", dx: 10,
+    fill: brand.muted, fontSize: 11
+  }) : null
+]
+
+drawNumber = (p, isLast) => {
+  const G = p.groups;
+  const rowH = 52;
+  const {min, max, binWidth} = scale;
+  const span = binWidth === 1 ? [min - 0.5, max + 0.5] : [min, max];
+  const ticks = max - min <= 10 ? d3.range(min, max + 1) : d3.ticks(min, max, chartWidth < 560 ? 5 : 10);
+  const histMax = d3.max(allGroups, g => d3.max(g.dist, b => b.share));
+  const base = 0.76;
+  const bars = G.flatMap(g => g.dist.filter(b => b.share > 0).map(b => ({...b, g})));
+  const showAnchors = isLast && anchors.length > 0;
+  const marginBottom = isLast ? (showAnchors ? 74 : 46) : 24;
+  const binText = k => binWidth === 1 ? `${scale.centre(k)}` : `${min + k * binWidth} to ${Math.min(max, min + (k + 1) * binWidth - (k === scale.nBins - 1 ? 0 : 1))}`;
+  return Plot.plot({
+    width: chartWidth,
+    height: G.length * rowH + 6 + marginBottom,
+    marginTop: 6, marginBottom, marginLeft: layout.marginLeft, marginRight: layout.marginRight,
+    style: layout.style,
+    x: {domain: span, ticks, tickFormat: d3.format("~g"), tickSize: 0, tickPadding: 6,
+      label: isLast ? `Average answer, on the scale from ${min} to ${max}` : null,
+      labelAnchor: "center", labelArrow: "none", labelOffset: showAnchors ? 68 : 40},
+    y: {domain: [0, G.length], reverse: true, axis: null},
+    marks: [
+      Plot.gridX(ticks, {stroke: brand.rule, strokeOpacity: 1}),
+      Plot.rect(bars, {
+        x1: d => scale.centre(d.k) - 0.4 * binWidth, x2: d => scale.centre(d.k) + 0.4 * binWidth,
+        y1: d => d.g.i + base, y2: d => d.g.i + base - 0.6 * d.share / histMax,
+        fill: d3.interpolateLab(brand.rule, brand.muted)(0.18), fillOpacity: d => d.g.faded ? 0.5 : 1,
+        title: d => `${d.g.group}: ${fmtPct(d.share)} answered ${binText(d.k)}`
+      }),
+      Plot.ruleY(G, {y: d => d.i + base, x1: span[0], x2: span[1], stroke: brand.rule}),
+      Plot.link(G.filter(d => Number.isFinite(d.lo)), {
+        x1: "lo", x2: "hi", y1: d => d.i + base, y2: d => d.i + base,
+        stroke: "colour", strokeWidth: 2.5, strokeOpacity: d => d.faded ? 0.4 : 1
+      }),
+      Plot.dot(G, {
+        x: "mean", y: d => d.i + base, r: 5.5, fill: "colour", fillOpacity: d => d.faded ? 0.4 : 1,
+        stroke: brand.paper, strokeWidth: 1.5,
+        title: d => `${d.group}: average ${fmtMean(d.mean)}, n = ${fmtN(d.n)}`
+      }),
+      Plot.text(G, {
+        x: d => Number.isFinite(d.hi) ? d.hi : d.mean, y: d => d.i + base, text: d => fmtMean(d.mean),
+        textAnchor: "start", dx: 8, fill: brand.ink, fillOpacity: d => d.faded ? 0.5 : 1, fontWeight: 600,
+        stroke: brand.paper, strokeWidth: 4
+      }),
+      ...rowLabels(G, true, base),
+      showAnchors ? Plot.text(anchors, {
+        x: "value", frameAnchor: "bottom", dy: 28, text: "text", lineAnchor: "top",
+        textAnchor: "middle", lineWidth: chartWidth < 560 ? 6 : 9, fill: brand.muted, fontSize: 11.5
+      }) : null
+    ]
+  });
+}
+
+drawDiverging = (p, isLast, width, withN) => {
+  const G = p.groups;
+  const rowH = 36;
+  const k = scaleLevels.length;
+  const m = Math.floor(k / 2);
+  const segments = G.flatMap(g => {
+    let x = g.start;
+    return scaleLevels.map(level => {
+      const s = g.shares.find(d => d.level === level);
+      const seg = {g, level, share: s.share, count: s.count, x1: x, x2: x + s.share};
+      x += s.share;
+      return seg;
+    });
+  });
+  const reach = d3.max(allGroups, g => Math.max(-g.start, g.end));
+  const D = Math.min(1, Math.ceil(reach * 10 - 1e-9) / 10);
+  const marginRight = withN ? layout.marginRight : 10;
+  const plotW = width - layout.marginLeft - marginRight;
+  const pad = 2 * D * 36 / Math.max(80, plotW - 72);
+  const ticks = d3.ticks(-D, D, plotW < 300 ? 4 : 8);
+  return Plot.plot({
+    width,
+    height: G.length * rowH + 6 + (isLast ? 44 : 22),
+    marginTop: 6, marginBottom: isLast ? 44 : 22, marginLeft: layout.marginLeft, marginRight,
+    style: layout.style,
+    x: {domain: [-D - pad, D + pad], ticks, tickFormat: v => fmtPct(Math.abs(v)), tickSize: 0, tickPadding: 6,
+      label: isLast ? "Share of answers" : null, labelAnchor: "center", labelArrow: "none", labelOffset: 38},
+    y: {domain: [0, G.length], reverse: true, axis: null},
+    marks: [
+      Plot.gridX(ticks, {stroke: brand.rule, strokeOpacity: 1}),
+      Plot.rect(segments, {
+        x1: "x1", x2: "x2", y1: d => d.g.i + 0.18, y2: d => d.g.i + 0.82,
+        fill: d => levelColour.get(d.level), fillOpacity: d => d.g.faded ? 0.4 : 1,
+        stroke: brand.paper, strokeWidth: 0.75,
+        title: d => `${d.g.group}, ${d.level}: ${fmtPct(d.share)} (${fmtN(d.count)} of ${fmtN(d.g.n)})`
+      }),
+      Plot.ruleX([0], {stroke: brand.ink, strokeWidth: 1}),
+      m > 0 ? Plot.text(G, {x: "start", y: d => d.i + 0.5, text: d => fmtPct(d.left), textAnchor: "end", dx: -5,
+        fill: brand["coral-dark"], fillOpacity: d => d.faded ? 0.5 : 1, fontWeight: 600}) : null,
+      m > 0 ? Plot.text(G, {x: "end", y: d => d.i + 0.5, text: d => fmtPct(d.right), textAnchor: "start", dx: 5,
+        fill: brand["blue-dark"], fillOpacity: d => d.faded ? 0.5 : 1, fontWeight: 600}) : null,
+      ...rowLabels(G, withN)
+    ]
+  });
+}
+
+// "I don't know" as a narrow chart of its own, next to the diverging bars
+drawDk = (p, isLast, width) => {
+  const G = p.groups.map(g => ({...g, dk: g.shares.find(s => s.level === dkLevel)}));
+  const rowH = 36;
+  const dkMax = d3.max(allGroups, g => g.shares.find(s => s.level === dkLevel).share);
+  const D = Math.max(0.1, Math.ceil(dkMax * 10 - 1e-9) / 10);
+  const plotW = width - 8 - layout.marginRight;
+  return Plot.plot({
+    width,
+    height: G.length * rowH + 6 + (isLast ? 44 : 22),
+    marginTop: 6, marginBottom: isLast ? 44 : 22, marginLeft: 8, marginRight: layout.marginRight,
+    style: layout.style,
+    x: {domain: [0, D * (1 + 34 / Math.max(30, plotW - 34))], ticks: [], tickSize: 0,
+      label: isLast ? "Don't know" : null, labelAnchor: "center", labelArrow: "none", labelOffset: 38},
+    y: {domain: [0, G.length], reverse: true, axis: null},
+    marks: [
+      Plot.gridX([0, D], {stroke: brand.rule, strokeOpacity: 1}),
+      Plot.rect(G, {
+        x1: 0, x2: d => d.dk.share, y1: d => d.i + 0.18, y2: d => d.i + 0.82,
+        fill: levelColour.get(dkLevel), fillOpacity: d => d.faded ? 0.4 : 1,
+        title: d => `${d.group}, ${dkLevel}: ${fmtPct(d.dk.share)} (${fmtN(d.dk.count)} of ${fmtN(d.n)})`
+      }),
+      Plot.text(G, {x: d => d.dk.share, y: d => d.i + 0.5, text: d => fmtPct(d.dk.share), textAnchor: "start", dx: 5,
+        fill: brand.muted, fillOpacity: d => d.faded ? 0.5 : 1, fontWeight: 600}),
+      layout.showN ? Plot.text(G, {frameAnchor: "right", y: d => d.i + 0.5, text: d => `n = ${fmtN(d.n)}`, textAnchor: "start", dx: 10,
+        fill: brand.muted, fontSize: 11}) : null
+    ]
+  });
+}
+
+drawLogical = (p, isLast) => {
+  const G = p.groups;
+  const rowH = 34;
+  const top = d3.max(allGroups, g => g.hi);
+  const D = Math.min(1, Math.max(0.1, Math.ceil(top * 10 - 1e-9) / 10));
+  const plotW = chartWidth - layout.marginLeft - layout.marginRight;
+  const ticks = d3.ticks(0, D, plotW < 300 ? 4 : 6);
+  return Plot.plot({
+    width: chartWidth,
+    height: G.length * rowH + 6 + (isLast ? 44 : 22),
+    marginTop: 6, marginBottom: isLast ? 44 : 22, marginLeft: layout.marginLeft, marginRight: layout.marginRight,
+    style: layout.style,
+    x: {domain: [0, D * (1 + 40 / Math.max(60, plotW - 40))], ticks, tickFormat: fmtPct, tickSize: 0, tickPadding: 6,
+      label: isLast ? "Share who ticked this option, with 95% confidence interval" : null,
+      labelAnchor: "center", labelArrow: "none", labelOffset: 38},
+    y: {domain: [0, G.length], reverse: true, axis: null},
+    marks: [
+      Plot.gridX(ticks, {stroke: brand.rule, strokeOpacity: 1}),
+      Plot.rect(G, {
+        x1: 0, x2: "p", y1: d => d.i + 0.22, y2: d => d.i + 0.78, fill: "colour", fillOpacity: d => d.faded ? 0.35 : 0.9,
+        title: d => `${d.group}: ${fmtPct(d.p)} (${fmtN(d.yes)} of ${fmtN(d.n)})`
+      }),
+      Plot.link(G, {x1: "lo", x2: "hi", y1: d => d.i + 0.5, y2: d => d.i + 0.5, stroke: brand.ink, strokeWidth: 1.2,
+        strokeOpacity: d => d.faded ? 0.4 : 0.8}),
+      Plot.text(G, {x: "hi", y: d => d.i + 0.5, text: d => fmtPct(d.p), textAnchor: "start", dx: 6,
+        fill: brand.ink, fillOpacity: d => d.faded ? 0.5 : 1, fontWeight: 600}),
+      Plot.ruleX([0], {stroke: brand.ink}),
+      ...rowLabels(G)
+    ]
+  });
+}
+
+drawCategorical = (p, isLast) => {
+  const G = p.groups;
+  const rowH = 36;
+  const segments = G.flatMap(g => {
+    let x = 0;
+    return g.shares.map(s => ({g, ...s, x1: x, x2: (x += s.share)}));
+  });
+  return Plot.plot({
+    width: chartWidth,
+    height: G.length * rowH + 6 + (isLast ? 44 : 22),
+    marginTop: 6, marginBottom: isLast ? 44 : 22, marginLeft: layout.marginLeft, marginRight: layout.marginRight,
+    style: layout.style,
+    x: {domain: [0, 1], tickFormat: fmtPct, tickSize: 0, tickPadding: 6, ticks: 5,
+      label: isLast ? "Share of answers" : null, labelAnchor: "center", labelArrow: "none", labelOffset: 38},
+    y: {domain: [0, G.length], reverse: true, axis: null},
+    marks: [
+      Plot.rect(segments, {
+        x1: "x1", x2: "x2", y1: d => d.g.i + 0.18, y2: d => d.g.i + 0.82,
+        fill: d => levelColour.get(d.level), fillOpacity: d => d.g.faded ? 0.4 : 1, stroke: brand.paper, strokeWidth: 0.75,
+        title: d => `${d.g.group}, ${d.level}: ${fmtPct(d.share)}`
+      }),
+      ...rowLabels(G)
+    ]
+  });
+}
+
+makeLegend = () => {
+  if (kind !== "diverging" && kind !== "categorical") return null;
+  const items = [...scaleLevels, ...(dkLevel && showDk ? [dkLevel] : [])];
+  return htl.html`<div class="ex-legend" aria-label="Legend">${items.map(l =>
+    htl.html`<span><span class="ex-swatch" style=${{background: levelColour.get(l)}}></span>${l}</span>`)}</div>`;
+}
+
+drawPanel = (p, isLast) => {
+  if (kind === "number") return drawNumber(p, isLast);
+  if (kind === "logical") return drawLogical(p, isLast);
+  if (kind === "categorical") return drawCategorical(p, isLast);
+  if (dkLevel && showDk) {
+    const dkWidth = Math.round(layout.showN ? Math.max(116, chartWidth * 0.19) : 64);
+    return htl.html`<div class="ex-panel">${drawDiverging(p, isLast, chartWidth - dkWidth, false)}${drawDk(p, isLast, dkWidth)}</div>`;
+  }
+  return drawDiverging(p, isLast, chartWidth, true);
+}
+
+// What the visitor sees --------------------------------------------------
+
+problem = {
+  if (!surveys.length) return "Please select at least one survey.";
+  if (!askedIn.length) {
+    const asked = datasets.filter(ds => current.nBySurvey.get(ds) > 0);
+    return `${joinWords(notAsked)} did not ask this question. It was asked in ${joinWords(asked)}, and you can include these surveys in the settings.`;
+  }
+  if (by === varName) return "This question is also the comparison, so the chart would show nothing new. Please choose another characteristic to compare by.";
+  if (!answers.length) return "No respondents match the current selection. You could widen the age range or include more surveys.";
+  return null;
+}
+
+howToRead = {
+  if (kind === "number") return "Each dot shows the average answer of a group, and the coloured line around it the 95% confidence interval. The grey bars above the line show how the answers of the group are spread over the scale.";
+  if (kind === "logical") return "Each bar shows the share of respondents in a group who ticked this option, and the thin line its 95% confidence interval.";
+  if (kind === "categorical") return "Each bar shows how the answers of a group are divided between the categories.";
+  const k = scaleLevels.length;
+  const m = Math.floor(k / 2);
+  const sides = `Answers from “${scaleLevels[0]}” to “${scaleLevels[m - 1]}” extend to the left of the centre line, and answers from “${scaleLevels[k - m]}” to “${scaleLevels[k - 1]}” to the right.`;
+  const middle = k % 2 ? ` The middle answer, “${scaleLevels[m]}”, is split evenly across the line.` : "";
+  const dk = dkLevel && showDk ? ` The share who answered “${dkLevel}” is shown separately on the right.` : "";
+  return `Each bar shows how the answers of a group are spread over the scale. ${sides}${middle} The numbers at either end give the total share on each side.${dk}`;
+}
+
+makeTable = () => {
+  const rows = shownPanels.flatMap(p => p.groups);
+  let head, cells;
+  if (kind === "number") {
+    head = ["Answers", "Average", "95% CI from", "to", "Standard deviation"];
+    cells = d => [fmtN(d.n), d3.format(".2f")(d.mean), d3.format(".2f")(d.lo), d3.format(".2f")(d.hi), d3.format(".2f")(d.sd)];
+  } else if (kind === "logical") {
+    head = ["Answers", "Ticked", "Share", "95% CI from", "to"];
+    cells = d => [fmtN(d.n), fmtN(d.yes), d3.format(".1%")(d.p), d3.format(".1%")(d.lo), d3.format(".1%")(d.hi)];
+  } else {
+    head = ["Answers", ...shownLevels];
+    cells = d => [fmtN(d.n), ...d.shares.map(s => d3.format(".1%")(s.share))];
+  }
+  return htl.html`<div class="ex-table"><table class="table table-sm">
+    <thead><tr>${splitActive ? htl.html`<th>Survey</th>` : null}<th>${byLabel}</th>${head.map(h => htl.html`<th class="num">${h}</th>`)}</tr></thead>
+    <tbody>${rows.map(d => htl.html`<tr>${splitActive ? htl.html`<td>${d.survey}</td>` : null}<td>${d.group}</td>${cells(d).map(c => htl.html`<td class="num">${c}</td>`)}</tr>`)}</tbody>
+  </table></div>`;
+}
+
+// Keep the controls and the address of the page in step --------------------
+
+splitHint = {
+  const el = viewof split;
+  el.hint.hidden = !(split && surveyComparison);
+  return surveyComparison;
+}
+
+dkVisible = {
+  const el = viewof showDk;
+  el.hidden = !dkLevel;
+  return Boolean(dkLevel);
+}
+
+urlSync = {
+  const p = new URLSearchParams();
+  p.set("var", varName);
+  p.set("by", by);
+  if (!split) p.set("split", "0");
+  if (surveys.length && surveys.length < datasets.length) p.set("surveys", surveys.map(datasetKey).join(","));
+  if (ageRange[0] !== ageExtent[0] || ageRange[1] !== ageExtent[1]) p.set("age", ageRange.join("-"));
+  if (once) p.set("once", "1");
+  if (dkLevel && !showDk) p.set("dk", "0");
+  history.replaceState(null, "", `${window.location.pathname}?${p}${window.location.hash}`);
+  return p.toString();
+}
+```

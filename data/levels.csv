@@ -1,0 +1,369 @@
+variable,order,code,level,ordered
+dataset,1,1,Gallup W1,FALSE
+dataset,2,2,Survation W1,FALSE
+dataset,3,3,Gallup W2,FALSE
+dataset,4,4,Survation W2,FALSE
+provider,1,1,Gallup International,FALSE
+provider,2,2,Survation,FALSE
+sample_type,1,1,Fresh,FALSE
+sample_type,2,2,Recontact,FALSE
+age_group,1,1,12-15,TRUE
+age_group,2,2,16-17,TRUE
+age_group,3,3,18-21,TRUE
+age_group,4,4,22-26,TRUE
+gender,1,1,Male,FALSE
+gender,2,2,Female,FALSE
+gender,3,99,Other,FALSE
+region,1,1,North East,FALSE
+region,2,2,North West,FALSE
+region,3,3,Yorkshire and The Humber,FALSE
+region,4,4,East Midlands,FALSE
+region,5,5,West Midlands,FALSE
+region,6,6,East of England,FALSE
+region,7,7,London,FALSE
+region,8,8,South East,FALSE
+region,9,9,South West,FALSE
+region,10,10,Wales,FALSE
+region,11,11,Scotland,FALSE
+region,12,12,Northern Ireland,FALSE
+rururb,1,1,Rural area or village,FALSE
+rururb,2,2,Small or middle size town,FALSE
+rururb,3,3,Large town or city,FALSE
+edu_group,1,1,ISCED 0-2,FALSE
+edu_group,2,2,ISCED 3-4,FALSE
+edu_group,3,3,ISCED 5-8,FALSE
+edu_group,4,99,Other,FALSE
+livecomf,1,1,Living comfortably on present income,TRUE
+livecomf,2,2,Coping on present income,TRUE
+livecomf,3,3,Finding it difficult on present income,TRUE
+livecomf,4,4,Finding it very difficult on present income,TRUE
+polint,1,1,Not at all interested,TRUE
+polint,2,2,A little interested,TRUE
+polint,3,3,Fairly interested,TRUE
+polint,4,4,Very interested,TRUE
+vote_intent,1,1,Very unlikely,TRUE
+vote_intent,2,2,Fairly unlikely,TRUE
+vote_intent,3,3,Neither likely nor unlikely,TRUE
+vote_intent,4,4,Fairly likely,TRUE
+vote_intent,5,5,Very likely,TRUE
+poldisc1_UK,1,1,Never,TRUE
+poldisc1_UK,2,2,Hardly ever,TRUE
+poldisc1_UK,3,3,Sometimes,TRUE
+poldisc1_UK,4,4,Often,TRUE
+poldisc1_UK,5,5,Very often,TRUE
+poldisc2_UK,1,1,Never,TRUE
+poldisc2_UK,2,2,Hardly ever,TRUE
+poldisc2_UK,3,3,Sometimes,TRUE
+poldisc2_UK,4,4,Often,TRUE
+poldisc2_UK,5,5,Very often,TRUE
+poldisc3_UK,1,1,Never,TRUE
+poldisc3_UK,2,2,Hardly ever,TRUE
+poldisc3_UK,3,3,Sometimes,TRUE
+poldisc3_UK,4,4,Often,TRUE
+poldisc3_UK,5,5,Very often,TRUE
+poldisc4_UK,1,1,Never,TRUE
+poldisc4_UK,2,2,Hardly ever,TRUE
+poldisc4_UK,3,3,Sometimes,TRUE
+poldisc4_UK,4,4,Often,TRUE
+poldisc4_UK,5,5,Very often,TRUE
+polself1_UK,1,1,Strongly disagree,TRUE
+polself1_UK,2,2,Disagree,TRUE
+polself1_UK,3,3,Somewhat disagree,TRUE
+polself1_UK,4,4,Neither agree nor disagree,TRUE
+polself1_UK,5,5,Somewhat agree,TRUE
+polself1_UK,6,6,Agree,TRUE
+polself1_UK,7,7,Strongly agree,TRUE
+polself2_UK,1,1,Strongly disagree,TRUE
+polself2_UK,2,2,Disagree,TRUE
+polself2_UK,3,3,Somewhat disagree,TRUE
+polself2_UK,4,4,Neither agree nor disagree,TRUE
+polself2_UK,5,5,Somewhat agree,TRUE
+polself2_UK,6,6,Agree,TRUE
+polself2_UK,7,7,Strongly agree,TRUE
+opideo01_UK,1,1,Strongly disagree,FALSE
+opideo01_UK,2,2,Disagree,FALSE
+opideo01_UK,3,3,Somewhat disagree,FALSE
+opideo01_UK,4,4,Neither agree nor disagree,FALSE
+opideo01_UK,5,5,Somewhat agree,FALSE
+opideo01_UK,6,6,Agree,FALSE
+opideo01_UK,7,7,Strongly agree,FALSE
+opideo01_UK,8,9,I don't know,FALSE
+opideo02_UK,1,1,Strongly disagree,FALSE
+opideo02_UK,2,2,Disagree,FALSE
+opideo02_UK,3,3,Somewhat disagree,FALSE
+opideo02_UK,4,4,Neither agree nor disagree,FALSE
+opideo02_UK,5,5,Somewhat agree,FALSE
+opideo02_UK,6,6,Agree,FALSE
+opideo02_UK,7,7,Strongly agree,FALSE
+opideo02_UK,8,9,I don't know,FALSE
+opideo03_UK,1,1,Strongly disagree,FALSE
+opideo03_UK,2,2,Disagree,FALSE
+opideo03_UK,3,3,Somewhat disagree,FALSE
+opideo03_UK,4,4,Neither agree nor disagree,FALSE
+opideo03_UK,5,5,Somewhat agree,FALSE
+opideo03_UK,6,6,Agree,FALSE
+opideo03_UK,7,7,Strongly agree,FALSE
+opideo03_UK,8,9,I don't know,FALSE
+opideo04_UK,1,1,Strongly disagree,FALSE
+opideo04_UK,2,2,Disagree,FALSE
+opideo04_UK,3,3,Somewhat disagree,FALSE
+opideo04_UK,4,4,Neither agree nor disagree,FALSE
+opideo04_UK,5,5,Somewhat agree,FALSE
+opideo04_UK,6,6,Agree,FALSE
+opideo04_UK,7,7,Strongly agree,FALSE
+opideo04_UK,8,9,I don't know,FALSE
+opideo05_UK,1,1,Strongly disagree,FALSE
+opideo05_UK,2,2,Disagree,FALSE
+opideo05_UK,3,3,Somewhat disagree,FALSE
+opideo05_UK,4,4,Neither agree nor disagree,FALSE
+opideo05_UK,5,5,Somewhat agree,FALSE
+opideo05_UK,6,6,Agree,FALSE
+opideo05_UK,7,7,Strongly agree,FALSE
+opideo05_UK,8,9,I don't know,FALSE
+opideo06_UK,1,1,Strongly disagree,FALSE
+opideo06_UK,2,2,Disagree,FALSE
+opideo06_UK,3,3,Somewhat disagree,FALSE
+opideo06_UK,4,4,Neither agree nor disagree,FALSE
+opideo06_UK,5,5,Somewhat agree,FALSE
+opideo06_UK,6,6,Agree,FALSE
+opideo06_UK,7,7,Strongly agree,FALSE
+opideo06_UK,8,9,I don't know,FALSE
+opideo07_UK,1,1,Strongly disagree,FALSE
+opideo07_UK,2,2,Disagree,FALSE
+opideo07_UK,3,3,Somewhat disagree,FALSE
+opideo07_UK,4,4,Neither agree nor disagree,FALSE
+opideo07_UK,5,5,Somewhat agree,FALSE
+opideo07_UK,6,6,Agree,FALSE
+opideo07_UK,7,7,Strongly agree,FALSE
+opideo07_UK,8,9,I don't know,FALSE
+opideo08_UK,1,1,Strongly disagree,FALSE
+opideo08_UK,2,2,Disagree,FALSE
+opideo08_UK,3,3,Somewhat disagree,FALSE
+opideo08_UK,4,4,Neither agree nor disagree,FALSE
+opideo08_UK,5,5,Somewhat agree,FALSE
+opideo08_UK,6,6,Agree,FALSE
+opideo08_UK,7,7,Strongly agree,FALSE
+opideo08_UK,8,9,I don't know,FALSE
+opideo09_UK,1,1,Strongly disagree,FALSE
+opideo09_UK,2,2,Disagree,FALSE
+opideo09_UK,3,3,Somewhat disagree,FALSE
+opideo09_UK,4,4,Neither agree nor disagree,FALSE
+opideo09_UK,5,5,Somewhat agree,FALSE
+opideo09_UK,6,6,Agree,FALSE
+opideo09_UK,7,7,Strongly agree,FALSE
+opideo09_UK,8,9,I don't know,FALSE
+opideo10_UK,1,1,Strongly disagree,FALSE
+opideo10_UK,2,2,Disagree,FALSE
+opideo10_UK,3,3,Somewhat disagree,FALSE
+opideo10_UK,4,4,Neither agree nor disagree,FALSE
+opideo10_UK,5,5,Somewhat agree,FALSE
+opideo10_UK,6,6,Agree,FALSE
+opideo10_UK,7,7,Strongly agree,FALSE
+opideo10_UK,8,9,I don't know,FALSE
+opideo11_UK,1,1,Strongly disagree,FALSE
+opideo11_UK,2,2,Disagree,FALSE
+opideo11_UK,3,3,Somewhat disagree,FALSE
+opideo11_UK,4,4,Neither agree nor disagree,FALSE
+opideo11_UK,5,5,Somewhat agree,FALSE
+opideo11_UK,6,6,Agree,FALSE
+opideo11_UK,7,7,Strongly agree,FALSE
+opideo11_UK,8,9,I don't know,FALSE
+opideo12_UK,1,1,Strongly disagree,FALSE
+opideo12_UK,2,2,Disagree,FALSE
+opideo12_UK,3,3,Somewhat disagree,FALSE
+opideo12_UK,4,4,Neither agree nor disagree,FALSE
+opideo12_UK,5,5,Somewhat agree,FALSE
+opideo12_UK,6,6,Agree,FALSE
+opideo12_UK,7,7,Strongly agree,FALSE
+opideo12_UK,8,9,I don't know,FALSE
+opideo13_UK,1,1,Strongly disagree,FALSE
+opideo13_UK,2,2,Disagree,FALSE
+opideo13_UK,3,3,Somewhat disagree,FALSE
+opideo13_UK,4,4,Neither agree nor disagree,FALSE
+opideo13_UK,5,5,Somewhat agree,FALSE
+opideo13_UK,6,6,Agree,FALSE
+opideo13_UK,7,7,Strongly agree,FALSE
+opideo13_UK,8,9,I don't know,FALSE
+opideo14_UK,1,1,Strongly disagree,FALSE
+opideo14_UK,2,2,Disagree,FALSE
+opideo14_UK,3,3,Somewhat disagree,FALSE
+opideo14_UK,4,4,Neither agree nor disagree,FALSE
+opideo14_UK,5,5,Somewhat agree,FALSE
+opideo14_UK,6,6,Agree,FALSE
+opideo14_UK,7,7,Strongly agree,FALSE
+opideo14_UK,8,9,I don't know,FALSE
+df1_UK,1,1,Strongly disagree,TRUE
+df1_UK,2,2,Disagree,TRUE
+df1_UK,3,3,Somewhat disagree,TRUE
+df1_UK,4,4,Neither agree nor disagree,TRUE
+df1_UK,5,5,Somewhat agree,TRUE
+df1_UK,6,6,Agree,TRUE
+df1_UK,7,7,Strongly agree,TRUE
+df2_UK,1,1,Strongly disagree,TRUE
+df2_UK,2,2,Disagree,TRUE
+df2_UK,3,3,Somewhat disagree,TRUE
+df2_UK,4,4,Neither agree nor disagree,TRUE
+df2_UK,5,5,Somewhat agree,TRUE
+df2_UK,6,6,Agree,TRUE
+df2_UK,7,7,Strongly agree,TRUE
+df3_UK,1,1,Strongly disagree,TRUE
+df3_UK,2,2,Disagree,TRUE
+df3_UK,3,3,Somewhat disagree,TRUE
+df3_UK,4,4,Neither agree nor disagree,TRUE
+df3_UK,5,5,Somewhat agree,TRUE
+df3_UK,6,6,Agree,TRUE
+df3_UK,7,7,Strongly agree,TRUE
+df4_UK,1,1,Strongly disagree,TRUE
+df4_UK,2,2,Disagree,TRUE
+df4_UK,3,3,Somewhat disagree,TRUE
+df4_UK,4,4,Neither agree nor disagree,TRUE
+df4_UK,5,5,Somewhat agree,TRUE
+df4_UK,6,6,Agree,TRUE
+df4_UK,7,7,Strongly agree,TRUE
+df5_UK,1,1,Strongly disagree,TRUE
+df5_UK,2,2,Disagree,TRUE
+df5_UK,3,3,Somewhat disagree,TRUE
+df5_UK,4,4,Neither agree nor disagree,TRUE
+df5_UK,5,5,Somewhat agree,TRUE
+df5_UK,6,6,Agree,TRUE
+df5_UK,7,7,Strongly agree,TRUE
+dog1_UK,1,1,Strongly disagree,TRUE
+dog1_UK,2,2,Disagree,TRUE
+dog1_UK,3,3,Somewhat disagree,TRUE
+dog1_UK,4,4,Neither agree nor disagree,TRUE
+dog1_UK,5,5,Somewhat agree,TRUE
+dog1_UK,6,6,Agree,TRUE
+dog1_UK,7,7,Strongly agree,TRUE
+dog2_UK,1,1,Strongly disagree,TRUE
+dog2_UK,2,2,Disagree,TRUE
+dog2_UK,3,3,Somewhat disagree,TRUE
+dog2_UK,4,4,Neither agree nor disagree,TRUE
+dog2_UK,5,5,Somewhat agree,TRUE
+dog2_UK,6,6,Agree,TRUE
+dog2_UK,7,7,Strongly agree,TRUE
+dog3_UK,1,1,Strongly disagree,TRUE
+dog3_UK,2,2,Disagree,TRUE
+dog3_UK,3,3,Somewhat disagree,TRUE
+dog3_UK,4,4,Neither agree nor disagree,TRUE
+dog3_UK,5,5,Somewhat agree,TRUE
+dog3_UK,6,6,Agree,TRUE
+dog3_UK,7,7,Strongly agree,TRUE
+dog4_UK,1,1,Strongly disagree,TRUE
+dog4_UK,2,2,Disagree,TRUE
+dog4_UK,3,3,Somewhat disagree,TRUE
+dog4_UK,4,4,Neither agree nor disagree,TRUE
+dog4_UK,5,5,Somewhat agree,TRUE
+dog4_UK,6,6,Agree,TRUE
+dog4_UK,7,7,Strongly agree,TRUE
+dog5_UK,1,1,Strongly disagree,TRUE
+dog5_UK,2,2,Disagree,TRUE
+dog5_UK,3,3,Somewhat disagree,TRUE
+dog5_UK,4,4,Neither agree nor disagree,TRUE
+dog5_UK,5,5,Somewhat agree,TRUE
+dog5_UK,6,6,Agree,TRUE
+dog5_UK,7,7,Strongly agree,TRUE
+dog6_UK,1,1,Strongly disagree,TRUE
+dog6_UK,2,2,Disagree,TRUE
+dog6_UK,3,3,Somewhat disagree,TRUE
+dog6_UK,4,4,Neither agree nor disagree,TRUE
+dog6_UK,5,5,Somewhat agree,TRUE
+dog6_UK,6,6,Agree,TRUE
+dog6_UK,7,7,Strongly agree,TRUE
+erq01_UK,1,1,Strongly disagree,TRUE
+erq01_UK,2,2,Disagree,TRUE
+erq01_UK,3,3,Somewhat disagree,TRUE
+erq01_UK,4,4,Neither agree nor disagree,TRUE
+erq01_UK,5,5,Somewhat agree,TRUE
+erq01_UK,6,6,Agree,TRUE
+erq01_UK,7,7,Strongly agree,TRUE
+erq02_UK,1,1,Strongly disagree,TRUE
+erq02_UK,2,2,Disagree,TRUE
+erq02_UK,3,3,Somewhat disagree,TRUE
+erq02_UK,4,4,Neither agree nor disagree,TRUE
+erq02_UK,5,5,Somewhat agree,TRUE
+erq02_UK,6,6,Agree,TRUE
+erq02_UK,7,7,Strongly agree,TRUE
+erq03_UK,1,1,Strongly disagree,TRUE
+erq03_UK,2,2,Disagree,TRUE
+erq03_UK,3,3,Somewhat disagree,TRUE
+erq03_UK,4,4,Neither agree nor disagree,TRUE
+erq03_UK,5,5,Somewhat agree,TRUE
+erq03_UK,6,6,Agree,TRUE
+erq03_UK,7,7,Strongly agree,TRUE
+erq04_UK,1,1,Strongly disagree,TRUE
+erq04_UK,2,2,Disagree,TRUE
+erq04_UK,3,3,Somewhat disagree,TRUE
+erq04_UK,4,4,Neither agree nor disagree,TRUE
+erq04_UK,5,5,Somewhat agree,TRUE
+erq04_UK,6,6,Agree,TRUE
+erq04_UK,7,7,Strongly agree,TRUE
+erq05_UK,1,1,Strongly disagree,TRUE
+erq05_UK,2,2,Disagree,TRUE
+erq05_UK,3,3,Somewhat disagree,TRUE
+erq05_UK,4,4,Neither agree nor disagree,TRUE
+erq05_UK,5,5,Somewhat agree,TRUE
+erq05_UK,6,6,Agree,TRUE
+erq05_UK,7,7,Strongly agree,TRUE
+erq06_UK,1,1,Strongly disagree,TRUE
+erq06_UK,2,2,Disagree,TRUE
+erq06_UK,3,3,Somewhat disagree,TRUE
+erq06_UK,4,4,Neither agree nor disagree,TRUE
+erq06_UK,5,5,Somewhat agree,TRUE
+erq06_UK,6,6,Agree,TRUE
+erq06_UK,7,7,Strongly agree,TRUE
+erq07_UK,1,1,Strongly disagree,TRUE
+erq07_UK,2,2,Disagree,TRUE
+erq07_UK,3,3,Somewhat disagree,TRUE
+erq07_UK,4,4,Neither agree nor disagree,TRUE
+erq07_UK,5,5,Somewhat agree,TRUE
+erq07_UK,6,6,Agree,TRUE
+erq07_UK,7,7,Strongly agree,TRUE
+erq08_UK,1,1,Strongly disagree,TRUE
+erq08_UK,2,2,Disagree,TRUE
+erq08_UK,3,3,Somewhat disagree,TRUE
+erq08_UK,4,4,Neither agree nor disagree,TRUE
+erq08_UK,5,5,Somewhat agree,TRUE
+erq08_UK,6,6,Agree,TRUE
+erq08_UK,7,7,Strongly agree,TRUE
+erq09_UK,1,1,Strongly disagree,TRUE
+erq09_UK,2,2,Disagree,TRUE
+erq09_UK,3,3,Somewhat disagree,TRUE
+erq09_UK,4,4,Neither agree nor disagree,TRUE
+erq09_UK,5,5,Somewhat agree,TRUE
+erq09_UK,6,6,Agree,TRUE
+erq09_UK,7,7,Strongly agree,TRUE
+erq10_UK,1,1,Strongly disagree,TRUE
+erq10_UK,2,2,Disagree,TRUE
+erq10_UK,3,3,Somewhat disagree,TRUE
+erq10_UK,4,4,Neither agree nor disagree,TRUE
+erq10_UK,5,5,Somewhat agree,TRUE
+erq10_UK,6,6,Agree,TRUE
+erq10_UK,7,7,Strongly agree,TRUE
+aa1_UK,1,1,Strongly disagree,TRUE
+aa1_UK,2,2,Disagree,TRUE
+aa1_UK,3,3,Somewhat disagree,TRUE
+aa1_UK,4,4,Neither agree nor disagree,TRUE
+aa1_UK,5,5,Somewhat agree,TRUE
+aa1_UK,6,6,Agree,TRUE
+aa1_UK,7,7,Strongly agree,TRUE
+aa2_UK,1,1,Strongly disagree,TRUE
+aa2_UK,2,2,Disagree,TRUE
+aa2_UK,3,3,Somewhat disagree,TRUE
+aa2_UK,4,4,Neither agree nor disagree,TRUE
+aa2_UK,5,5,Somewhat agree,TRUE
+aa2_UK,6,6,Agree,TRUE
+aa2_UK,7,7,Strongly agree,TRUE
+aa3_UK,1,1,Strongly disagree,TRUE
+aa3_UK,2,2,Disagree,TRUE
+aa3_UK,3,3,Somewhat disagree,TRUE
+aa3_UK,4,4,Neither agree nor disagree,TRUE
+aa3_UK,5,5,Somewhat agree,TRUE
+aa3_UK,6,6,Agree,TRUE
+aa3_UK,7,7,Strongly agree,TRUE
+aa4_UK,1,1,Strongly disagree,TRUE
+aa4_UK,2,2,Disagree,TRUE
+aa4_UK,3,3,Somewhat disagree,TRUE
+aa4_UK,4,4,Neither agree nor disagree,TRUE
+aa4_UK,5,5,Somewhat agree,TRUE
+aa4_UK,6,6,Agree,TRUE
+aa4_UK,7,7,Strongly agree,TRUE

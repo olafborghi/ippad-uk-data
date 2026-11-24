@@ -1,0 +1,58 @@
+# Brand of the IP-PAD UK data website: the single source of colours, fonts
+# and logo. The site theme reads this file, and so do R/site.R (figures) and
+# the explorer (Observable). Change colours here only, then run
+# `Rscript R/palette_check.R`.
+
+meta:
+  name: IP-PAD UK Data
+
+logo:
+  images:
+    mark: assets/logo.png
+  medium: mark
+
+color:
+  palette:
+    # base tones (the "fernande" palette)
+    coral: "#FF7676"
+    yellow: "#F9D662"
+    green: "#7CAB7D"
+    blue: "#75B7D1"
+    # darker partners, used for wave 2 and for text-sized marks
+    coral-dark: "#B23A3A"
+    blue-dark: "#2F6F8F"
+    # neutrals
+    ink: "#23262B"
+    muted: "#5F6670"
+    rule: "#E3E5E8"
+    tint: "#F4F5F7"
+    paper: "#FFFFFF"
+    # data colours of the four datasets: hue for provider, lightness for wave
+    gallup-w1: "#75B7D1"
+    gallup-w2: "#2F6F8F"
+    survation-w1: "#FF7676"
+    survation-w2: "#B23A3A"
+  foreground: ink
+  background: paper
+  primary: blue-dark
+  secondary: muted
+  tertiary: coral
+  light: tint
+  dark: ink
+
+typography:
+  fonts:
+    - family: Public Sans
+      source: google
+      weight: [300, 400, 600, 700]
+      style: [normal, italic]
+  base:
+    family: Public Sans
+    line-height: 1.6
+  headings:
+    family: Public Sans
+    weight: 600
+    color: ink
+  link:
+    color: blue-dark
+    decoration: underline

@@ -1,0 +1,394 @@
+---
+title: "The data"
+subtitle: "How the four UK surveys were carried out, and what to keep in mind when comparing them."
+---
+
+```{=html}
+<style>
+/* Page-level styling of the data page */
+.data-table table {
+  font-size: 0.92rem;
+  margin-bottom: 0.6rem;
+}
+.data-table th {
+  font-weight: 600;
+  vertical-align: bottom;
+}
+.data-table td,
+.data-table th {
+  padding: 0.45rem 0.6rem 0.45rem 0;
+}
+.data-table .survey-sub {
+  display: block;
+  color: var(--ip-muted);
+  font-size: 0.82rem;
+}
+.data-table .none {
+  color: var(--ip-muted);
+}
+.data-table .nowrap {
+  white-space: nowrap;
+}
+.data-table .table > tbody > tr > * {
+  --bs-table-accent-bg: transparent;
+  --bs-table-bg-type: transparent;
+  box-shadow: none;
+}
+.variable-search form {
+  max-width: 100%;
+  --input-width: 22rem;
+  --label-width: 8rem;
+}
+.variable-search form input[type="search"] {
+  padding: 0.25rem 0.4rem;
+  border: 1px solid var(--ip-rule);
+}
+.variable-search table {
+  font-size: 0.88rem;
+  width: 100%;
+  margin: 0 !important;
+}
+.variable-search form[class*="-table"] {
+  margin-left: 0 !important;
+  padding-left: 0 !important;
+}
+.variable-search table th {
+  font-weight: 600;
+}
+.variable-search table td {
+  white-space: normal;
+  vertical-align: top;
+  overflow-wrap: anywhere;
+  padding-top: 0.3rem;
+  padding-bottom: 0.3rem;
+}
+/* the selection checkboxes are not used, so the first column is hidden */
+.variable-search table tr > :first-child {
+  display: none;
+}
+.variable-search table tr > :nth-child(2) {
+  padding-left: 0;
+}
+.variable-search table td:nth-child(2) {
+  font-family: var(--bs-font-monospace);
+  font-size: 0.8rem;
+}
+.data-table {
+  overflow-x: auto;
+}
+@media (max-width: 600px) {
+  .data-table table {
+    font-size: 0.8rem;
+  }
+  .data-table td,
+  .data-table th {
+    padding-right: 0.4rem;
+  }
+  .data-table .survey-sub {
+    display: none;
+  }
+  .variable-search form {
+    --label-width: 100%;
+    --input-width: 100%;
+    flex-wrap: wrap;
+  }
+}
+</style>
+```
+
+```{r}
+#| label: setup
+#| include: false
+source(here::here("R", "site.R"))
+
+n_interviews <- nrow(respondents)
+n_persons <- sum(respondents$person_first)
+years <- range(str_sub(respondents$interview_month, 1, 4))
+
+# one row per survey
+surveys <- respondents |>
+  summarise(
+    provider = first(provider),
+    wave = first(wave),
+    age_min = min(age),
+    age_max = max(age),
+    n = n(),
+    first_month = ym(min(interview_month)),
+    last_month = ym(max(interview_month)),
+    recontacts = sum(sample_type == "Recontact"),
+    .by = dataset
+  ) |>
+  arrange(dataset) |>
+  mutate(
+    fieldwork = if_else(
+      year(first_month) == year(last_month),
+      str_c(format(first_month, "%B"), " to ", format(last_month, "%B %Y")),
+      str_c(format(first_month, "%B %Y"), " to ", format(last_month, "%B %Y"))
+    ),
+    answers = if_else(provider == "Survation", "A parent, then the child", "The young person")
+  )
+
+# ages covered by each provider and their overlap
+provider_ages <- respondents |>
+  summarise(min = min(age), max = max(age), .by = provider) |>
+  mutate(provider = word(provider, 1)) |>
+  pivot_longer(c(min, max)) |>
+  mutate(name = str_c(provider, "_", name)) |>
+  select(name, value) |>
+  deframe()
+overlap <- c(
+  max(provider_ages[["Gallup_min"]], provider_ages[["Survation_min"]]),
+  min(provider_ages[["Gallup_max"]], provider_ages[["Survation_max"]])
+)
+
+n_survation_18 <- sum(respondents$dataset == "Survation W2" & respondents$age == 18)
+
+# share of Gallup W2 interviews in November and December 2025
+gallup_w2_late <- respondents |>
+  filter(dataset == "Gallup W2") |>
+  summarise(share = mean(interview_month %in% c("2025-11", "2025-12"))) |>
+  pull(share) |>
+  percent(accuracy = 1)
+
+# mean of the six 0 to 10 items asked in all four surveys, per respondent
+scale_scores <- respondents |>
+  mutate(score = rowMeans(pick(ftp1_UK, ftp2_UK, ftp3_UK, ftp4_UK, ftp5_UK, lr), na.rm = TRUE))
+
+score_dataset <- scale_scores |>
+  summarise(mean = mean(score), .by = dataset) |>
+  mutate(dataset = as.character(dataset)) |>
+  deframe()
+score_others <- score_dataset[names(score_dataset) != "Survation W1"]
+
+score_survation_w1 <- scale_scores |>
+  filter(dataset == "Survation W1") |>
+  mutate(group = if_else(panel, "panel", "others")) |>
+  summarise(mean = mean(score), .by = group) |>
+  deframe()
+
+# panel links by provider
+links <- panel |>
+  summarise(
+    n = n(),
+    strict = sum(link_age_diff %in% 1:2 & link_same_gender),
+    .by = provider
+  ) |>
+  mutate(provider = word(provider, 1))
+link_n <- deframe(select(links, provider, n))
+link_strict <- deframe(select(links, provider, strict))
+
+# topics covered by the questions on this site
+survey_cols <- c(
+  "Gallup W1" = "n_gallup_w1",
+  "Survation W1" = "n_survation_w1",
+  "Gallup W2" = "n_gallup_w2",
+  "Survation W2" = "n_survation_w2"
+)
+
+questions <- variables |>
+  filter(!block %in% c("Identifiers and linking", "Interview")) |>
+  mutate(topic = coalesce(topic, block))
+
+n_questions <- nrow(questions)
+n_all_four <- questions |>
+  filter(if_all(all_of(unname(survey_cols)), \(x) x > 0)) |>
+  nrow()
+asked_by_survey <- colSums(select(questions, all_of(unname(survey_cols))) > 0) |>
+  set_names(names(survey_cols))
+```
+
+The IP-PAD UK data come from four online surveys of young people in the United Kingdom, carried out between `r years[1]` and `r years[2]`. Two fieldwork providers each ran two waves. Gallup International interviewed young people who are members of its online panels themselves, while Survation reached younger adolescents through the panel accounts of their parents. We combined the four surveys into one data file with one row per interview, which holds `r comma(n_interviews)` interviews with `r comma(n_persons)` young people. Apart from two questions about the future that only Survation asked, the file includes only questions that were asked in at least two of the surveys, so that answers can be compared between them.
+
+## The four surveys
+
+::: {.data-table}
+```{r}
+#| label: table-surveys
+surveys |>
+  transmute(
+    Survey = str_c(dataset, "<span class='survey-sub'>", provider, ", wave ", wave, "</span>"),
+    Ages = str_c("<span class='nowrap'>", age_min, "–", age_max, "</span>"),
+    Interviews = comma(n),
+    Fieldwork = fieldwork,
+    `Recontacted from wave 1` = if_else(recontacts == 0, "<span class='none'>None</span>", comma(recontacts)),
+    `Who answered` = answers
+  ) |>
+  knitr::kable(
+    format = "html",
+    align = c("l", "l", "r", "l", "r", "l"),
+    escape = FALSE,
+    table.attr = 'class="table"'
+  )
+```
+:::
+
+In the Gallup surveys, respondents answered every question themselves. In the Survation surveys, a parent first gave consent and reported the child's age, gender, region and the type of place they live in, before handing the device to the child, who answered the rest of the questionnaire. In both second waves, the providers first invited their own first-wave respondents back and then filled the sample with new respondents. Because few Gallup respondents returned, Gallup W2 added a separate sample of 22 to 26 year olds, which is why its age range is wider. Survation W2, in turn, also admitted 18 year olds outside its quota (`r n_survation_18` respondents).
+
+## When the surveys were in the field
+
+::: {.how-to-read}
+Each row shows one survey. The bars give the number of interviews in each month, on the same scale for all four surveys.
+:::
+
+```{r}
+#| label: plot-timeline
+#| fig-width: 8
+#| fig-height: 3.4
+#| fig-alt: !expr str_c("Monthly number of interviews in each of the four surveys, from May 2024 to November 2026. Gallup W1 ran in May and June 2024. Gallup W2 ran from May 2025 to January 2026, with ", gallup_w2_late, " of its interviews in November and December 2025. Survation W1 ran from July to September 2025, during the Gallup W2 fieldwork. Survation W2 ran from August to November 2026, mostly in October.")
+timeline <- respondents |>
+  count(dataset, interview_month) |>
+  mutate(month = ym(interview_month) + days(14))
+
+ggplot(timeline, aes(x = month, y = n, fill = dataset)) +
+  geom_col(width = 26) +
+  facet_wrap(~dataset, ncol = 1, strip.position = "left") +
+  scale_fill_manual(values = dataset_colours, guide = "none") +
+  scale_x_date(
+    breaks = seq(ym("2024-05"), ym("2026-11"), by = "6 months"),
+    date_labels = "%b %Y",
+    limits = c(ym("2024-04"), ym("2026-12"))
+  ) +
+  scale_y_continuous(breaks = c(0, 1000), labels = label_comma()) +
+  labs(
+    title = "Survation W1 was in the field while Gallup W2 was running",
+    x = NULL,
+    y = NULL,
+    caption = site_caption
+  ) +
+  theme(
+    strip.placement = "outside",
+    strip.text.y.left = element_text(angle = 0, hjust = 1),
+    strip.background = element_blank(),
+    panel.grid.major.x = element_line(colour = brand[["rule"]], linewidth = 0.3),
+    panel.spacing.y = unit(0.3, "lines")
+  )
+```
+
+Three of the surveys carried out most of their interviews within two or three months. Gallup W2 is the exception. It began in May 2025 with a small number of interviews each month, and `r gallup_w2_late` of its interviews took place in November and December 2025, when the separate sample of 22 to 26 year olds was also interviewed.
+
+## Good to know before comparing
+
+The four surveys share most of their questions, but they were not designed as one sample. A few differences between them therefore matter whenever answers are compared across surveys, and the [explorer](explore.qmd) lets you check whether a pattern holds in each survey separately.
+
+The age ranges of the two providers overlap only at ages `r overlap[1]` to `r overlap[2]`. A difference between Gallup and Survation can thus reflect age as much as the provider, and even at the shared ages the respondents were recruited in different ways.
+
+The variable `wave` counts the waves within each provider and does not order the surveys in time. Survation W1 was in the field in the summer of 2025, while Gallup W2 was still running, so the fieldwork dates are a better guide to when people answered.
+
+The data are not weighted, and all respondents come from online panels rather than from random samples of the population. The results describe the young people who took part and should not be read as estimates for all young people in the UK.
+
+Each survey also applied its own checks to remove careless or automated answers. Gallup W1, for example, kept respondents who failed its attention check, whereas Survation removed those who failed two checks, so some differences between the surveys may partly come from these rules.
+
+On the scales from 0 to 10, Survation W1 respondents give higher answers than respondents in the other surveys. Averaged over the five party ratings and the left-right scale, for example, they score `r number(score_dataset[["Survation W1"]], 0.1)`, against `r number(min(score_others), 0.1)` to `r number(max(score_others), 0.1)` in the other surveys. However, the Survation W1 respondents who took part again a year later already answered much like the other surveys in the first wave, with an average of `r number(score_survation_w1[["panel"]], 0.1)`. This suggests that the difference reflects who took part in Survation W1 rather than a real difference in attitudes. The insight on [left and right](insights/uk/left-right/index.qmd) shows what this means for one of these scales.
+
+Only `r link_n[["Gallup"]]` Gallup and `r link_n[["Survation"]]` Survation respondents took part in both waves of their provider, and some of these links are doubtful. In Survation the link runs through the parent's panel account, and only `r link_strict[["Survation"]]` of the `r link_n[["Survation"]]` linked respondents are one or two years older in the second wave and report the same gender, so it cannot be ruled out that a sibling answered in some cases. By the same measure, `r link_strict[["Gallup"]]` of the `r link_n[["Gallup"]]` Gallup links are plausible.
+
+Finally, the wording of a few questions differs slightly between the surveys. Gallup W1, for instance, introduced the party ratings as parties "in the Parliament of the United Kingdom", and the other surveys as parties "in the House of Commons". The codebook notes each of these differences at the question concerned.
+
+## What the data cover
+
+This website uses `r n_questions` questions from the combined file, grouped by topic in the table below. Of these, `r n_all_four` were asked in all four surveys. Survation W2 asked fewer of the shared questions than the other surveys (`r asked_by_survey[["Survation W2"]]`), and some batteries, such as the ideological labels, were asked in only two of them. The combined file holds further variables that are not shown here, for example open answers and details of the interview.
+
+::: {.data-table}
+```{r}
+#| label: table-topics
+topic_order <- c(
+  "Interest and participation", "Ideology", "Party feelings", "Issue attitudes",
+  "Ideological labels", "Democracy and populism", "Trust in institutions",
+  "Living and belonging", "Outlook and personality", "Demographics"
+)
+stopifnot(setequal(topic_order, questions$topic))
+
+questions |>
+  summarise(
+    Questions = n(),
+    across(all_of(unname(survey_cols)), \(x) sum(x > 0)),
+    .by = topic
+  ) |>
+  arrange(match(topic, topic_order)) |>
+  mutate(
+    across(
+      all_of(unname(survey_cols)),
+      \(x) case_when(
+        x == Questions ~ "All",
+        x == 0 ~ "<span class='none'>None</span>",
+        .default = as.character(x)
+      )
+    )
+  ) |>
+  rename(Topic = topic, all_of(survey_cols)) |>
+  knitr::kable(
+    format = "html",
+    align = c("l", "r", "r", "r", "r", "r"),
+    escape = FALSE,
+    table.attr = 'class="table"'
+  )
+```
+:::
+
+## Search the questions
+
+The table below lists every variable used on this website, with the surveys that asked it. You can search by variable name, by a word of the question or by topic.
+
+::: {.variable-search}
+```{ojs}
+//| echo: false
+variables = FileAttachment("data/variables.csv").csv({typed: true})
+
+type_labels = ({
+  number: "Number",
+  ordered: "Ordered categories",
+  factor: "Categories",
+  logical: "Yes or no",
+  text: "Text"
+})
+
+survey_counts = [
+  ["Gallup W1", "n_gallup_w1"],
+  ["Survation W1", "n_survation_w1"],
+  ["Gallup W2", "n_gallup_w2"],
+  ["Survation W2", "n_survation_w2"]
+]
+
+variable_rows = variables.map(d => {
+  const asked = survey_counts.filter(([, col]) => d[col] > 0).map(([survey]) => survey)
+  return {
+    name: d.name,
+    label: d.short_label,
+    topic: d.topic ?? d.block,
+    type: type_labels[d.type] ?? d.type,
+    surveys: asked.length === 4 ? "All four" : asked.join(", ")
+  }
+})
+
+viewof variable_query = Inputs.search(variable_rows, {
+  placeholder: "For example trust, climate or lr",
+  label: "Search the list"
+})
+
+narrow = width < 620
+
+Inputs.table(variable_query, {
+  columns: narrow
+    ? ["name", "label", "surveys"]
+    : ["name", "label", "topic", "type", "surveys"],
+  header: {
+    name: "Name",
+    label: "Question",
+    topic: "Topic",
+    type: "Type",
+    surveys: "Asked in"
+  },
+  width: narrow
+    ? {name: "28%", label: "44%", surveys: "28%"}
+    : {name: "15%", label: "35%", topic: "18%", type: "13%", surveys: "19%"},
+  layout: "fixed",
+  rows: 24
+})
+```
+:::
+
+## Getting the data
+
+The combined data are public on the Open Science Framework (OSF). A link to the data on OSF will follow. The data come as csv and RData files, with copies for SPSS and Stata, and they are accompanied by the full documentation and a codebook in PDF. The documentation explains how each survey was carried out and where the surveys differ, and the codebook describes every variable, including differences in wording and routing between the surveys.
+
+The data are released under the Creative Commons Attribution 4.0 International licence ([CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)), so you may share and adapt them for any purpose as long as you cite them. The [About page](about.qmd#citation) gives the full citation.
