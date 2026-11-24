@@ -1,0 +1,12 @@
+name,label
+dataset,Survey
+provider,Fieldwork provider
+wave,Wave
+age_group,Age group
+age,Age
+gender,Gender
+region,Region
+rururb,Urban or rural
+edu_group,Education
+livecomf,Household income
+sample_type,Fresh or recontacted

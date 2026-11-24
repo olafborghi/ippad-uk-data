@@ -1,0 +1,24 @@
+[
+  {
+    "listing": "/insights/index.html",
+    "items": [
+      "/insights/uk/interest-democracy-trust/index.html",
+      "/insights/uk/issue-attitudes/index.html",
+      "/insights/uk/left-right/index.html",
+      "/insights/uk/panel-change/index.html",
+      "/insights/uk/party-feelings/index.html",
+      "/insights/uk/who-took-part/index.html"
+    ]
+  },
+  {
+    "listing": "/index.html",
+    "items": [
+      "/insights/uk/interest-democracy-trust/index.html",
+      "/insights/uk/issue-attitudes/index.html",
+      "/insights/uk/left-right/index.html",
+      "/insights/uk/panel-change/index.html",
+      "/insights/uk/party-feelings/index.html",
+      "/insights/uk/who-took-part/index.html"
+    ]
+  }
+]
