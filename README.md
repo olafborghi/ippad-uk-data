@@ -18,13 +18,18 @@ The pages are frozen (`freeze: auto`), so they only run their R code again when 
 
 ## Publishing
 
-The site is published to the `gh-pages` branch of this repository with
+The site is published automatically. Whenever changes are pushed to `main`, a GitHub Action (`.github/workflows/publish.yml`) renders the site and pushes it to the `gh-pages` branch, which GitHub Pages serves. Because the site is a project site of the account `olafborghi`, it appears under the custom domain of the account's user site.
+
+The Action does not run R. It reuses the results that were rendered locally and committed in `_freeze/`. An update therefore always follows the same steps:
 
 ```sh
-quarto publish gh-pages
+quarto render                 # or render only the page you changed
+git add -A
+git commit -m "Describe the change"
+git push
 ```
 
-GitHub Pages serves that branch. Because the site is a project site of the account `olafborghi`, it appears under the custom domain of the account's user site.
+If a page with R code is pushed without rendering it first, its frozen results no longer match and the Action fails, so that the live site stays as it was. The failed run is shown in the Actions tab of the repository, and rendering the page locally and pushing again fixes it. A publish can also be started by hand from the Actions tab, or from the command line with `quarto publish gh-pages`.
 
 ## How the site is organised
 

@@ -1,0 +1,38 @@
+# Publish the website whenever changes are pushed to main.
+#
+# GitHub renders the site from the committed sources and the frozen results
+# in _freeze/, so it needs no R. Pages with R code must therefore be rendered
+# locally before they are pushed. Otherwise their frozen results no longer
+# match the source and this workflow fails (the live site then stays as it
+# was). The rendered site is pushed to the gh-pages branch, which GitHub
+# Pages serves.
+
+name: Publish website
+
+on:
+  push:
+    branches: main
+  # also allows starting a publish by hand from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
+      - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+        with:
+          # same version as used locally, so the site builds the same way
+          version: 1.10.18
+
+      - name: Render and publish to gh-pages
+        uses: quarto-dev/quarto-actions/publish@v2
+        with:
+          target: gh-pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
