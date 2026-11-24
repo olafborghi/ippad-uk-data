@@ -222,10 +222,6 @@ source(here::here("R", "site.R"))
 ojs_define(brand = as.list(brand))
 ```
 
-This page shows how the young people in the four surveys answered most of our questions, and how their answers differ between groups. You can choose a question and a characteristic to compare by, such as age or gender, and limit the data to certain surveys or ages. All calculations run in your browser, on the same data that the [data page](data.qmd) describes.
-
-Because the surveys differ in age range, recruitment and timing, the explorer shows each survey in its own panel unless you choose to pool them. In pooled data, a difference between two groups may partly reflect who took part in each survey rather than a real difference between the groups. The address of the page changes with your choices, so you can share a link to the chart you are looking at.
-
 ::: {.ex-layout .column-page}
 ::: {.ex-controls}
 ```{ojs}
@@ -368,6 +364,9 @@ chart = {
 //| echo: false
 notes = {
   if (problem) return htl.html`<div class="ex-notes"></div>`;
+  // the table keeps its open or closed state when the notes are redrawn
+  const details = htl.html`<details open=${tableState.open}><summary>Numbers behind the chart</summary>${makeTable()}</details>`;
+  details.addEventListener("toggle", () => { tableState.open = details.open; });
   const ages = ageRange[0] === ageRange[1] ? `aged ${ageRange[0]}` : `aged ${ageRange[0]} to ${ageRange[1]}`;
   const used = joinWords(splitActive ? shownPanels.map(p => p.key) : askedIn);
   const small = allGroups.some(d => d.faded);
@@ -378,7 +377,7 @@ notes = {
     ${small ? htl.html`<p>Groups with fewer than ${minN} answers are shown in a lighter shade, because their results are too uncertain to interpret.</p>` : null}
     ${nDkLeftOut ? htl.html`<p>${nDkLeftOut === 1 ? "One respondent who" : `${fmtN(nDkLeftOut)} respondents who`} answered “${dkLevel}” ${nDkLeftOut === 1 ? "is" : "are"} left out, so the shares refer only to answers on the scale.</p>` : null}
     ${current.note ? htl.html`<p><strong>About this question.</strong> ${current.note.replace(/\.?\s*$/, ".")}</p>` : null}
-    <details><summary>Numbers behind the chart</summary>${makeTable()}</details>
+    ${details}
   </div>`;
 }
 ```
@@ -388,6 +387,12 @@ The samples are not weighted, so the results describe the young people who took 
 :::
 :::
 :::
+
+## About the explorer
+
+On this page, you can see how the young people in the four surveys answered most of our questions and how their answers differ between groups. You can choose a question and a characteristic to compare by, such as age or gender, and limit the data to certain surveys or ages. All calculations run in your browser, on the same data that the [data page](data.qmd) describes.
+
+Because the surveys differ in age range, recruitment and timing, the explorer shows each survey in its own panel unless you choose to pool them. In pooled data, a difference between two groups may partly reflect who took part in each survey rather than a real difference between the groups. The address of the page changes with your choices, so you can share a link to the chart you are looking at.
 
 ```{ojs}
 //| echo: false
@@ -628,6 +633,10 @@ levelColour = {
   if (dkLevel) map.set(dkLevel, d3.interpolateLab(brand.muted, brand.paper)(0.3));
   return map;
 }
+
+// Whether the table "Numbers behind the chart" is open. This cell depends on
+// nothing, so it is never recomputed, and the notes read and update it.
+tableState = ({open: false})
 
 // Chart layout ------------------------------------------------------------
 
