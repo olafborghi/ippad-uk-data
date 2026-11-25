@@ -1,5 +1,6 @@
 ---
 pagetitle: "IP-PAD UK Data"
+toc: false
 listing:
   id: latest-insights
   contents: "insights/uk/**/index.qmd"
@@ -23,7 +24,8 @@ age_range <- range(respondents$age)
 years <- range(str_sub(respondents$interview_month, 1, 4))
 ```
 
-::: {.hero}
+::: {.hero .column-screen}
+::: {.hero-inner}
 ::: {.kicker}
 Interdisciplinary Perspectives on the Politics of Adolescence and Democracy
 :::
@@ -31,8 +33,7 @@ Interdisciplinary Perspectives on the Politics of Adolescence and Democracy
 # How young people in the UK think about politics
 
 ::: {.lead}
-Between `r years[1]` and `r years[2]`, we surveyed young people across the United Kingdom about politics, from `r age_range[1]`-year-olds who took part with a parent's consent to young adults in their mid twenties. On this site, we describe who took part and what they were asked, and you can look at their answers yourself.
-:::
+Between `r years[1]` and `r years[2]`, we surveyed young people across the United Kingdom about politics, from `r age_range[1]`-year-olds to young adults in their mid twenties. On this site, we describe the samples and provide interactive insights into the data. 
 :::
 
 ::: {.key-numbers}
@@ -72,10 +73,10 @@ young people took part in both waves of a survey
 :::
 :::
 :::
+:::
+:::
 
-## Four surveys, `r years[1]` to `r years[2]`
-
-Two fieldwork providers carried out the surveys for us. Gallup International interviewed 16 to 26 year olds who are members of its online panels, while Survation reached 12 to 18 year olds through their parents, who first gave consent and then handed over to their child. Each provider ran two waves about a year apart. For the second wave, they first invited the respondents of the first wave to take part again and then completed the sample with new respondents, which is why some young people answered our questions twice.
+Two fieldwork providers carried out the surveys for us. Gallup International interviewed 16 to 26 year olds from its online panels, and Survation reached 12 to 18 year olds through their parents. Each provider ran two waves about a year apart and invited the first-wave respondents back for the second, which is why some young people answered our questions twice.
 
 ```{r}
 #| label: plot-timeline
@@ -93,7 +94,11 @@ ggplot(timeline, aes(x = month, y = dataset, size = n, colour = dataset)) +
   geom_point(alpha = 0.9) +
   geom_point(shape = 21, colour = brand[["ink"]], stroke = 0.3, fill = NA) +
   scale_colour_manual(values = dataset_colours, guide = "none") +
-  scale_size_area(max_size = 9, breaks = c(50, 500, 1000), name = "Interviews per month") +
+  scale_size_area(
+    max_size = 9,
+    breaks = c(50, 500, 1000),
+    name = "Interviews per month"
+  ) +
   scale_x_date(date_breaks = "6 months", date_labels = "%b %Y") +
   labs(x = NULL, y = NULL, caption = site_caption) +
   theme(

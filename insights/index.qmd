@@ -1,6 +1,6 @@
 ---
+toc: false
 title: "Insights"
-subtitle: "In these short articles, we take a closer look at selected questions from the surveys and at how the answers differ between young people."
 listing:
   contents: "**/index.qmd"
   sort: "date desc"

@@ -1,6 +1,6 @@
 ---
 title: "Feelings towards the parties"
-description: "How young people in the UK rate the Conservatives, Labour, the Liberal Democrats, the Greens and Reform UK, and how this differs by age, gender and survey."
+description: "How young people in the UK rate five parties, and how this differs by age, gender and survey."
 date: 2026-11-24
 categories: [Parties, Age, Gender]
 image: thumbnail.png
@@ -114,7 +114,7 @@ thumbnail <- ratings |>
 ggsave("thumbnail.png", thumbnail, width = 6, height = 3.9, dpi = 150)
 ```
 
-Most of the young people in these surveys are too young to vote, so their feelings towards the parties are one of the few ways to see how they relate to party politics. In all four surveys, we asked them to rate five parties on a scale from 0 (strongly dislike) to 10 (strongly like). The surveys took place at different points in the political cycle. Gallup W1 was fielded in May and June 2024, during the general election campaign and under a Conservative government, while all later surveys took place after Labour had come to power (see [Who took part](/insights/uk/who-took-part/index.qmd)).
+Most respondents are too young to vote, so their feelings towards the parties are one of the few ways to see how they relate to party politics. All four surveys asked them to rate five parties from 0 (strongly dislike) to 10 (strongly like). Gallup W1 was fielded during the 2024 general election campaign, under a Conservative government, while all later surveys took place after Labour had come to power (see [Who took part](/insights/uk/who-took-part/index.qmd)).
 
 ## Which parties young people like
 
@@ -170,9 +170,9 @@ ggplot(like_long, aes(x = value, y = fct_rev(party), fill = side)) +
   )
 ```
 
-Labour is the party that the largest share of respondents like in Gallup W1 (`r stat(like_dislike, "Gallup W1", "Labour", "like")`) and in both Survation surveys. Gallup W2 is the exception, as `r stat(like_dislike, "Gallup W2", "Greens", "like")` of its respondents like the Greens and `r stat(like_dislike, "Gallup W2", "Labour", "like")` like Labour. At the other end, the Conservatives and Reform UK are disliked most often. In Gallup W1, `r stat(like_dislike, "Gallup W1", "Conservatives", "dislike")` rate the Conservatives 3 or lower. In both second waves, Reform UK receives the lowest possible rating of 0 more often than any other party (`r stat(like_dislike, "Gallup W2", "Reform UK", "zero")` in Gallup W2, `r stat(like_dislike, "Survation W2", "Reform UK", "zero")` in Survation W2). At the same time, `r stat(like_dislike, "Survation W2", "Reform UK", "like")` of Survation W2 respondents like Reform UK, about as many as like the Greens. This suggests that Reform UK divides young people more sharply than the other parties do.
+Labour is liked by the largest share of respondents in Gallup W1 (`r stat(like_dislike, "Gallup W1", "Labour", "like")`) and in both Survation surveys. Gallup W2 is the exception, where `r stat(like_dislike, "Gallup W2", "Greens", "like")` like the Greens and `r stat(like_dislike, "Gallup W2", "Labour", "like")` like Labour. The Conservatives and Reform UK are disliked most often. In Gallup W1, `r stat(like_dislike, "Gallup W1", "Conservatives", "dislike")` rate the Conservatives 3 or lower, and in both second waves Reform UK receives a rating of 0 more often than any other party (`r stat(like_dislike, "Gallup W2", "Reform UK", "zero")` in Gallup W2, `r stat(like_dislike, "Survation W2", "Reform UK", "zero")` in Survation W2). Yet `r stat(like_dislike, "Survation W2", "Reform UK", "like")` of Survation W2 respondents like Reform UK, about as many as like the Greens, which suggests that Reform UK divides young people more sharply than other parties.
 
-Survation W1 looks different from the other surveys. Its respondents like every party more often and dislike every party less often, and their average rating across all five parties is `r mean_sw1`, against `r mean_others[1]` to `r mean_others[2]` in the other surveys. This fits the general tendency of Survation W1 respondents to give higher answers on 0 to 10 scales, so it is safer to compare the order of the parties within that survey than their levels across surveys.
+Survation W1 stands apart. Its respondents like every party more often and dislike every party less often, with an average rating of `r mean_sw1` across all five parties, against `r mean_others[1]` to `r mean_others[2]` in the other surveys. This fits their tendency to give higher answers on 0 to 10 scales, so the order of the parties within this survey is a safer guide than their levels.
 
 ## Age
 
@@ -211,7 +211,7 @@ ggplot(age_means, aes(x = age_group, y = mean, colour = dataset, group = dataset
   )
 ```
 
-Because each survey covers a different age range, age differences are best read within a survey. In Gallup W2, 22 to 26 year olds rate the Conservatives at `r w2_age("22-26", "Conservatives", "mean")` on average, compared with `r w2_age("18-21", "Conservatives", "mean")` among 18 to 21 year olds, and Reform UK at `r w2_age("22-26", "Reform UK", "mean")` compared with `r w2_age("18-21", "Reform UK", "mean")`. Labour, too, is rated higher by the older group, while ratings of the Greens hardly differ by age. Since the older group rates almost every party more warmly, this could partly reflect a general tendency to give higher ratings rather than a preference for particular parties. Within the Survation surveys, the age pattern runs the other way, as 16 and 17 year olds rate all five parties slightly lower than 12 to 15 year olds.
+Because the surveys cover different age ranges, age differences are best read within a survey. In Gallup W2, 22 to 26 year olds rate the Conservatives at `r w2_age("22-26", "Conservatives", "mean")` on average, against `r w2_age("18-21", "Conservatives", "mean")` among 18 to 21 year olds, and Reform UK at `r w2_age("22-26", "Reform UK", "mean")` against `r w2_age("18-21", "Reform UK", "mean")`. They also rate Labour higher, while ratings of the Greens hardly differ by age. As the older group rates almost every party more warmly, this could partly reflect a general tendency to rate higher rather than a preference for particular parties. In the Survation surveys the pattern runs the other way, as 16 and 17 year olds rate all five parties slightly lower than 12 to 15 year olds.
 
 ## Gender
 
@@ -251,7 +251,7 @@ ggplot(gender_means, aes(x = mean, y = fct_rev(party))) +
   )
 ```
 
-The gender differences concern specific parties. In all four surveys, young men rate the Conservatives higher than young women, by `r gap_range("Conservatives")[1]` to `r gap_range("Conservatives")[2]` points, and Reform UK by `r gap_range("Reform UK")[1]` to `r gap_range("Reform UK")[2]` points. In turn, young women in the two Gallup surveys rate the Greens higher than young men, by `r green_gap[["Gallup W1"]]` points in W1 and `r green_gap[["Gallup W2"]]` points in W2. For Labour and the Liberal Democrats, the gaps are smaller and less consistent. In Survation W1, young men rate every party somewhat higher than young women.
+In all four surveys, young men rate the Conservatives higher than young women, by `r gap_range("Conservatives")[1]` to `r gap_range("Conservatives")[2]` points, and Reform UK by `r gap_range("Reform UK")[1]` to `r gap_range("Reform UK")[2]` points. In turn, young women in the two Gallup surveys rate the Greens higher, by `r green_gap[["Gallup W1"]]` points in W1 and `r green_gap[["Gallup W2"]]` points in W2. The gaps for Labour and the Liberal Democrats are smaller and less consistent, and in Survation W1 young men rate every party somewhat higher.
 
 ## The same ages in two waves
 
@@ -300,8 +300,6 @@ ggplot(waves, aes(x = share, y = fct_rev(party))) +
   )
 ```
 
-The two Gallup surveys allow a fairer comparison over time, because both include over 800 respondents aged 18 to 21 (`r n_1821[["Gallup W1"]]` and `r n_1821[["Gallup W2"]]`) recruited in the same way. In this age group, the share who like Labour is `r stat(gallup_1821, "Gallup W1", "Labour", "like")` in W1 and `r stat(gallup_1821, "Gallup W2", "Labour", "like")` in W2, while the share who like the Greens rises from `r stat(gallup_1821, "Gallup W1", "Greens", "like")` to `r stat(gallup_1821, "Gallup W2", "Greens", "like")`. Interestingly, the share who like Reform UK hardly changes, but the share who give it a rating of 0 rises from `r stat(gallup_1821, "Gallup W1", "Reform UK", "zero")` to `r stat(gallup_1821, "Gallup W2", "Reform UK", "zero")`. The two surveys lie on either side of the change from a Conservative to a Labour government. However, the two samples consist of different young people, and the data cannot tell whether the differences reflect the political events of that period or who happened to take part.
+The Gallup surveys allow a fairer comparison over time, as both include over 800 respondents aged 18 to 21 (`r n_1821[["Gallup W1"]]` and `r n_1821[["Gallup W2"]]`) recruited in the same way. In this age group, the share who like Labour falls from `r stat(gallup_1821, "Gallup W1", "Labour", "like")` in W1 to `r stat(gallup_1821, "Gallup W2", "Labour", "like")` in W2, while the share who like the Greens rises from `r stat(gallup_1821, "Gallup W1", "Greens", "like")` to `r stat(gallup_1821, "Gallup W2", "Greens", "like")`. The share who like Reform UK hardly changes, but the share who rate it 0 rises from `r stat(gallup_1821, "Gallup W1", "Reform UK", "zero")` to `r stat(gallup_1821, "Gallup W2", "Reform UK", "zero")`. The two surveys lie on either side of the change of government. However, they consist of different young people, so the data cannot tell whether the differences reflect the events of that period or who happened to take part.
 
-## About these data
-
-The four surveys differ in age range, recruitment and timing, and the data are not weighted. Gallup W1 introduced the parties as those "in the Parliament of the United Kingdom" and the other surveys as those "in the House of Commons". [The data](/data.qmd) page explains the design.
+Gallup W1 also introduced the parties with slightly different wording, so small differences between surveys should be read with care. [The data](/data.qmd) page describes how the surveys differ.

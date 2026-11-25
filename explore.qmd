@@ -1,17 +1,84 @@
 ---
-title: "Explore"
-subtitle: "How different groups of young people answered the questions of the four surveys."
+toc: false
+pagetitle: "Explore the data"
+description: "How different groups of young people answered the questions of the four surveys."
 ---
 
 ```{=html}
 <style>
 /* Page-level styling of the explorer */
+.ex-intro {
+  margin-top: 0.6rem;
+}
+.ex-intro h1 {
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  margin: 0 0 0.5rem 0;
+}
+.ex-about {
+  margin: 0.8rem 0 0 0;
+  max-width: 46rem;
+}
+.ex-about summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--ip-blue-dark);
+  cursor: pointer;
+  list-style: none;
+  padding: 0.15rem 0;
+}
+.ex-about summary::-webkit-details-marker {
+  display: none;
+}
+.ex-about summary::before {
+  content: "";
+  width: 0.42rem;
+  height: 0.42rem;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(-45deg);
+  transition: transform 150ms ease;
+}
+.ex-about[open] summary::before {
+  transform: rotate(45deg) translate(-2px, -2px);
+}
+.ex-about summary:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+.ex-about summary:focus-visible {
+  outline: 2px solid var(--ip-blue-dark);
+  outline-offset: 3px;
+}
+.ex-about > p {
+  background: var(--ip-tint);
+  border-left: 3px solid var(--ip-blue);
+  font-size: 0.95rem;
+  margin: 0;
+  padding: 0.5rem 1.1rem;
+}
+.ex-about > summary + p {
+  margin-top: 0.6rem;
+  padding-top: 0.9rem;
+}
+.ex-about > p:last-of-type {
+  padding-bottom: 0.9rem;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ex-about summary::before {
+    transition: none;
+  }
+}
 .ex-layout {
   display: grid;
   grid-template-columns: minmax(14rem, 16.5rem) minmax(0, 1fr);
   gap: 2.5rem;
   align-items: start;
-  margin-top: 1.8rem;
+  margin-top: 1.6rem;
+  font-variant-numeric: tabular-nums;
 }
 .ex-controls {
   position: sticky;
@@ -222,6 +289,19 @@ source(here::here("R", "site.R"))
 ojs_define(brand = as.list(brand))
 ```
 
+::: {.ex-intro .column-page}
+# Explore the data
+
+<details class="ex-about">
+<summary>About the explorer</summary>
+
+Choose a question and a characteristic to compare by, such as age or gender, and narrow the data down to certain surveys or ages if you like. Because the surveys differ in age range, recruitment and timing, each survey is shown in its own panel unless you pool them, and pooled differences may partly reflect who took part in each survey.
+
+The address of the page changes with your choices, so you can share a link to any chart. All calculations run in your browser, on the data described on the [data page](data.qmd).
+
+</details>
+:::
+
 ::: {.ex-layout .column-page}
 ::: {.ex-controls}
 ```{ojs}
@@ -387,12 +467,6 @@ The samples are not weighted, so the results describe the young people who took 
 :::
 :::
 :::
-
-## About the explorer
-
-On this page, you can see how the young people in the four surveys answered most of our questions and how their answers differ between groups. You can choose a question and a characteristic to compare by, such as age or gender, and limit the data to certain surveys or ages. All calculations run in your browser, on the same data that the [data page](data.qmd) describes.
-
-Because the surveys differ in age range, recruitment and timing, the explorer shows each survey in its own panel unless you choose to pool them. In pooled data, a difference between two groups may partly reflect who took part in each survey rather than a real difference between the groups. The address of the page changes with your choices, so you can share a link to the chart you are looking at.
 
 ```{ojs}
 //| echo: false

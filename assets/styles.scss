@@ -14,6 +14,8 @@ $navbar-hl: #23262B;
 
 /*-- scss:rules --*/
 
+// The same values as in _brand.yml, as CSS variables for the rules below
+// and for the page-level styles of the explorer and the About page
 :root {
   --ip-ink: #23262B;
   --ip-muted: #5F6670;
@@ -23,10 +25,26 @@ $navbar-hl: #23262B;
   --ip-yellow: #F9D662;
   --ip-green: #7CAB7D;
   --ip-blue: #75B7D1;
+  --ip-blue-dark: #2F6F8F;
+  --ip-blue-tint: #EDF5F8;
+  --ip-band: linear-gradient(
+    to right,
+    var(--ip-coral) 0 25%,
+    var(--ip-yellow) 25% 50%,
+    var(--ip-green) 50% 75%,
+    var(--ip-blue) 75% 100%
+  );
 }
 
-body {
+// Digits of equal width only where numbers line up (tables, key numbers,
+// the explorer), not in running text
+table,
+.key-numbers {
   font-variant-numeric: tabular-nums;
+}
+
+a {
+  text-underline-offset: 0.15em;
 }
 
 // Navbar: white, finished with the four colours of the palette as a thin
@@ -34,21 +52,32 @@ body {
 .navbar {
   border-bottom: 0;
   box-shadow: none;
-  background-image: linear-gradient(
-    to right,
-    var(--ip-coral) 0 25%,
-    var(--ip-yellow) 25% 50%,
-    var(--ip-green) 50% 75%,
-    var(--ip-blue) 75% 100%
-  );
+  background-image: var(--ip-band);
   background-size: 100% 4px;
   background-position: bottom;
   background-repeat: no-repeat;
 }
 
-.navbar-brand img {
-  max-height: 34px;
-  margin-right: 0.4rem;
+// IP-PAD logo on the right of the navbar, linking to www.ippad.eu. The
+// link text stays for screen readers, and the logo is drawn as background.
+.ippad-link {
+  display: inline-block;
+  width: 36px;
+  height: 30px;
+  background: url("assets/logo.png") center / contain no-repeat;
+  overflow: hidden;
+  white-space: nowrap;
+  text-indent: 100%;
+  vertical-align: middle;
+}
+
+.navbar .nav-link:has(.ippad-link) {
+  opacity: 0.9;
+
+  &:hover,
+  &:focus-visible {
+    opacity: 1;
+  }
 }
 
 .navbar .nav-link {
@@ -61,31 +90,48 @@ body {
   letter-spacing: -0.01em;
 }
 
-// Funding logos in the footer
-.funder-logos {
-  display: flex;
-  align-items: center;
-  gap: 1.2rem;
-  margin-bottom: 0.4rem;
-
-  img {
-    height: 38px;
-    width: auto;
-  }
+// Section headings: plain, without an underline
+h2,
+.h2 {
+  border-bottom: 0;
+  padding-bottom: 0;
 }
 
-// The four colours of the palette as a thin band, used under page titles
-// and on the home page. It is the one decorative element of the site.
-.colour-band {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  height: 6px;
-  margin: 1rem 0 2rem 0;
+section.level2 > h2 {
+  margin-top: 2.6rem;
+}
 
-  span:nth-child(1) { background: var(--ip-coral); }
-  span:nth-child(2) { background: var(--ip-yellow); }
-  span:nth-child(3) { background: var(--ip-green); }
-  span:nth-child(4) { background: var(--ip-blue); }
+// Contents on the right of inner pages: small and quiet, with the current
+// section marked in blue
+#TOC,
+#quarto-margin-sidebar nav[role="doc-toc"] {
+  font-size: 0.85rem;
+
+  h2,
+  .toc-title {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ip-muted);
+    margin-bottom: 0.6rem;
+  }
+
+  .nav-link {
+    color: var(--ip-muted);
+    padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
+  }
+
+  .nav-link:hover {
+    color: var(--ip-ink);
+  }
+
+  .nav-link.active {
+    color: var(--ip-blue-dark);
+    border-left-color: var(--ip-blue);
+    font-weight: 600;
+  }
 }
 
 // Small upper-case label above titles and numbers
@@ -94,8 +140,8 @@ body {
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--ip-muted);
-  margin-bottom: 0.3rem;
+  color: var(--ip-blue-dark);
+  margin-bottom: 0.2rem;
 }
 
 h1.title,
@@ -110,14 +156,56 @@ h1.title,
   max-width: 42rem;
 }
 
-// Home page
+// The home page has no title block, so its empty header takes no space
+#title-block-header:empty {
+  display: none;
+}
+
+// Page subtitles read like the lead on the home page
+#title-block-header {
+  margin-bottom: 1.6rem;
+}
+
+#title-block-header .subtitle,
+#title-block-header .description {
+  font-size: 1.2rem;
+  line-height: 1.5;
+  color: var(--ip-muted);
+  max-width: 42rem;
+  padding-top: 0.4rem;
+}
+
+// On the home page, the hero panel starts right under the navbar
+#quarto-content > main.content:has(> .hero) {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+// Home page: the hero sits on a pale blue panel that runs the full width
+// of the screen, with its content aligned to the text column
 .hero {
-  margin-top: 1.5rem;
+  display: grid;
+  grid-template-columns: subgrid;
+  background: var(--ip-blue-tint);
+  margin-top: 0;
+  padding: 2.8rem 0 2.4rem 0;
+  margin-bottom: 1rem;
+
+  > .hero-inner {
+    grid-column: body-content-start / body-content-end;
+  }
 
   h1 {
     font-size: clamp(2rem, 5vw, 3rem);
     line-height: 1.1;
+    margin-top: 0.35rem;
     margin-bottom: 0.8rem;
+    border: 0;
+    padding: 0;
+  }
+
+  .lead p:last-child {
+    margin-bottom: 0;
   }
 }
 
@@ -125,19 +213,33 @@ h1.title,
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
   gap: 1.5rem;
-  border-top: 1px solid var(--ip-rule);
-  padding-top: 1.2rem;
-  margin: 2rem 0 2.5rem 0;
+  margin: 2.2rem 0 0 0;
+
+  > div {
+    padding-top: 0.8rem;
+    border-top: 4px solid var(--ip-blue);
+  }
+
+  > div:nth-child(2) { border-top-color: var(--ip-coral); }
+  > div:nth-child(3) { border-top-color: var(--ip-green); }
+  > div:nth-child(4) { border-top-color: var(--ip-yellow); }
+
+  p {
+    margin: 0;
+  }
 
   .value {
     font-size: 2.3rem;
     font-weight: 700;
     line-height: 1.1;
+    letter-spacing: -0.015em;
   }
 
   .label {
     color: var(--ip-muted);
     font-size: 0.92rem;
+    line-height: 1.45;
+    margin-top: 0.35rem;
   }
 }
 
@@ -184,6 +286,11 @@ h1.title,
   }
 }
 
+// Lists in running text: a little air between items
+main.content ul > li + li {
+  margin-top: 0.35rem;
+}
+
 // Figures: captions small and muted, aligned left
 .figure-caption,
 figcaption {
@@ -201,30 +308,109 @@ figcaption {
   margin: 1rem 0 1.5rem 0;
 }
 
-// Listings: flat cards with a rule, no shadow
+// Listings: flat cards, with the text flush with the picture above it
 .quarto-grid-item.card {
   border: 0;
-  border-top: 1px solid var(--ip-rule);
   box-shadow: none;
   background: transparent;
-}
 
-.quarto-grid-item .card-title {
-  font-weight: 600;
+  .card-img-top {
+    margin-bottom: 0.8rem;
+  }
+
+  .card-body {
+    padding: 0;
+  }
+
+  .card-title {
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: 0.45rem;
+  }
+
+  .card-text,
+  .listing-description {
+    color: var(--ip-muted);
+    font-size: 0.94rem;
+    line-height: 1.5;
+  }
+
+  // date at the foot of the card: small, left-aligned, in normal case
+  .card-attribution {
+    justify-content: flex-start;
+    text-transform: none;
+    font-weight: 400;
+    font-size: 0.82rem;
+    color: var(--ip-muted);
+    padding-top: 0.7rem;
+  }
+
+  .card-attribution .listing-date {
+    font-size: inherit;
+  }
 }
 
 // Tables
-table {
-  font-variant-numeric: tabular-nums;
-}
-
 .table > :not(caption) > * > * {
   background-color: transparent;
 }
 
-// Footer
+// Footer: one row, on a light grey ground, with the funder logos and a
+// short funding line on the left and the licence on the right
 .nav-footer {
   border-top: 1px solid var(--ip-rule);
-  font-size: 0.82rem;
+  background-color: var(--ip-tint);
+  font-size: 0.8rem;
   color: var(--ip-muted);
+  align-items: center;
+  gap: 0.6rem 2rem;
+  padding-top: 0.9rem;
+  padding-bottom: 0.9rem;
+
+  a {
+    color: var(--ip-muted);
+  }
+
+  .nav-footer-center {
+    display: none;
+  }
+}
+
+.nav-footer .nav-footer-left {
+  flex: 1 1 32rem;
+  font-size: inherit;
+  text-align: left;
+
+  p {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1.1rem;
+    margin: 0;
+  }
+}
+
+.nav-footer .nav-footer-right {
+  flex: 0 0 auto;
+  font-size: inherit;
+
+  p {
+    margin: 0;
+  }
+}
+
+.funder-logos {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  flex: none;
+
+  img {
+    height: 30px;
+    width: auto;
+  }
+}
+
+.funder-text {
+  flex: 1 1 18rem;
 }

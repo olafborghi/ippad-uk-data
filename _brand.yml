@@ -1,15 +1,13 @@
-# Brand of the IP-PAD UK data website: the single source of colours, fonts
-# and logo. The site theme reads this file, and so do R/site.R (figures) and
+# Brand of the IP-PAD UK data website: the single source of colours and
+# fonts. The site theme reads this file, and so do R/site.R (figures) and
 # the explorer (Observable). Change colours here only, then run
 # `Rscript R/palette_check.R`.
 
 meta:
   name: IP-PAD UK Data
 
-logo:
-  images:
-    mark: assets/logo.png
-  medium: mark
+# No logo here on purpose: Quarto would put a brand logo at the left of the
+# navbar. The IP-PAD logo sits on the right instead (see _quarto.yml).
 
 color:
   palette:
@@ -26,6 +24,8 @@ color:
     muted: "#5F6670"
     rule: "#E3E5E8"
     tint: "#F4F5F7"
+    # pale tint of the blue, for the home page hero panel only
+    blue-tint: "#EDF5F8"
     paper: "#FFFFFF"
     # data colours of the four datasets: hue for provider, lightness for wave
     gallup-w1: "#75B7D1"

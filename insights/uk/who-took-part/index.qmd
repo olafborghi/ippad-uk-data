@@ -108,11 +108,11 @@ thumbnail <- respondents |>
 ggsave("thumbnail.png", thumbnail, width = 6, height = 3.9, dpi = 150)
 ```
 
-The IP-PAD UK data bring together four online surveys with `r n_interviews` interviews in total. Two were carried out by Gallup International and two by Survation, and each provider ran two waves about a year apart. Because the surveys reached different age groups in different ways, it helps to know who took part before reading any comparison between them, and this page serves as the background for the other insights.
+The IP-PAD UK data combine four online surveys with `r n_interviews` interviews in total, two waves each by Gallup International and Survation. The surveys reached different age groups in different ways, which matters for every comparison in the other insights.
 
 ## Two ways of reaching young people
 
-Gallup International interviewed members of its online access panels aged 16 and over, who answered every question themselves. Survation, in turn, reached children through parents on its online panels. A parent gave consent and reported the child's age, gender, region and type of place, and then handed the device to the child, who answered all remaining questions. In the Survation surveys, the background information thus comes from parents, while the questions on politics and on household income were answered by the young people themselves.
+Gallup International interviewed panel members aged 16 and over, who answered every question themselves. Survation reached children through their parents, who gave consent and reported the child's age, gender, region and type of place before handing the device to the child. In the Survation surveys, these background details thus come from parents, while the questions on politics and household income were answered by the young people themselves.
 
 ## Age
 
@@ -145,7 +145,7 @@ ggplot(count(respondents, dataset, age), aes(x = age, y = n, fill = dataset)) +
   )
 ```
 
-The two providers cover different stages of youth. Survation W1 includes ages `r age_range[["Survation W1"]]` and Survation W2 ages `r age_range[["Survation W2"]]`, with a median age of `r median_age[["Survation W1"]]` in both. Gallup W1 covers ages `r age_range[["Gallup W1"]]`, and Gallup W2 added a separate sample of young adults, so that it spans ages `r age_range[["Gallup W2"]]` with a median of `r median_age[["Gallup W2"]]`. The providers thus overlap only at ages 16 to 18, and even there the numbers are uneven. Gallup has `r gallup_16_17[["Gallup W1"]]` respondents aged 16 or 17 in W1 and `r gallup_16_17[["Gallup W2"]]` in W2, and Survation W2 has only `r survation_18` respondents aged 18. Interestingly, Gallup W2 has `r gallup_w2_25` respondents aged 25, compared with at most `r gallup_w2_next` at any other age, a peak that the fieldwork documents do not explain.
+Survation W1 covers ages `r age_range[["Survation W1"]]` and Survation W2 ages `r age_range[["Survation W2"]]`, with a median age of `r median_age[["Survation W1"]]` in both. Gallup W1 covers ages `r age_range[["Gallup W1"]]`, while Gallup W2, which added a separate sample of young adults, spans ages `r age_range[["Gallup W2"]]` with a median of `r median_age[["Gallup W2"]]`. The providers thus overlap only at ages 16 to 18, and even there the numbers are uneven. Gallup has `r gallup_16_17[["Gallup W1"]]` respondents aged 16 or 17 in W1 and `r gallup_16_17[["Gallup W2"]]` in W2, and Survation W2 has only `r survation_18` respondents aged 18. Gallup W2 also has `r gallup_w2_25` respondents aged 25, against at most `r gallup_w2_next` at any other age, a peak that the fieldwork documents do not explain.
 
 ## When the surveys took place
 
@@ -214,7 +214,7 @@ ggplot(months) +
   )
 ```
 
-The wave number does not order the surveys in time. Gallup W1 was fielded in May and June 2024, during the campaign for the general election of July 2024 and thus still under a Conservative government. Survation W1 followed a year later, in the summer of 2025. Gallup W2 started in May 2025, but `r gallup_w2_novdec` of its interviews took place in November and December 2025, after Survation W1. Survation W2 then ran in the autumn of 2026. All surveys but the first therefore took place under a Labour government, and any difference between them can reflect the time of fieldwork as well as the age of the respondents.
+The wave number does not order the surveys in time. Gallup W1 was fielded in May and June 2024, during the general election campaign and under a Conservative government. Survation W1 followed in the summer of 2025. Gallup W2 started in May 2025, but `r gallup_w2_novdec` of its interviews took place in November and December 2025, and Survation W2 ran in the autumn of 2026. All surveys but the first thus took place under a Labour government, and differences between them can reflect the time of fieldwork as well as the age of the respondents.
 
 ## Gender, place, education and income
 
@@ -283,14 +283,12 @@ ggplot(background, aes(x = share, y = answer)) +
   )
 ```
 
-In terms of gender and place, the four samples look much alike. Between `r female_range[1]` and `r female_range[2]` of respondents in each survey are female, and `r other_gender` respondents in total describe their gender in another way. Most live in a large town or city, from `r city[["Survation W2"]]` in Survation W2 to `r city[["Survation W1"]]` in Survation W1, and every UK region is represented. Education, however, mostly follows age, as it combines the level that respondents are studying for with the highest level attained by those who have left education. In the Survation surveys, `r isced_low_survation` of respondents are in the lowest group (ISCED 0 to 2), which mainly reflects that most of them are still working towards their GCSEs. In Gallup, by contrast, `r isced_high_1821` of those aged 18 to 21 and `r isced_high_2226` of those aged 22 to 26 are studying for or hold a tertiary qualification (ISCED 5 to 8).
+In gender and place, the four samples look much alike. Between `r female_range[1]` and `r female_range[2]` of respondents in each survey are female, and `r other_gender` in total describe their gender in another way. Most live in a large town or city, from `r city[["Survation W2"]]` in Survation W2 to `r city[["Survation W1"]]` in Survation W1, and every UK region is represented. Education, however, mostly follows age, because it combines the level that respondents are studying for with the highest level attained by those who have left education. In the Survation surveys, `r isced_low_survation` are in the lowest group (ISCED 0 to 2), mainly because most are still working towards their GCSEs. In Gallup, by contrast, `r isced_high_1821` of those aged 18 to 21 and `r isced_high_2226` of those aged 22 to 26 are studying for or hold a tertiary qualification (ISCED 5 to 8).
 
-The question on household income shows a less expected pattern. In both Gallup surveys, `r comfortable[["Gallup W1"]]` say that their household is living comfortably on its present income. In Survation W1 this share is `r comfortable[["Survation W1"]]`, but in Survation W2 it is only `r comfortable[["Survation W2"]]`, although both surveys used the same design. Young adolescents may find this question hard to judge, and the difference could also reflect who took part in each survey, so we would not read it as a change in household finances.
+Household income shows a less expected pattern. In both Gallup surveys, `r comfortable[["Gallup W1"]]` say that their household is living comfortably on its present income. In Survation W1 this share is `r comfortable[["Survation W1"]]`, but in Survation W2 it is only `r comfortable[["Survation W2"]]`, although both surveys used the same design. Young adolescents may find this question hard to judge, and the gap could also reflect who took part, so we would not read it as a change in household finances.
 
 ## Fresh and recontacted respondents
 
-In both second waves, the providers first invited their earlier respondents again, but few took part, namely `r recontacts[["Gallup W2"]]` in Gallup W2 (`r recontact_share[["Gallup"]]` of Gallup W1) and `r recontacts[["Survation W2"]]` in Survation W2 (`r recontact_share[["Survation"]]` of Survation W1). The rest of each sample was new. The data therefore come from `r n_persons` different young people, and each survey is best treated as a separate snapshot rather than as a panel.
+Both second waves first invited earlier respondents back, but only `r recontacts[["Gallup W2"]]` returned to Gallup W2 (`r recontact_share[["Gallup"]]` of Gallup W1) and `r recontacts[["Survation W2"]]` to Survation W2 (`r recontact_share[["Survation"]]` of Survation W1). The data thus come from `r n_persons` different young people, and each survey is best treated as a separate snapshot rather than as a panel.
 
-## About these data
-
-The data are not weighted, so the shares on this page describe the respondents rather than all young people in the UK. Each provider also set its own quotas and its own rules for removing low quality interviews. [The data](/data.qmd) page describes the design in detail.
+The samples are not weighted, so the shares on this page describe the respondents rather than all young people in the UK. [The data](/data.qmd) page describes how the surveys were designed.

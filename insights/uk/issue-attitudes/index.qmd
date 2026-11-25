@@ -132,7 +132,7 @@ thumbnail <- ggplot(thumb_data, aes(y = y)) +
 ggsave("thumbnail.png", thumbnail, width = 6, height = 3.9, dpi = 150)
 ```
 
-Left and right are broad labels, and young people who share one can still disagree on concrete questions. All four surveys therefore asked how far respondents agree with fourteen statements on the economy, moral questions, climate change and immigration, with the option to say that they did not know. Some statements are worded so that agreeing expresses a left-leaning or progressive view, and others so that it expresses a right-leaning or conservative one. This mix helps to tell genuine views apart from a general tendency to agree.
+Young people who call themselves left or right can still disagree on concrete questions. All four surveys therefore asked how far respondents agree with fourteen statements on the economy, moral questions, climate change and immigration, with the option to say that they did not know. Agreeing expresses a progressive view for some statements and a conservative one for others, which helps to tell genuine views apart from a general tendency to agree.
 
 ## Broad agreement, with more division on welfare and immigration
 
@@ -217,9 +217,9 @@ ggplot(bars) +
   )
 ```
 
-On moral questions and climate change, clear majorities take the progressive side. About two thirds agree that one parent can raise a child as well as two (`r pooled_share("opideo05_UK", "Agree")`) and that terminally ill people should have a right to assisted dying (`r pooled_share("opideo07_UK", "Agree")`), while the opposite statements on discrimination against women and on climate change find more disagreement than agreement. On the economy, however, the answers fit less neatly into one position. Most agree that the government should reduce income differences (`r pooled_share("opideo01_UK", "Agree")`), yet `r pooled_share("opideo03_UK", "Agree")` also accept large income differences as a reward for talent and effort, and slightly more agree than disagree that welfare benefits make people lazy. These patterns hold within each survey.
+On moral questions and climate change, clear majorities take the progressive side. About two thirds agree that one parent can raise a child as well as two (`r pooled_share("opideo05_UK", "Agree")`) and that terminally ill people should have a right to assisted dying (`r pooled_share("opideo07_UK", "Agree")`), while the opposite statements on discrimination against women and climate change find more disagreement than agreement. On the economy, however, answers fit less neatly into one position. Most agree that the government should reduce income differences (`r pooled_share("opideo01_UK", "Agree")`), yet `r pooled_share("opideo03_UK", "Agree")` also accept large differences as a reward for talent and effort, and slightly more agree than disagree that welfare benefits make people lazy. These patterns hold within each survey.
 
-Immigration divides young people most, and it is also the issue on which the surveys differ most. In Survation W2, `r agree_s("opideo14_UK", "Survation W2")` agree that immigration makes the UK a worse place to live, compared with `r agree_s("opideo14_UK", "Survation W1")` in Survation W1 about a year earlier, although both surveys cover the same ages. This could reflect a change over time, but it could equally reflect differences in who took part or in question order, as Survation W2 asked these statements after an experiment on ideology.
+Immigration divides young people most, and the surveys also differ most on it. In Survation W2, `r agree_s("opideo14_UK", "Survation W2")` agree that immigration makes the UK a worse place to live, compared with `r agree_s("opideo14_UK", "Survation W1")` in Survation W1 a year earlier, although both cover the same ages. This could reflect change over time, but also differences in who took part or in question order, as Survation W2 asked these statements after an experiment on ideology.
 
 ## Gender gaps are largest on questions about gender and family
 
@@ -257,7 +257,7 @@ ggplot(gender_agree, aes(x = agree, y = dataset)) +
   theme(legend.position = "top", legend.justification = "left", panel.spacing.x = unit(1.5, "lines"))
 ```
 
-Young women and young men differ most on statements about gender and the family. Young women more often agree that one parent can raise a child as well as two, with gaps of between `r gap_range("opideo05_UK")` percentage points, and less often that discrimination against women is no longer a problem. These gaps are larger among the Gallup respondents than among the 12 to 17 year olds in Survation, whose gender was reported by a parent. On climate change, a gap appears in Gallup only, where young men more often see its impact as exaggerated.
+Young women more often than young men agree that one parent can raise a child as well as two, with gaps of between `r gap_range("opideo05_UK")` percentage points, and less often that discrimination against women is no longer a problem. These gaps are larger in Gallup than among the 12 to 17 year olds in Survation, whose gender was reported by a parent. On climate change, only Gallup shows a gap, with young men more often seeing its impact as exaggerated.
 
 ## Older respondents agree more, on both sides
 
@@ -298,7 +298,7 @@ ggplot(age_plot, aes(x = age_group, y = agree, group = item)) +
   theme(panel.spacing.x = unit(1.5, "lines"))
 ```
 
-Since each survey covers different ages, we look at age within Gallup W2, the only survey that spans ages 16 to 26. Interestingly, older respondents there agree more often with statements on both sides of the same issue. Agreement that the government should reduce income differences rises from `r age_agree("opideo01_UK", "16-17")` among 16 and 17 year olds to `r age_agree("opideo01_UK", "22-26")` among 22 to 26 year olds, but agreement that large income differences are acceptable rises as well, from `r age_agree("opideo03_UK", "16-17")` to `r age_agree("opideo03_UK", "22-26")`. This suggests that older respondents are, if anything, more willing to agree in general rather than more left or more right. Differences in who took part at each age could also play a role, and only `r n_gw2_16_17` respondents are aged 16 or 17.
+Because the surveys cover different ages, we look at age within Gallup W2, the only survey that spans ages 16 to 26. There, older respondents agree more often with statements on both sides of the same issue. Agreement that the government should reduce income differences rises from `r age_agree("opideo01_UK", "16-17")` among 16 and 17 year olds to `r age_agree("opideo01_UK", "22-26")` among 22 to 26 year olds, but agreement that large income differences are acceptable also rises, from `r age_agree("opideo03_UK", "16-17")` to `r age_agree("opideo03_UK", "22-26")`. If anything, older respondents seem more willing to agree in general rather than more left or right. Differences in who took part at each age could also play a role, and only `r n_gw2_16_17` respondents are aged 16 or 17.
 
 ## Few answer "I don't know"
 
@@ -334,8 +334,6 @@ ggplot(dont_know_age, aes(x = age, y = dont_know, colour = dataset)) +
   theme(legend.position = "top", legend.justification = "left")
 ```
 
-Only `r dk_all` of all answers are "I don't know". In the two Survation surveys, 12 to 14 year olds choose it somewhat more often (`r pct(dk_survation[["TRUE"]])` of their answers) than 15 to 17 year olds (`r pct(dk_survation[["FALSE"]])`), most of all for the statement on assisted dying. Gallup W2 has the fewest such answers at every age, so the differences between surveys are as large as those between ages.
+Only `r dk_all` of all answers are "I don't know". In Survation, 12 to 14 year olds choose it somewhat more often (`r pct(dk_survation[["TRUE"]])` of their answers) than 15 to 17 year olds (`r pct(dk_survation[["FALSE"]])`), most of all on assisted dying. Gallup W2 has the fewest such answers at every age, so the differences between surveys are as large as those between ages.
 
-## About these data
-
-The overview pools all interviews, so Gallup W2, which is twice as large as the other surveys, counts twice as much. The surveys are unweighted and differ in age range, recruitment and timing (see [The data](/data.qmd)), which is why we compare age and gender within surveys. Gallup W1 also shows signs of weaker response quality. The statements that immigration enriches cultural life and that it makes the UK a worse place should go together negatively, as they do in the other surveys with correlations between `r num2(min(r_others))` and `r num2(max(r_others))`. In Gallup W1, however, the correlation is only `r num2(immigration_r[["Gallup W1"]])`. Leaving Gallup W1 out changes no pooled share of agreement by more than `r max_shift_gw1` percentage points.
+The overview pools all interviews without weights, so Gallup W2, which is twice as large as the other surveys, counts twice as much there. Gallup W1 also shows signs of weaker response quality on the immigration statements, but leaving it out changes no pooled share of agreement by more than `r max_shift_gw1` percentage points. [The data](/data.qmd) page describes how the surveys differ.

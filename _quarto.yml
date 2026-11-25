@@ -30,8 +30,6 @@ website:
   favicon: assets/logo.png
   page-navigation: false
   navbar:
-    logo: assets/logo.png
-    logo-alt: "IP-PAD logo"
     title: "IP-PAD UK Data"
     left:
       - text: "Data"
@@ -42,22 +40,26 @@ website:
         href: insights/index.qmd
       - text: "About"
         href: about.qmd
+    # the IP-PAD logo on the right links to the project website; the logo
+    # itself is drawn by .ippad-link in assets/styles.scss
+    right:
+      - href: https://www.ippad.eu
+        text: '<span class="ippad-link">IP-PAD project website</span>'
   page-footer:
     left: |
-      [![European Commission](/assets/ec-logo-horiz_en.png){height=38px} ![UK Research and Innovation](/assets/UKRI_Logo.jpg){height=38px}]{.funder-logos}
-
-      IP-PAD is funded by the European Union under the Horizon Europe MSCA Doctoral Networks
-      programme (Grant Agreement No. 101072992), with participation from the UKRI Horizon Europe
-      guarantee scheme (EPSRC EP/X026825/1). [Funding details](/about.qmd#funding)
+      [![European Commission](/assets/ec-logo-horiz_en.png){height=30px} ![UK Research and Innovation](/assets/UKRI_Logo.jpg){height=30px}]{.funder-logos} [Funded by the European Union (Grant Agreement No. 101072992) and UKRI (EPSRC EP/X026825/1). [Funding details](/about.qmd#funding)]{.funder-text}
     right: |
-      Data and text under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)
-
-      This website was built with the help of [Claude Code](https://claude.com/claude-code).
+      Data and text under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) · Built with [Claude Code](https://claude.com/claude-code)
 
 format:
   html:
     theme: [brand, assets/styles.scss]
-    toc: false
+    # contents on the right of inner pages; the home, explore and insights
+    # listing pages switch it off in their front matter
+    toc: true
+    toc-location: right
+    toc-depth: 2
+    toc-title: "On this page"
     smooth-scroll: true
     link-external-newwindow: true
     fig-align: left
