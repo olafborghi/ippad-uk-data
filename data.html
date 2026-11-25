@@ -83,9 +83,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-cf7ae2a3b92290bf3a20dcfd51783431.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-51154a8b496bf957ebaf1982e06a9b88.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-cf7ae2a3b92290bf3a20dcfd51783431.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-66e26926a045ce2231e89bc30a69f0c8.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-84c6e79e0ea25212c28f5593d2dcb3ca.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-66e26926a045ce2231e89bc30a69f0c8.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -120,17 +120,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </head>
 
-<body class="nav-fixed fullcontent quarto-light">
+<body class="nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a href="./index.html" class="navbar-brand navbar-brand-logo">
-    <img src="./assets/logo.png" alt="IP-PAD logo" class="navbar-logo light-content">
-    <img src="./assets/logo.png" alt="IP-PAD logo" class="navbar-logo dark-content">
-    </a>
     <a class="navbar-brand" href="./index.html">
     <span class="navbar-title">IP-PAD UK Data</span>
     </a>
@@ -158,6 +154,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span class="menu-text">About</span></a>
   </li>  
 </ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="https://www.ippad.eu"> 
+<span class="menu-text"><span class="ippad-link">IP-PAD project website</span></span></a>
+  </li>  
+</ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
 </div>
@@ -168,14 +170,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul class="collapse">
+  <li><a href="#the-four-surveys" id="toc-the-four-surveys" class="nav-link active" data-scroll-target="#the-four-surveys">The four surveys</a></li>
+  <li><a href="#when-the-surveys-were-in-the-field" id="toc-when-the-surveys-were-in-the-field" class="nav-link" data-scroll-target="#when-the-surveys-were-in-the-field">When the surveys were in the field</a></li>
+  <li><a href="#before-comparing-surveys" id="toc-before-comparing-surveys" class="nav-link" data-scroll-target="#before-comparing-surveys">Before comparing surveys</a></li>
+  <li><a href="#what-the-data-cover" id="toc-what-the-data-cover" class="nav-link" data-scroll-target="#what-the-data-cover">What the data cover</a></li>
+  <li><a href="#search-the-questions" id="toc-search-the-questions" class="nav-link" data-scroll-target="#search-the-questions">Search the questions</a></li>
+  <li><a href="#getting-the-data" id="toc-getting-the-data" class="nav-link" data-scroll-target="#getting-the-data">Getting the data</a></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
 <h1 class="title">The data</h1>
-<p class="subtitle lead">How the four UK surveys were carried out, and what to keep in mind when comparing them.</p>
 </div>
 
 
@@ -282,7 +296,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }
 </style>
-<p>The IP-PAD UK data come from four online surveys of young people in the United Kingdom, carried out between 2024 and 2026. Two fieldwork providers each ran two waves. Gallup International interviewed young people who are members of its online panels themselves, while Survation reached younger adolescents through the panel accounts of their parents. We combined the four surveys into one data file with one row per interview, which holds 4,968 interviews with 4,841 young people. Apart from two questions about the future that only Survation asked, the file includes only questions that were asked in at least two of the surveys, so that answers can be compared between them.</p>
+<p>The IP-PAD UK data combine four online surveys of young people in the United Kingdom, carried out between 2024 and 2026 by two fieldwork providers that each ran two waves. The combined file has one row per interview and holds 4,968 interviews with 4,841 young people. Apart from two questions about the future that only Survation asked, it includes only questions asked in at least two of the surveys.</p>
 <section id="the-four-surveys" class="level2">
 <h2 class="anchored" data-anchor-id="the-four-surveys">The four surveys</h2>
 <div class="data-table">
@@ -337,7 +351,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>In the Gallup surveys, respondents answered every question themselves. In the Survation surveys, a parent first gave consent and reported the child’s age, gender, region and the type of place they live in, before handing the device to the child, who answered the rest of the questionnaire. In both second waves, the providers first invited their own first-wave respondents back and then filled the sample with new respondents. Because few Gallup respondents returned, Gallup W2 added a separate sample of 22 to 26 year olds, which is why its age range is wider. Survation W2, in turn, also admitted 18 year olds outside its quota (25 respondents).</p>
+<p>Gallup respondents answered all questions themselves. In the Survation surveys, a parent first gave consent and reported the child’s age, gender, region and type of place, before the child answered the rest of the questionnaire. In both second waves, the providers invited their first-wave respondents back and then added new respondents. Because few Gallup respondents returned, Gallup W2 added a separate sample of 22 to 26 year olds, and Survation W2 also admitted 25 respondents aged 18 outside its quota.</p>
 </section>
 <section id="when-the-surveys-were-in-the-field" class="level2">
 <h2 class="anchored" data-anchor-id="when-the-surveys-were-in-the-field">When the surveys were in the field</h2>
@@ -353,22 +367,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>Three of the surveys carried out most of their interviews within two or three months. Gallup W2 is the exception. It began in May 2025 with a small number of interviews each month, and 95% of its interviews took place in November and December 2025, when the separate sample of 22 to 26 year olds was also interviewed.</p>
+<p>Three of the surveys carried out most of their interviews within two or three months. Gallup W2 began in May 2025 with a few interviews each month, and 95% of its interviews took place in November and December 2025, when the 22 to 26 year olds were added.</p>
 </section>
-<section id="good-to-know-before-comparing" class="level2">
-<h2 class="anchored" data-anchor-id="good-to-know-before-comparing">Good to know before comparing</h2>
-<p>The four surveys share most of their questions, but they were not designed as one sample. A few differences between them therefore matter whenever answers are compared across surveys, and the <a href="./explore.html">explorer</a> lets you check whether a pattern holds in each survey separately.</p>
-<p>The age ranges of the two providers overlap only at ages 16 to 18. A difference between Gallup and Survation can thus reflect age as much as the provider, and even at the shared ages the respondents were recruited in different ways.</p>
-<p>The variable <code>wave</code> counts the waves within each provider and does not order the surveys in time. Survation W1 was in the field in the summer of 2025, while Gallup W2 was still running, so the fieldwork dates are a better guide to when people answered.</p>
-<p>The data are not weighted, and all respondents come from online panels rather than from random samples of the population. The results describe the young people who took part and should not be read as estimates for all young people in the UK.</p>
-<p>Each survey also applied its own checks to remove careless or automated answers. Gallup W1, for example, kept respondents who failed its attention check, whereas Survation removed those who failed two checks, so some differences between the surveys may partly come from these rules.</p>
-<p>On the scales from 0 to 10, Survation W1 respondents give higher answers than respondents in the other surveys. Averaged over the five party ratings and the left-right scale, for example, they score 5.4, against 4.3 to 4.5 in the other surveys. However, the Survation W1 respondents who took part again a year later already answered much like the other surveys in the first wave, with an average of 4.3. This suggests that the difference reflects who took part in Survation W1 rather than a real difference in attitudes. The insight on <a href="./insights/uk/left-right/index.html">left and right</a> shows what this means for one of these scales.</p>
-<p>Only 55 Gallup and 72 Survation respondents took part in both waves of their provider, and some of these links are doubtful. In Survation the link runs through the parent’s panel account, and only 39 of the 72 linked respondents are one or two years older in the second wave and report the same gender, so it cannot be ruled out that a sibling answered in some cases. By the same measure, 48 of the 55 Gallup links are plausible.</p>
-<p>Finally, the wording of a few questions differs slightly between the surveys. Gallup W1, for instance, introduced the party ratings as parties “in the Parliament of the United Kingdom”, and the other surveys as parties “in the House of Commons”. The codebook notes each of these differences at the question concerned.</p>
+<section id="before-comparing-surveys" class="level2">
+<h2 class="anchored" data-anchor-id="before-comparing-surveys">Before comparing surveys</h2>
+<p>The four surveys share most of their questions but were not designed as one sample. The differences below matter whenever answers are compared across surveys, and the <a href="./explore.html">explorer</a> lets you check whether a pattern holds in each survey separately.</p>
+<ul>
+<li><strong>Different age ranges.</strong> The two providers overlap only at ages 16 to 18, so a difference between Gallup and Survation can reflect age as much as the provider.</li>
+<li><strong>Wave is not time.</strong> The variable <code>wave</code> counts the waves within each provider. Survation W1 was in the field in the summer of 2025, while Gallup W2 was still running, so the fieldwork dates are the better guide to timing.</li>
+<li><strong>Not weighted.</strong> All respondents come from online panels and the data are not weighted, so the results describe the young people who took part rather than all young people in the UK.</li>
+<li><strong>Different quality checks.</strong> Each survey removed careless or automated answers by its own rules. Gallup W1, for example, kept respondents who failed its attention check, whereas Survation removed those who failed two checks.</li>
+<li><strong>Survation W1 scores higher on 0 to 10 scales.</strong> Averaged over the five party ratings and the left-right scale, Survation W1 respondents score 5.4, against 4.3 to 4.5 in the other surveys. Those who took part again a year later had already answered much like the other surveys in the first wave (4.3), which suggests that the difference lies in who took part. The insight on <a href="./insights/uk/left-right/index.html">left and right</a> shows an example.</li>
+<li><strong>Few and uncertain panel links.</strong> Only 55 Gallup and 72 Survation respondents took part in both waves of their provider. Judged by age and gender, 48 of the Gallup links and 39 of the Survation links are plausible. Survation links run through the parent’s panel account, so a sibling may have answered in some cases.</li>
+<li><strong>Small wording differences.</strong> A few questions were worded slightly differently between the surveys, such as the introduction to the party ratings. The codebook notes each of these differences.</li>
+</ul>
 </section>
 <section id="what-the-data-cover" class="level2">
 <h2 class="anchored" data-anchor-id="what-the-data-cover">What the data cover</h2>
-<p>This website uses 107 questions from the combined file, grouped by topic in the table below. Of these, 55 were asked in all four surveys. Survation W2 asked fewer of the shared questions than the other surveys (61), and some batteries, such as the ideological labels, were asked in only two of them. The combined file holds further variables that are not shown here, for example open answers and details of the interview.</p>
+<p>This website uses 107 questions from the combined file, grouped by topic below. Of these, 55 were asked in all four surveys, while Survation W2 asked fewer of the shared questions (61).</p>
 <div class="data-table">
 <div class="cell" data-layout-align="left">
 <div class="cell-output-display">
@@ -472,61 +488,61 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="search-the-questions" class="level2">
 <h2 class="anchored" data-anchor-id="search-the-questions">Search the questions</h2>
-<p>The table below lists every variable used on this website, with the surveys that asked it. You can search by variable name, by a word of the question or by topic.</p>
+<p>Search by variable name, question wording or topic to see which surveys asked a question.</p>
 <div class="variable-search">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb1" data-startfrom="335" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 334;"><span id="cb1-335"><a href="#cb1-335" aria-hidden="true" tabindex="-1"></a>variables <span class="op">=</span> <span class="fu">FileAttachment</span>(<span class="st">"data/variables.csv"</span>)<span class="op">.</span><span class="fu">csv</span>({<span class="dt">typed</span><span class="op">:</span> <span class="kw">true</span>})</span>
-<span id="cb1-336"><a href="#cb1-336" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-337"><a href="#cb1-337" aria-hidden="true" tabindex="-1"></a>type_labels <span class="op">=</span> ({</span>
-<span id="cb1-338"><a href="#cb1-338" aria-hidden="true" tabindex="-1"></a>  <span class="dt">number</span><span class="op">:</span> <span class="st">"Number"</span><span class="op">,</span></span>
-<span id="cb1-339"><a href="#cb1-339" aria-hidden="true" tabindex="-1"></a>  <span class="dt">ordered</span><span class="op">:</span> <span class="st">"Ordered categories"</span><span class="op">,</span></span>
-<span id="cb1-340"><a href="#cb1-340" aria-hidden="true" tabindex="-1"></a>  <span class="dt">factor</span><span class="op">:</span> <span class="st">"Categories"</span><span class="op">,</span></span>
-<span id="cb1-341"><a href="#cb1-341" aria-hidden="true" tabindex="-1"></a>  <span class="dt">logical</span><span class="op">:</span> <span class="st">"Yes or no"</span><span class="op">,</span></span>
-<span id="cb1-342"><a href="#cb1-342" aria-hidden="true" tabindex="-1"></a>  <span class="dt">text</span><span class="op">:</span> <span class="st">"Text"</span></span>
-<span id="cb1-343"><a href="#cb1-343" aria-hidden="true" tabindex="-1"></a>})</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb1" data-startfrom="328" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 327;"><span id="cb1-328"><a href="#cb1-328" aria-hidden="true" tabindex="-1"></a>variables <span class="op">=</span> <span class="fu">FileAttachment</span>(<span class="st">"data/variables.csv"</span>)<span class="op">.</span><span class="fu">csv</span>({<span class="dt">typed</span><span class="op">:</span> <span class="kw">true</span>})</span>
+<span id="cb1-329"><a href="#cb1-329" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-330"><a href="#cb1-330" aria-hidden="true" tabindex="-1"></a>type_labels <span class="op">=</span> ({</span>
+<span id="cb1-331"><a href="#cb1-331" aria-hidden="true" tabindex="-1"></a>  <span class="dt">number</span><span class="op">:</span> <span class="st">"Number"</span><span class="op">,</span></span>
+<span id="cb1-332"><a href="#cb1-332" aria-hidden="true" tabindex="-1"></a>  <span class="dt">ordered</span><span class="op">:</span> <span class="st">"Ordered categories"</span><span class="op">,</span></span>
+<span id="cb1-333"><a href="#cb1-333" aria-hidden="true" tabindex="-1"></a>  <span class="dt">factor</span><span class="op">:</span> <span class="st">"Categories"</span><span class="op">,</span></span>
+<span id="cb1-334"><a href="#cb1-334" aria-hidden="true" tabindex="-1"></a>  <span class="dt">logical</span><span class="op">:</span> <span class="st">"Yes or no"</span><span class="op">,</span></span>
+<span id="cb1-335"><a href="#cb1-335" aria-hidden="true" tabindex="-1"></a>  <span class="dt">text</span><span class="op">:</span> <span class="st">"Text"</span></span>
+<span id="cb1-336"><a href="#cb1-336" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb1-337"><a href="#cb1-337" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-338"><a href="#cb1-338" aria-hidden="true" tabindex="-1"></a>survey_counts <span class="op">=</span> [</span>
+<span id="cb1-339"><a href="#cb1-339" aria-hidden="true" tabindex="-1"></a>  [<span class="st">"Gallup W1"</span><span class="op">,</span> <span class="st">"n_gallup_w1"</span>]<span class="op">,</span></span>
+<span id="cb1-340"><a href="#cb1-340" aria-hidden="true" tabindex="-1"></a>  [<span class="st">"Survation W1"</span><span class="op">,</span> <span class="st">"n_survation_w1"</span>]<span class="op">,</span></span>
+<span id="cb1-341"><a href="#cb1-341" aria-hidden="true" tabindex="-1"></a>  [<span class="st">"Gallup W2"</span><span class="op">,</span> <span class="st">"n_gallup_w2"</span>]<span class="op">,</span></span>
+<span id="cb1-342"><a href="#cb1-342" aria-hidden="true" tabindex="-1"></a>  [<span class="st">"Survation W2"</span><span class="op">,</span> <span class="st">"n_survation_w2"</span>]</span>
+<span id="cb1-343"><a href="#cb1-343" aria-hidden="true" tabindex="-1"></a>]</span>
 <span id="cb1-344"><a href="#cb1-344" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-345"><a href="#cb1-345" aria-hidden="true" tabindex="-1"></a>survey_counts <span class="op">=</span> [</span>
-<span id="cb1-346"><a href="#cb1-346" aria-hidden="true" tabindex="-1"></a>  [<span class="st">"Gallup W1"</span><span class="op">,</span> <span class="st">"n_gallup_w1"</span>]<span class="op">,</span></span>
-<span id="cb1-347"><a href="#cb1-347" aria-hidden="true" tabindex="-1"></a>  [<span class="st">"Survation W1"</span><span class="op">,</span> <span class="st">"n_survation_w1"</span>]<span class="op">,</span></span>
-<span id="cb1-348"><a href="#cb1-348" aria-hidden="true" tabindex="-1"></a>  [<span class="st">"Gallup W2"</span><span class="op">,</span> <span class="st">"n_gallup_w2"</span>]<span class="op">,</span></span>
-<span id="cb1-349"><a href="#cb1-349" aria-hidden="true" tabindex="-1"></a>  [<span class="st">"Survation W2"</span><span class="op">,</span> <span class="st">"n_survation_w2"</span>]</span>
-<span id="cb1-350"><a href="#cb1-350" aria-hidden="true" tabindex="-1"></a>]</span>
-<span id="cb1-351"><a href="#cb1-351" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-352"><a href="#cb1-352" aria-hidden="true" tabindex="-1"></a>variable_rows <span class="op">=</span> variables<span class="op">.</span><span class="fu">map</span>(d <span class="kw">=&gt;</span> {</span>
-<span id="cb1-353"><a href="#cb1-353" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> asked <span class="op">=</span> survey_counts<span class="op">.</span><span class="fu">filter</span>(([<span class="op">,</span> col]) <span class="kw">=&gt;</span> d[col] <span class="op">&gt;</span> <span class="dv">0</span>)<span class="op">.</span><span class="fu">map</span>(([survey]) <span class="kw">=&gt;</span> survey)</span>
-<span id="cb1-354"><a href="#cb1-354" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> {</span>
-<span id="cb1-355"><a href="#cb1-355" aria-hidden="true" tabindex="-1"></a>    <span class="dt">name</span><span class="op">:</span> d<span class="op">.</span><span class="at">name</span><span class="op">,</span></span>
-<span id="cb1-356"><a href="#cb1-356" aria-hidden="true" tabindex="-1"></a>    <span class="dt">label</span><span class="op">:</span> d<span class="op">.</span><span class="at">short_label</span><span class="op">,</span></span>
-<span id="cb1-357"><a href="#cb1-357" aria-hidden="true" tabindex="-1"></a>    <span class="dt">topic</span><span class="op">:</span> d<span class="op">.</span><span class="at">topic</span> <span class="op">??</span> d<span class="op">.</span><span class="at">block</span><span class="op">,</span></span>
-<span id="cb1-358"><a href="#cb1-358" aria-hidden="true" tabindex="-1"></a>    <span class="dt">type</span><span class="op">:</span> type_labels[d<span class="op">.</span><span class="at">type</span>] <span class="op">??</span> d<span class="op">.</span><span class="at">type</span><span class="op">,</span></span>
-<span id="cb1-359"><a href="#cb1-359" aria-hidden="true" tabindex="-1"></a>    <span class="dt">surveys</span><span class="op">:</span> asked<span class="op">.</span><span class="at">length</span> <span class="op">===</span> <span class="dv">4</span> <span class="op">?</span> <span class="st">"All four"</span> <span class="op">:</span> asked<span class="op">.</span><span class="fu">join</span>(<span class="st">", "</span>)</span>
-<span id="cb1-360"><a href="#cb1-360" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb1-361"><a href="#cb1-361" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb1-345"><a href="#cb1-345" aria-hidden="true" tabindex="-1"></a>variable_rows <span class="op">=</span> variables<span class="op">.</span><span class="fu">map</span>(d <span class="kw">=&gt;</span> {</span>
+<span id="cb1-346"><a href="#cb1-346" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> asked <span class="op">=</span> survey_counts<span class="op">.</span><span class="fu">filter</span>(([<span class="op">,</span> col]) <span class="kw">=&gt;</span> d[col] <span class="op">&gt;</span> <span class="dv">0</span>)<span class="op">.</span><span class="fu">map</span>(([survey]) <span class="kw">=&gt;</span> survey)</span>
+<span id="cb1-347"><a href="#cb1-347" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> {</span>
+<span id="cb1-348"><a href="#cb1-348" aria-hidden="true" tabindex="-1"></a>    <span class="dt">name</span><span class="op">:</span> d<span class="op">.</span><span class="at">name</span><span class="op">,</span></span>
+<span id="cb1-349"><a href="#cb1-349" aria-hidden="true" tabindex="-1"></a>    <span class="dt">label</span><span class="op">:</span> d<span class="op">.</span><span class="at">short_label</span><span class="op">,</span></span>
+<span id="cb1-350"><a href="#cb1-350" aria-hidden="true" tabindex="-1"></a>    <span class="dt">topic</span><span class="op">:</span> d<span class="op">.</span><span class="at">topic</span> <span class="op">??</span> d<span class="op">.</span><span class="at">block</span><span class="op">,</span></span>
+<span id="cb1-351"><a href="#cb1-351" aria-hidden="true" tabindex="-1"></a>    <span class="dt">type</span><span class="op">:</span> type_labels[d<span class="op">.</span><span class="at">type</span>] <span class="op">??</span> d<span class="op">.</span><span class="at">type</span><span class="op">,</span></span>
+<span id="cb1-352"><a href="#cb1-352" aria-hidden="true" tabindex="-1"></a>    <span class="dt">surveys</span><span class="op">:</span> asked<span class="op">.</span><span class="at">length</span> <span class="op">===</span> <span class="dv">4</span> <span class="op">?</span> <span class="st">"All four"</span> <span class="op">:</span> asked<span class="op">.</span><span class="fu">join</span>(<span class="st">", "</span>)</span>
+<span id="cb1-353"><a href="#cb1-353" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1-354"><a href="#cb1-354" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb1-355"><a href="#cb1-355" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-356"><a href="#cb1-356" aria-hidden="true" tabindex="-1"></a>viewof variable_query <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">search</span>(variable_rows<span class="op">,</span> {</span>
+<span id="cb1-357"><a href="#cb1-357" aria-hidden="true" tabindex="-1"></a>  <span class="dt">placeholder</span><span class="op">:</span> <span class="st">"For example trust, climate or lr"</span><span class="op">,</span></span>
+<span id="cb1-358"><a href="#cb1-358" aria-hidden="true" tabindex="-1"></a>  <span class="dt">label</span><span class="op">:</span> <span class="st">"Search the list"</span></span>
+<span id="cb1-359"><a href="#cb1-359" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb1-360"><a href="#cb1-360" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-361"><a href="#cb1-361" aria-hidden="true" tabindex="-1"></a>narrow <span class="op">=</span> width <span class="op">&lt;</span> <span class="dv">620</span></span>
 <span id="cb1-362"><a href="#cb1-362" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-363"><a href="#cb1-363" aria-hidden="true" tabindex="-1"></a>viewof variable_query <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">search</span>(variable_rows<span class="op">,</span> {</span>
-<span id="cb1-364"><a href="#cb1-364" aria-hidden="true" tabindex="-1"></a>  <span class="dt">placeholder</span><span class="op">:</span> <span class="st">"For example trust, climate or lr"</span><span class="op">,</span></span>
-<span id="cb1-365"><a href="#cb1-365" aria-hidden="true" tabindex="-1"></a>  <span class="dt">label</span><span class="op">:</span> <span class="st">"Search the list"</span></span>
-<span id="cb1-366"><a href="#cb1-366" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb1-367"><a href="#cb1-367" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-368"><a href="#cb1-368" aria-hidden="true" tabindex="-1"></a>narrow <span class="op">=</span> width <span class="op">&lt;</span> <span class="dv">620</span></span>
-<span id="cb1-369"><a href="#cb1-369" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-370"><a href="#cb1-370" aria-hidden="true" tabindex="-1"></a>Inputs<span class="op">.</span><span class="fu">table</span>(variable_query<span class="op">,</span> {</span>
-<span id="cb1-371"><a href="#cb1-371" aria-hidden="true" tabindex="-1"></a>  <span class="dt">columns</span><span class="op">:</span> narrow</span>
-<span id="cb1-372"><a href="#cb1-372" aria-hidden="true" tabindex="-1"></a>    <span class="op">?</span> [<span class="st">"name"</span><span class="op">,</span> <span class="st">"label"</span><span class="op">,</span> <span class="st">"surveys"</span>]</span>
-<span id="cb1-373"><a href="#cb1-373" aria-hidden="true" tabindex="-1"></a>    <span class="op">:</span> [<span class="st">"name"</span><span class="op">,</span> <span class="st">"label"</span><span class="op">,</span> <span class="st">"topic"</span><span class="op">,</span> <span class="st">"type"</span><span class="op">,</span> <span class="st">"surveys"</span>]<span class="op">,</span></span>
-<span id="cb1-374"><a href="#cb1-374" aria-hidden="true" tabindex="-1"></a>  <span class="dt">header</span><span class="op">:</span> {</span>
-<span id="cb1-375"><a href="#cb1-375" aria-hidden="true" tabindex="-1"></a>    <span class="dt">name</span><span class="op">:</span> <span class="st">"Name"</span><span class="op">,</span></span>
-<span id="cb1-376"><a href="#cb1-376" aria-hidden="true" tabindex="-1"></a>    <span class="dt">label</span><span class="op">:</span> <span class="st">"Question"</span><span class="op">,</span></span>
-<span id="cb1-377"><a href="#cb1-377" aria-hidden="true" tabindex="-1"></a>    <span class="dt">topic</span><span class="op">:</span> <span class="st">"Topic"</span><span class="op">,</span></span>
-<span id="cb1-378"><a href="#cb1-378" aria-hidden="true" tabindex="-1"></a>    <span class="dt">type</span><span class="op">:</span> <span class="st">"Type"</span><span class="op">,</span></span>
-<span id="cb1-379"><a href="#cb1-379" aria-hidden="true" tabindex="-1"></a>    <span class="dt">surveys</span><span class="op">:</span> <span class="st">"Asked in"</span></span>
-<span id="cb1-380"><a href="#cb1-380" aria-hidden="true" tabindex="-1"></a>  }<span class="op">,</span></span>
-<span id="cb1-381"><a href="#cb1-381" aria-hidden="true" tabindex="-1"></a>  <span class="dt">width</span><span class="op">:</span> narrow</span>
-<span id="cb1-382"><a href="#cb1-382" aria-hidden="true" tabindex="-1"></a>    <span class="op">?</span> {<span class="dt">name</span><span class="op">:</span> <span class="st">"28%"</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"44%"</span><span class="op">,</span> <span class="dt">surveys</span><span class="op">:</span> <span class="st">"28%"</span>}</span>
-<span id="cb1-383"><a href="#cb1-383" aria-hidden="true" tabindex="-1"></a>    <span class="op">:</span> {<span class="dt">name</span><span class="op">:</span> <span class="st">"15%"</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"35%"</span><span class="op">,</span> <span class="dt">topic</span><span class="op">:</span> <span class="st">"18%"</span><span class="op">,</span> <span class="dt">type</span><span class="op">:</span> <span class="st">"13%"</span><span class="op">,</span> <span class="dt">surveys</span><span class="op">:</span> <span class="st">"19%"</span>}<span class="op">,</span></span>
-<span id="cb1-384"><a href="#cb1-384" aria-hidden="true" tabindex="-1"></a>  <span class="dt">layout</span><span class="op">:</span> <span class="st">"fixed"</span><span class="op">,</span></span>
-<span id="cb1-385"><a href="#cb1-385" aria-hidden="true" tabindex="-1"></a>  <span class="dt">rows</span><span class="op">:</span> <span class="dv">24</span></span>
-<span id="cb1-386"><a href="#cb1-386" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-363"><a href="#cb1-363" aria-hidden="true" tabindex="-1"></a>Inputs<span class="op">.</span><span class="fu">table</span>(variable_query<span class="op">,</span> {</span>
+<span id="cb1-364"><a href="#cb1-364" aria-hidden="true" tabindex="-1"></a>  <span class="dt">columns</span><span class="op">:</span> narrow</span>
+<span id="cb1-365"><a href="#cb1-365" aria-hidden="true" tabindex="-1"></a>    <span class="op">?</span> [<span class="st">"name"</span><span class="op">,</span> <span class="st">"label"</span><span class="op">,</span> <span class="st">"surveys"</span>]</span>
+<span id="cb1-366"><a href="#cb1-366" aria-hidden="true" tabindex="-1"></a>    <span class="op">:</span> [<span class="st">"name"</span><span class="op">,</span> <span class="st">"label"</span><span class="op">,</span> <span class="st">"topic"</span><span class="op">,</span> <span class="st">"type"</span><span class="op">,</span> <span class="st">"surveys"</span>]<span class="op">,</span></span>
+<span id="cb1-367"><a href="#cb1-367" aria-hidden="true" tabindex="-1"></a>  <span class="dt">header</span><span class="op">:</span> {</span>
+<span id="cb1-368"><a href="#cb1-368" aria-hidden="true" tabindex="-1"></a>    <span class="dt">name</span><span class="op">:</span> <span class="st">"Name"</span><span class="op">,</span></span>
+<span id="cb1-369"><a href="#cb1-369" aria-hidden="true" tabindex="-1"></a>    <span class="dt">label</span><span class="op">:</span> <span class="st">"Question"</span><span class="op">,</span></span>
+<span id="cb1-370"><a href="#cb1-370" aria-hidden="true" tabindex="-1"></a>    <span class="dt">topic</span><span class="op">:</span> <span class="st">"Topic"</span><span class="op">,</span></span>
+<span id="cb1-371"><a href="#cb1-371" aria-hidden="true" tabindex="-1"></a>    <span class="dt">type</span><span class="op">:</span> <span class="st">"Type"</span><span class="op">,</span></span>
+<span id="cb1-372"><a href="#cb1-372" aria-hidden="true" tabindex="-1"></a>    <span class="dt">surveys</span><span class="op">:</span> <span class="st">"Asked in"</span></span>
+<span id="cb1-373"><a href="#cb1-373" aria-hidden="true" tabindex="-1"></a>  }<span class="op">,</span></span>
+<span id="cb1-374"><a href="#cb1-374" aria-hidden="true" tabindex="-1"></a>  <span class="dt">width</span><span class="op">:</span> narrow</span>
+<span id="cb1-375"><a href="#cb1-375" aria-hidden="true" tabindex="-1"></a>    <span class="op">?</span> {<span class="dt">name</span><span class="op">:</span> <span class="st">"28%"</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"44%"</span><span class="op">,</span> <span class="dt">surveys</span><span class="op">:</span> <span class="st">"28%"</span>}</span>
+<span id="cb1-376"><a href="#cb1-376" aria-hidden="true" tabindex="-1"></a>    <span class="op">:</span> {<span class="dt">name</span><span class="op">:</span> <span class="st">"15%"</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"35%"</span><span class="op">,</span> <span class="dt">topic</span><span class="op">:</span> <span class="st">"18%"</span><span class="op">,</span> <span class="dt">type</span><span class="op">:</span> <span class="st">"13%"</span><span class="op">,</span> <span class="dt">surveys</span><span class="op">:</span> <span class="st">"19%"</span>}<span class="op">,</span></span>
+<span id="cb1-377"><a href="#cb1-377" aria-hidden="true" tabindex="-1"></a>  <span class="dt">layout</span><span class="op">:</span> <span class="st">"fixed"</span><span class="op">,</span></span>
+<span id="cb1-378"><a href="#cb1-378" aria-hidden="true" tabindex="-1"></a>  <span class="dt">rows</span><span class="op">:</span> <span class="dv">24</span></span>
+<span id="cb1-379"><a href="#cb1-379" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <div id="ojs-cell-1-1" data-nodetype="declaration">
@@ -581,8 +597,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="getting-the-data" class="level2">
 <h2 class="anchored" data-anchor-id="getting-the-data">Getting the data</h2>
-<p>The combined data are public on the Open Science Framework (OSF). A link to the data on OSF will follow. The data come as csv and RData files, with copies for SPSS and Stata, and they are accompanied by the full documentation and a codebook in PDF. The documentation explains how each survey was carried out and where the surveys differ, and the codebook describes every variable, including differences in wording and routing between the surveys.</p>
-<p>The data are released under the Creative Commons Attribution 4.0 International licence (<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>), so you may share and adapt them for any purpose as long as you cite them. The <a href="./about.html#citation">About page</a> gives the full citation.</p>
+<p>The combined data and their documentation will be released in the near future, and we will post a link to them on this website. The data will come as csv and RData files, with copies for SPSS and Stata, together with a codebook that notes how each question was asked in each survey.</p>
+<p>They will be released under a <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> licence, so you may share and adapt them as long as you cite them as given on the <a href="./about.html#citation">About page</a>.</p>
 
 
 </section>
@@ -1008,15 +1024,13 @@ window._ojs.runtime.interpretFromScriptTags();
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
-<p><span class="funder-logos"><img src="./assets/ec-logo-horiz_en.png" height="38" alt="European Commission"> <img src="./assets/UKRI_Logo.jpg" height="38" alt="UK Research and Innovation"></span></p>
-<p>IP-PAD is funded by the European Union under the Horizon Europe MSCA Doctoral Networks programme (Grant Agreement No.&nbsp;101072992), with participation from the UKRI Horizon Europe guarantee scheme (EPSRC EP/X026825/1). <a href="./about.html#funding">Funding details</a></p>
+<p><span class="funder-logos"><img src="./assets/ec-logo-horiz_en.png" height="30" alt="European Commission"> <img src="./assets/UKRI_Logo.jpg" height="30" alt="UK Research and Innovation"></span> <span class="funder-text">Funded by the European Union (Grant Agreement No.&nbsp;101072992) and UKRI (EPSRC EP/X026825/1). <a href="./about.html#funding">Funding details</a></span></p>
 </div>   
     <div class="nav-footer-center">
       &nbsp;
     </div>
     <div class="nav-footer-right">
-<p>Data and text under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></p>
-<p>This website was built with the help of <a href="https://claude.com/claude-code">Claude Code</a>.</p>
+<p>Data and text under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> · Built with <a href="https://claude.com/claude-code">Claude Code</a></p>
 </div>
   </div>
 </footer>
